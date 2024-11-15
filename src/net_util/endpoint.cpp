@@ -8,3 +8,5 @@ Endpoint::Endpoint(const char *ip, uint16_t port)
     addr.sin_port = port;
     
 }
+
+Endpoint::Endpoint(sockaddr_in ip_addr): addr(ip_addr) {}

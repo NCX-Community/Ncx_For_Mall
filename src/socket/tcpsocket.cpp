@@ -24,7 +24,13 @@ void TcpSocket::listen(int backlog) {
 
 int TcpSocket::accept(Endpoint &client) {
     struct sockaddr_in client_addr;
-    socklen_t client_ip_len = sizeof(client_addr);
-    bzero(&client_addr, client_ip_len);
-    int client_fd = ::accept(fd, (sockaddr*)&client_addr, &client_ip_len);
+    socklen_t client_addr_len = sizeof(client_addr);
+    bzero(&client_addr, client_addr_len);
+
+    int client_fd = ::accept(fd, (struct sockaddr*)&client_addr, &client_addr_len);
+    // 将客户端地址信息存储到 Endpoint 对象中
+    client.addr = client_addr;
+    return client_fd;
 }
+
+int TcpSocket::get_fd() {return fd;}

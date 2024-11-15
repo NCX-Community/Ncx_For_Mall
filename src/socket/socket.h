@@ -2,6 +2,7 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 #include "net_util/endpoint.h"
+#include "common.h"
 
 // socket trait
 class Socket
@@ -15,6 +16,7 @@ public:
     virtual void close();
     virtual Endpoint get_endpoint();
     virtual Endpoint get_remote_endpoint();
+    virtual int get_fd();
 };
 
 // tcp Socket
@@ -33,6 +35,9 @@ public:
     void close() override;
     Endpoint get_endpoint() override;
     Endpoint get_remote_endpoint() override;
+    int get_fd() override;
 };
 
+
+Socket* create_socket(Type sock_tp);
 #endif
