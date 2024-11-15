@@ -31,5 +31,4 @@
 *.out
 *.app
 
-/src/server/build
-/src/cli/build
+/src/build

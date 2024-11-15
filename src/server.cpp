@@ -6,6 +6,7 @@
 
 #include"error/error.h"
 #include"net_util/endpoint.h"
+#include"socket/socket.h"
 
 int create_inet_tcp_server(Endpoint endpoint) {
     int serv_fd = socket(AF_INET, SOCK_STREAM, 0);
