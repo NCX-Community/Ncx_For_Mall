@@ -2,6 +2,8 @@
 #define EPOLL_H
 
 #include <sys/epoll.h>
+#include <channel/channel.h>
+#include <vector>
 constexpr int MAX_EVENTS = 10;
 
 class Epoll {
@@ -14,6 +16,7 @@ public:
     void epoll_ctl(int op, int fd, struct epoll_event* ev);
     int get_epfd();
     struct epoll_event* get_events();
-    int poll();
+    std::vector<Channel*> poll();
+    void updateChannel(Channel* channel);
 };
 #endif

@@ -14,7 +14,7 @@ add_subdirectory(socket)
 add_subdirectory(epoll)
 
 # bin
-file(GLOB SERVER "server.cpp")
+file(GLOB SERVER "serv.cpp")
 file(GLOB CLIENT "cli.cpp")
 add_executable(ncxs ${SERVER})
 add_executable(ncxc ${CLIENT})
