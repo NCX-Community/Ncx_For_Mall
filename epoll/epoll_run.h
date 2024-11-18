@@ -1,6 +1,10 @@
 #ifndef EPOLL_RUN_H
 #define EPOLL_RUN_H
-#include "epoll/epoll.h"
+#include "epoll.h"
+#include "channel.h"
+
+class Epoll;
+class Channel;
 
 class EpollRun {
 private:

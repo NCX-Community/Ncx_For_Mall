@@ -2,8 +2,10 @@
 #define EPOLL_H
 
 #include <sys/epoll.h>
-#include <channel/channel.h>
 #include <vector>
+#include "channel.h"
+
+class Channel;
 constexpr int MAX_EVENTS = 10;
 
 class Epoll {

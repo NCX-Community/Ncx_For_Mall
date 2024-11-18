@@ -2,8 +2,10 @@
 #define CHANNEL_H
 #include<sys/epoll.h>
 #include<functional>
-#include "epoll/epoll.h"
-#include "epoll_run/epoll_run.h"
+#include"epoll.h"
+#include"epoll_run.h"
+
+class EpollRun;
 
 class Channel {
 private:

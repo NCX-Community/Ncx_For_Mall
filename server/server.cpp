@@ -1,5 +1,8 @@
-#include"server.h"
-
+#include "server.h"
+#include "epoll_run.h"
+#include "socket.h"
+#include "channel.h"
+#include "endpoint.h"
 
 Server::Server(Socket* server, EpollRun* er) {
     this->er = er;

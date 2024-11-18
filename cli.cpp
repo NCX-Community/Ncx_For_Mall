@@ -1,6 +1,6 @@
-#include "net_util/endpoint.h"
-#include "error/error.h"
-#include "socket/socket.h"
+#include "endpoint.h"
+#include "error.h"
+#include "socket.h"
 #include <unistd.h>
 
 const char MSG[] = "hello i am nvxc!";

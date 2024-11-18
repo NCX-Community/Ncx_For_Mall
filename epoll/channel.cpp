@@ -1,6 +1,7 @@
 #include"channel.h"
 #include<cstring>
 
+
 Channel::Channel(EpollRun* _er, int _fd): er(_er), fd(_fd), evs(0), revs(0), is_epolled(false){}
 Channel::~Channel(){}
 

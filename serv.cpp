@@ -4,11 +4,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#include "error/error.h"
-#include "net_util/endpoint.h"
-#include "socket/socket.h"
-#include "epoll_run/epoll_run.h"
-#include "server/server.h"
+#include "error.h"
+#include "endpoint.h"
+#include "socket.h"
+#include "epoll_run.h"
+#include "server.h"
 
 static const char SERVER_IP[] = "0.0.0.0";
 static const uint16_t SERVER_PORT = 6666;
