@@ -8,4 +8,4 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # 此处添加C++ 库文件
-add_library(server STATIC server.cpp)
+add_library(server STATIC server.cpp server.h)

@@ -8,4 +8,4 @@ project(socket VERSION 1.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(socket STATIC socket.cpp)
+add_library(socket STATIC socket.cpp socket.h) 
