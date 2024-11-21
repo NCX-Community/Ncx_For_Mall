@@ -13,7 +13,6 @@ EpollRun::~EpollRun() {
 
 void EpollRun::run() {
     while(!quit) {
-        std::cout<<quit<<std::endl;
         std::vector<Channel*> activeChannels = ep->poll();
         // std::cout<<"epoll event count: "<< activeChannels.size() <<std::endl;
         for(auto channel : activeChannels) {

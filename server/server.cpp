@@ -25,6 +25,8 @@ void Server::newConnectionHandle(Socket* client) {
 
 void Server::disconnectHandle(int conn_id) {
     // remove connection from connections
-    std::cout<<"disconnectClient!"<<std::endl;
+    Connection* conn = connections[conn_id];
+    connections.erase(conn_id);
+    delete conn;
     //delete connection
 }

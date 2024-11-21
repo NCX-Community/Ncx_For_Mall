@@ -5,7 +5,7 @@
 class Connection {
 public:
     Connection(Socket* sock, EpollRun*er);
-    ~Connection() = default;
+    ~Connection();
     int get_id();
     void handleRead();
     void setDisconnectClient(std::function<void(int)> disconnectClient);
