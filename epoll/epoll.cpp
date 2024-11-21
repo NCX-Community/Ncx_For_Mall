@@ -1,8 +1,6 @@
-#include <unistd.h>
-#include <sys/epoll.h>
-#include <cstring>
 #include "epoll.h"
-#include "error.h"
+#include "merror.h"
+#include "channel.h"
 
 Epoll::Epoll() {
     epoll_fd = epoll_create1(0);
@@ -23,12 +21,13 @@ struct epoll_event* Epoll::get_events() {return events;}
 
 std::vector<Channel*> Epoll::poll() {
     std::vector<Channel*> recvChannels;
-    ::epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
-    for(auto ev : events) {
-        Channel* recvChannel = static_cast<Channel*>(ev.data.ptr);
-        recvChannel->setRevs(ev.events);
+    int nfps = ::epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+    for(int i = 0; i < nfps; i++) {
+        Channel* recvChannel = static_cast<Channel*>(events[i].data.ptr);
+        recvChannel->setRevs(events[i].events);
         recvChannels.push_back(recvChannel);
     }
+
     return recvChannels;
 }
 

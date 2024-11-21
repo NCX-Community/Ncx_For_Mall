@@ -1,11 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <stdio.h>
-#include <cstring>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <cerrno>
+#include"util.h"
 
 // Reactor模式中的reactor，负责监听事件和分发事件
 class EpollRun;

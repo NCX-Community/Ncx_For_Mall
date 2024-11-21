@@ -45,6 +45,8 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "io_context": "cpp",
-        "socket": "cpp"
+        "socket": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp"
     }
 }

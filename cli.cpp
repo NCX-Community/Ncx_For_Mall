@@ -1,5 +1,5 @@
 #include "endpoint.h"
-#include "error.h"
+#include "merror.h"
 #include "socket.h"
 #include <unistd.h>
 
@@ -15,7 +15,7 @@ const char CLI_OP[] = "127.0.0.1";
 const uint16_t CLI_PORT = 0;
 
 int
-main(void) {
+main() {
     Endpoint remote_endpoint(SERVER_IP, SERVER_PORT);
     Endpoint client_endpoint(CLI_OP, CLI_PORT);
     Socket* cli = new TcpSocket();

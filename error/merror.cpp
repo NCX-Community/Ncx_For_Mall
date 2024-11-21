@@ -1,6 +1,4 @@
-#include "error.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "merror.h"
 
 void errif(bool condition, const char* msg) {
     if (condition) {

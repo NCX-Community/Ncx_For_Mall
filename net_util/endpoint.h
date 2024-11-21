@@ -1,9 +1,7 @@
 #ifndef ENDPOINT_H
 #define ENDPOINT_H
 
-#include<arpa/inet.h>
-#include <string.h>
-#include <stdio.h>
+#include"util.h"
 
 class Endpoint{
 public:

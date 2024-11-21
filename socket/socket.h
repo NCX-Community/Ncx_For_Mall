@@ -1,8 +1,8 @@
 // socket.h
 #ifndef SOCKET_H
 #define SOCKET_H
-#include "common.h"
-#include "endpoint.h"
+#include"util.h"
+
 // socket trait
 class Socket
 {

@@ -1,9 +1,6 @@
 #ifndef CHANNEL_H  
 #define CHANNEL_H
-#include<sys/epoll.h>
-#include<functional>
-#include"epoll.h"
-#include"epoll_run.h"
+#include"util.h"
 
 class EpollRun;
 

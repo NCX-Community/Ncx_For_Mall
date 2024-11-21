@@ -1,13 +1,14 @@
 // 动态分配socket接口
-#include "socket.h"
-#include<sys/socket.h>
-#include<unistd.h>
-#include "error.h"
+#include"socket.h"
+#include "merror.h"
 #include "endpoint.h"
+#include "common.h"
+
 Socket::~Socket() {}
 
 TcpSocket::TcpSocket() {
     fd = socket(AF_INET, SOCK_STREAM, 0);
+    std::cout<<"serv fd: "<<fd<<std::endl;
 }
 
 TcpSocket::~TcpSocket() {

@@ -24,6 +24,6 @@ aux_source_directory(socket SOCKET)
 
 # bin
 file(GLOB SERV "serv.cpp")
-# file(GLOB CLIENT "cli.cpp")
+file(GLOB CLIENT "cli.cpp")
 add_executable(ncxs ${SERV} ${EPOLL} ${ERROR} ${NET_UTIL} ${SERVER} ${SOCKET})
-# add_executable(ncxc ${NET_UTIL} ${ERROR} ${SOCKET})
+add_executable(ncxc ${CLIENT} ${NET_UTIL} ${ERROR} ${SOCKET})

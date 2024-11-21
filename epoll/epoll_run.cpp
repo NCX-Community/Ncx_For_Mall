@@ -1,4 +1,6 @@
 #include "epoll_run.h"
+#include "epoll.h"
+#include "channel.h"
 
 EpollRun::EpollRun() {
     ep = new Epoll();
@@ -12,6 +14,7 @@ EpollRun::~EpollRun() {
 void EpollRun::run() {
     while(!quit) {
         std::vector<Channel*> activeChannels = ep->poll();
+        std::cout<<"epoll event count: "<< activeChannels.size() <<std::endl;
         for(auto channel : activeChannels) {
             channel->callHandleFunc();
         }
