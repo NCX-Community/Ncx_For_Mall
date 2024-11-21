@@ -1,3 +1,6 @@
+#ifndef UTIL_H
+#define UTIL_H
+
 #include<iostream>
 #include<vector>
 #include<cstring>
@@ -11,6 +14,8 @@
 #include<arpa/inet.h>
 #include<string>
 #include<cerrno>
+#include<memory>
+#include<random>
 
 class EpollRun;
 class Channel;
@@ -19,4 +24,8 @@ class Endpoint;
 class EpollRun;
 class Socket;
 class Server;
-class Type;
+class Acceptor;
+class Connection;
+class Buffer;
+
+#endif

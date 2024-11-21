@@ -2,7 +2,6 @@
 #include"socket.h"
 #include "merror.h"
 #include "endpoint.h"
-#include "common.h"
 
 Socket::~Socket() {}
 
@@ -10,6 +9,8 @@ TcpSocket::TcpSocket() {
     fd = socket(AF_INET, SOCK_STREAM, 0);
     std::cout<<"serv fd: "<<fd<<std::endl;
 }
+
+TcpSocket::TcpSocket(int _fd): fd(_fd) {}
 
 TcpSocket::~TcpSocket() {
     ::close(fd);

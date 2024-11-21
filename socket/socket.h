@@ -2,7 +2,7 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 #include"util.h"
-
+#include "common.h"
 // socket trait
 class Socket
 {
@@ -27,6 +27,7 @@ private:
     int cli_fd;
 public:
     TcpSocket();
+    TcpSocket(int _fd);
     ~TcpSocket() override;
     void bind(Endpoint local_endpoint) override;
     void connect(Endpoint remote_endpoint) override;

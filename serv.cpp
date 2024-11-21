@@ -9,6 +9,7 @@
 #include "socket.h"
 #include "epoll_run.h"
 #include "server.h"
+#include "common.h"
 
 static const char SERVER_IP[] = "0.0.0.0";
 static const uint16_t SERVER_PORT = 6666;
