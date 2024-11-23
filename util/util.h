@@ -16,6 +16,11 @@
 #include<cerrno>
 #include<memory>
 #include<random>
+#include<thread>
+#include<queue>
+#include<mutex>
+#include<condition_variable>
+#include<future>
 
 class EpollRun;
 class Channel;
@@ -27,5 +32,6 @@ class Server;
 class Acceptor;
 class Connection;
 class Buffer;
+class ThreadPool;
 
 #endif

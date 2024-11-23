@@ -3,7 +3,7 @@
 #include "channel.h"
 
 Epoll::Epoll() {
-    epoll_fd = epoll_create1(0);
+    epoll_fd = epoll_create(1);
     errif(epoll_fd < 0, "epoll create error!");
 }
 
@@ -39,6 +39,7 @@ void Epoll::updateChannel(Channel* channel) {
     ev.data.ptr = channel;
     if(!channel->isEpolled()) {
         epoll_ctl(EPOLL_CTL_ADD, recvfd, &ev);
+        channel->setEpolled();
     }
     else {
         epoll_ctl(EPOLL_CTL_MOD, recvfd, &ev);

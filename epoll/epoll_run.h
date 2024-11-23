@@ -7,6 +7,7 @@ class Channel;
 class EpollRun {
 private:
     Epoll* ep;
+    std::unique_ptr<ThreadPool> tp;
     bool quit;
 public:
     EpollRun();
@@ -14,6 +15,7 @@ public:
     void run();
     void stop();
     void updateChannel(Channel* channel);
+    void addTask(std::function<void()> task);
 };
 
 

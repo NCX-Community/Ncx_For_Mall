@@ -10,11 +10,14 @@ Acceptor::Acceptor(Socket* _sock, EpollRun* _er) {
     this->sock = _sock;
     int serv_fd = sock->get_fd();
     this->acceptChanel = new Channel(er, serv_fd); 
-    acceptChanel->setHandleFunc(std::bind(&Acceptor::acceptNewConnection, this));
+    acceptChanel->setReadHandleFunc(std::bind(&Acceptor::acceptNewConnection, this));
     acceptChanel->enableRead();
+    acceptChanel->setUseThreadPool(false);
+    acceptChanel->setET();
 }
 
 void Acceptor::acceptNewConnection() {
+    printf("accept new connection\n");
     Endpoint client_addr;
     Socket* client_sock = new TcpSocket(sock->accept(client_addr));
     newConnectionHandle(client_sock);

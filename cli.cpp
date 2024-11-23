@@ -10,7 +10,7 @@ void connect_to_server(Endpoint remote_endpoint, int cli_fd) {
 }
 
 const char SERVER_IP[] = "0.0.0.0";
-const uint16_t SERVER_PORT = 6666;
+const uint16_t SERVER_PORT = 6667;
 const char CLI_OP[] = "127.0.0.1";
 const uint16_t CLI_PORT = 0;
 

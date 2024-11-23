@@ -13,6 +13,7 @@ TcpSocket::TcpSocket() {
 TcpSocket::TcpSocket(int _fd): fd(_fd) {}
 
 TcpSocket::~TcpSocket() {
+    printf("close fd: %d\n", fd);
     ::close(fd);
 };
 

@@ -11,7 +11,9 @@ private:
     uint32_t revs;
     EpollRun* er;
     bool is_epolled;
-    std::function<void()> handle_func;
+    bool use_threadpool;
+    std::function<void()> read_handle;
+    std::function<void()> write_handle;
 public:
     Channel(EpollRun* er, int fd);
     ~Channel();
@@ -21,8 +23,11 @@ public:
     uint32_t getEvents();
     int getFd();
     bool isEpolled();
-    void setHandleFunc(std::function<void()> func);
-    void callHandleFunc();
+    void setReadHandleFunc(std::function<void()> func);
+    void setWriteHandleFunc(std::function<void()> func);
+    void setUseThreadPool(bool use_threadpool = true);  
+    void setET();
+    void callHandle();
 };
 
 #endif

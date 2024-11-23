@@ -14,16 +14,16 @@ Connection::Connection(Socket *sock, EpollRun *er)
     this->er = er;
     this->channel = new Channel(er, sock->get_fd());
     std::function<void()> cb = std::bind(&Connection::handleRead, this);
-    this->channel->setHandleFunc(cb);
+    this->channel->setReadHandleFunc(cb);
     this->channel->enableRead();
+    this->channel->setET();
     this->buf = new Buffer();
 }
 
 Connection::~Connection()
 {
-    close(sock->get_fd());
-    delete sock;
     delete channel;
+    delete sock;
     delete buf;
 }
 
@@ -34,6 +34,7 @@ int Connection::get_id()
 
 void Connection::handleRead()
 {
+    // printf("handleRead\n");
     char buf[1024];
     bzero(buf, sizeof(buf));
     while (true)
@@ -57,7 +58,7 @@ void Connection::handleRead()
         }
         else if (bytes_read == 0)
         { // EOF，客户端断开连接
-            printf("client fd %d disconnect!\n", sock->get_fd());
+            // printf("client disconnect\n");
             disconnectClient(conn_id);
             break;
         }
@@ -67,4 +68,9 @@ void Connection::handleRead()
 void Connection::setDisconnectClient(std::function<void(int)> disconnectClient)
 {
     this->disconnectClient = disconnectClient;
+}
+
+int Connection::get_fd()
+{
+    return sock->get_fd();
 }

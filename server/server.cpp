@@ -18,15 +18,19 @@ void Server::newConnectionHandle(Socket* client) {
     // create a new connection
     Connection* newConn = new Connection(client, er);
     newConn->setDisconnectClient(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
-
     // add connection to connections
     connections[newConn->get_id()] = std::move(newConn);
 }
 
 void Server::disconnectHandle(int conn_id) {
     // remove connection from connections
-    Connection* conn = connections[conn_id];
-    connections.erase(conn_id);
-    delete conn;
+    // std::printf("disconnect %d connection\n", conn_id);
+    if (connections.find(conn_id) != connections.end()) {
+        Connection* conn = connections[conn_id];
+        connections.erase(conn_id);
+        close(conn->get_fd());
+        //delete conn;  //epoll 仍然可poll 导致段错误
+    }
+    // printf("disconnect connection finish\n");
     //delete connection
 }
