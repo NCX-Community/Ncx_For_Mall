@@ -15,6 +15,7 @@ include_directories(
     server
     socket
     util
+    example
 )
 
 aux_source_directory(epoll EPOLL)
@@ -23,9 +24,10 @@ aux_source_directory(net_util NET_UTIL)
 aux_source_directory(server SERVER)
 aux_source_directory(socket SOCKET)
 aux_source_directory(util, UTIL)
+aux_source_directory(example, EXAMPLE)
 
 # bin
-file(GLOB SERV "serv.cpp")
-file(GLOB CLIENT "cli.cpp")
+file(GLOB SERV "example/serv.cpp")
+file(GLOB CLIENT "example/cli.cpp")
 add_executable(ncxs ${SERV} ${EPOLL} ${ERROR} ${NET_UTIL} ${SERVER} ${SOCKET} ${UTIL})
 add_executable(ncxc ${CLIENT} ${NET_UTIL} ${ERROR} ${SOCKET} ${UTIL})

@@ -9,7 +9,9 @@ class Server {
 private:
     EpollRun* er;
     Acceptor* acceptor;
+    ThreadPool* tp;     //线程池应该由reactor负责管理
     std::unordered_map<int, Connection*> connections;
+    std::vector<EpollRun*> sub_reactors;
 public:
     Server() = default;
     Server(Socket* serv_sock, EpollRun* er);

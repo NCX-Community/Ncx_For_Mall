@@ -3,7 +3,7 @@
 #include"epoll_run.h"
 
 
-Channel::Channel(EpollRun* _er, int _fd): er(_er), fd(_fd), evs(0), revs(0), is_epolled(false), use_threadpool(true){}
+Channel::Channel(EpollRun* _er, int _fd): er(_er), fd(_fd), evs(0), revs(0), is_epolled(false){}
 Channel::~Channel(){}
 
 void Channel::enableRead() {
@@ -18,10 +18,6 @@ void Channel::setEpolled() {
 void Channel::setET() {
     evs |= EPOLLET;
     er->updateChannel(this);
-}
-
-void Channel::setUseThreadPool(bool use_threadpool) {
-    use_threadpool = use_threadpool;
 }
 
 uint32_t Channel::getEvents() {
@@ -49,13 +45,6 @@ void Channel::setWriteHandleFunc(std::function<void()> func) {
 }
 
 void Channel::callHandle() {
-    if(revs & EPOLLIN) {
-        if(use_threadpool) er->addTask(read_handle);
-        else read_handle();
-    }
-
-    if(revs & EPOLLOUT) {
-        if(use_threadpool) er->addTask(write_handle);
-        else write_handle();
-    }
+    if(revs & EPOLLIN) read_handle();
+    if(revs & EPOLLOUT) write_handle();
 }

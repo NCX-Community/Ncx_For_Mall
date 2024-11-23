@@ -12,7 +12,6 @@ Acceptor::Acceptor(Socket* _sock, EpollRun* _er) {
     this->acceptChanel = new Channel(er, serv_fd); 
     acceptChanel->setReadHandleFunc(std::bind(&Acceptor::acceptNewConnection, this));
     acceptChanel->enableRead();
-    acceptChanel->setUseThreadPool(false);
     acceptChanel->setET();
 }
 

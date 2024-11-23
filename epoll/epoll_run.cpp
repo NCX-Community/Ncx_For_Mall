@@ -6,7 +6,6 @@
 EpollRun::EpollRun()
 {
     ep = new Epoll();
-    tp = std::make_unique<ThreadPool>();
     quit = false;
 }
 
@@ -39,9 +38,4 @@ void EpollRun::stop()
 void EpollRun::updateChannel(Channel *channel)
 {
     ep->updateChannel(channel);
-}
-
-void EpollRun::addTask(std::function<void()> task)
-{
-    tp->add(task);
 }
