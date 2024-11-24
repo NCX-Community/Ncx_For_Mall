@@ -18,16 +18,7 @@ static const int BACKLOG = 10;
 
 int main(void)
 {
-    // create tcp server
-    Socket *serv_sock = create_socket(Type::TCP);
-    Endpoint server_endpoint(SERVER_IP, SERVER_PORT);
-    serv_sock->bind(server_endpoint);
-    serv_sock->listen(BACKLOG);
-
-    // create and run epoll
-    EpollRun* epoll_run = new EpollRun();
-    Server* server = new Server(serv_sock, epoll_run);
-    epoll_run->run();
-
+    Server* server = new Server(SERVER_IP, SERVER_PORT, BACKLOG);
+    server->start();
     return 0;
 }

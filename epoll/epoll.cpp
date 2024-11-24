@@ -12,7 +12,7 @@ Epoll::~Epoll() {
     delete[] events;
 }
 
-void Epoll::epoll_ctl(int op, int fd, struct epoll_event* ev) {
+int Epoll::epoll_ctl(int op, int fd, struct epoll_event* ev) {
     ::epoll_ctl(epoll_fd, op, fd, ev);
 }
 
@@ -31,11 +31,11 @@ std::vector<Channel*> Epoll::poll() {
     return recvChannels;
 }
 
-void Epoll::updateChannel(Channel* channel) {
+void Epoll::update_channel(Channel* channel) {
     int recvfd = channel->getFd();
     struct epoll_event ev;
     bzero(&ev, sizeof(ev));
-    ev.events = channel->getEvents();
+    ev.events = channel->listen_events();
     ev.data.ptr = channel;
     if(!channel->isEpolled()) {
         epoll_ctl(EPOLL_CTL_ADD, recvfd, &ev);
@@ -43,5 +43,12 @@ void Epoll::updateChannel(Channel* channel) {
     }
     else {
         epoll_ctl(EPOLL_CTL_MOD, recvfd, &ev);
+    }
+}
+
+void Epoll::delete_channel(Channel* channel) {
+    int channel_fd = channel->getFd();
+    if(epoll_ctl(EPOLL_CTL_DEL, channel_fd, nullptr) < 0) {
+        std::puts("Epoll:: epoll delete error!");
     }
 }

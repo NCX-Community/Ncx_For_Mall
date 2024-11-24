@@ -5,15 +5,18 @@ class Epoll;
 class Channel;
 
 class EpollRun {
-private:
-    Epoll* ep;
-    bool quit;
 public:
     EpollRun();
     ~EpollRun();
     void run();
-    void stop();
-    void updateChannel(Channel* channel);
+    void do_after_handle_events();
+    void add_to_do(std::function<void()> func);
+    void update_channel(Channel* channel);
+    void delete_channel(Channel* channel);
+private:
+    std::mutex mtx;
+    std::vector<std::function<void()>> to_do_list;
+    std::unique_ptr<Epoll> poller;
 };
 
 

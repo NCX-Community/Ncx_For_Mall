@@ -5,27 +5,44 @@
 class EpollRun;
 
 class Channel {
-private:
-    int fd;
-    uint32_t evs;
-    uint32_t revs;
-    EpollRun* er;
-    bool is_epolled;
-    std::function<void()> read_handle;
-    std::function<void()> write_handle;
 public:
+    DISALLOW_MOVE(Channel);
+
     Channel(EpollRun* er, int fd);
     ~Channel();
-    void setEpolled();
-    void setRevs(uint32_t revs);
+
     void enableRead();
-    uint32_t getEvents();
+    void enableWrite();
+    void disableWrite();
+
     int getFd();
+    short listen_events();
+    short ready_events();
+    void setRevs(uint32_t revs);
+
     bool isEpolled();
-    void setReadHandleFunc(std::function<void()> func);
-    void setWriteHandleFunc(std::function<void()> func);
-    void setET();
-    void callHandle();
+    void setEpolled(bool in = true);
+
+    void set_read_callback(std::function<void()> func);
+    void set_write_callback(std::function<void()> func);
+    void set_et();
+    void set_tie(const std::shared_ptr<void>& tie);
+
+    void handle_event();
+    void handle_event_guard();
+
+private:
+    int fd_;
+    EpollRun* epoll_run_;
+    std::weak_ptr<void> tie_; 
+    
+    short listen_events_;
+    short ready_events_;
+
+    bool is_epolled_{false};
+
+    std::function<void()> read_callback_;
+    std::function<void()> write_callback_;
 };
 
 #endif

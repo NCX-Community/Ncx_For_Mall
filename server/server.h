@@ -6,20 +6,28 @@
 // Reactor模式中的reactor，负责监听事件和分发事件
 
 class Server {
-private:
-    EpollRun* er;
-    Acceptor* acceptor;
-    ThreadPool* tp;     //线程池应该由reactor负责管理
-    std::unordered_map<int, Connection*> connections;
-    std::vector<EpollRun*> sub_reactors;
 public:
     Server() = default;
-    Server(Socket* serv_sock, EpollRun* er);
+    Server(const char* IP, const uint16_t PORT, const int BACKLOG);
     ~Server();
+
+    void start();
+
     //handle 事件函数集
-    void newConnectionHandle(Socket* client);
-    void disconnectHandle(int conn_id);
-    void handleRead(int client_fd);
+    void newConnectionHandle(int client_fd);
+    void disconnectHandle(const std::shared_ptr<Connection>& conn);
+
+    void bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func);
+    void bind_on_message(std::function<void(std::shared_ptr<Connection>)> func);
+private:
+    std::unique_ptr<EpollRun> main_reactor_;
+    std::unique_ptr<Acceptor> acceptor;
+    std::unique_ptr<ThreadPool> tp;     //线程池应该由reactor负责管理
+    std::unordered_map<int, std::shared_ptr<Connection>> connections;
+    std::vector<std::unique_ptr<EpollRun>> sub_reactors;
+
+    std::function<void(std::shared_ptr<Connection>)> on_connect_;
+    std::function<void(std::shared_ptr<Connection>)> on_message_;
 };
 
 #endif

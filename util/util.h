@@ -27,11 +27,26 @@ class Channel;
 class Epoll;
 class Endpoint;
 class EpollRun;
-class Socket;
+class TcpSocket;
 class Server;
 class Acceptor;
 class Connection;
 class Buffer;
 class ThreadPool;
+
+/// disallow copy constructor
+#define DISALLOW_COPY(TypeName) \
+    TypeName(const TypeName&) = delete; \
+    void operator=(const TypeName&) = delete;
+
+/// disallow move constructor
+#define DISALLOW_MOVE(TypeName) \
+    TypeName(TypeName&&) = delete; \
+    void operator=(TypeName&&) = delete;
+
+/// disallow copy and move constructor
+#define DISALLOW_COPY_AND_MOVE(TypeName) \
+    DISALLOW_COPY(TypeName) \
+    DISALLOW_MOVE(TypeName)
 
 #endif

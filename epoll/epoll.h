@@ -4,19 +4,20 @@
 #include"util.h"
 
 class Channel;
-constexpr int MAX_EVENTS = 10;
+constexpr int MAX_EVENTS = 1000;
 
 class Epoll {
-private:
-    int epoll_fd;
-    struct epoll_event events[MAX_EVENTS];
 public:
     Epoll();
     ~Epoll();
-    void epoll_ctl(int op, int fd, struct epoll_event* ev);
+    int epoll_ctl(int op, int fd, struct epoll_event* ev);
     int get_epfd();
     struct epoll_event* get_events();
     std::vector<Channel*> poll();
-    void updateChannel(Channel* channel);
+    void update_channel(Channel* channel);
+    void delete_channel(Channel* channel);
+private:
+    int epoll_fd;
+    struct epoll_event events[MAX_EVENTS];
 };
 #endif

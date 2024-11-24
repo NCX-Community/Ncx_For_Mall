@@ -15,3 +15,7 @@ size_t Buffer::size() {
 const char* Buffer::data() {
     return buf.data();
 }
+
+void Buffer::set_buf(const char* data, size_t len) {
+    buf.assign(data, len);
+}

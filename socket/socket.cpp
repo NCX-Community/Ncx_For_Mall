@@ -3,8 +3,6 @@
 #include "merror.h"
 #include "endpoint.h"
 
-Socket::~Socket() {}
-
 TcpSocket::TcpSocket() {
     fd = socket(AF_INET, SOCK_STREAM, 0);
     std::cout<<"serv fd: "<<fd<<std::endl;
@@ -41,20 +39,3 @@ int TcpSocket::accept(Endpoint &client) {
 }
 
 int TcpSocket::get_fd() {return fd;}
-
-
-Socket* create_socket(Type sock_tp) {
-    switch (sock_tp) {
-        case Type::TCP:
-            return new TcpSocket();
-        case Type::UDP:
-            //todo
-            return nullptr;
-        case Type::RAW:
-            //todo
-            return nullptr;
-        case Type::SEQPACKET:
-            //todo
-            return nullptr;
-    }
-}
