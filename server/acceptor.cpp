@@ -8,7 +8,7 @@
 Acceptor::Acceptor(const char* IP, const uint16_t PORT, const int BACKLOG, EpollRun* _er) {
     // create tcp server
     Endpoint server_endpoint(IP, PORT);
-    this->sock = std::make_unique<TcpSocket>();
+    this->sock = std::make_unique<TcpSocket>(false);
     sock->bind(server_endpoint);
     sock->listen(BACKLOG);
 

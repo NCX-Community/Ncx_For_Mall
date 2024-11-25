@@ -22,6 +22,7 @@
 #include<condition_variable>
 #include<future>
 #include<sys/eventfd.h>
+#include<fcntl.h>
 
 class EpollRun;
 class Channel;

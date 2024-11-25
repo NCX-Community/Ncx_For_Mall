@@ -18,7 +18,7 @@ int
 main() {
     Endpoint remote_endpoint(SERVER_IP, SERVER_PORT);
     Endpoint client_endpoint(CLI_OP, CLI_PORT);
-    TcpSocket* cli = new TcpSocket();
+    TcpSocket* cli = new TcpSocket(true); // 设置为非阻塞socket
     cli->bind(client_endpoint);
     socklen_t len = sizeof(remote_endpoint.addr);
     int result = connect(cli->get_fd(), (sockaddr*)&remote_endpoint.addr, len);

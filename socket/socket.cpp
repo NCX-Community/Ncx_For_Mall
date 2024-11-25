@@ -3,9 +3,15 @@
 #include "merror.h"
 #include "endpoint.h"
 
-TcpSocket::TcpSocket() {
+TcpSocket::TcpSocket(bool is_nonblock): is_nonblock_(is_nonblock) {
     fd = socket(AF_INET, SOCK_STREAM, 0);
-    std::cout<<"serv fd: "<<fd<<std::endl;
+    if(is_nonblock_) {
+        int flags = fcntl(fd, F_GETFL, 0);
+        errif(flags == -1, "fcntl error");
+        flags |= O_NONBLOCK;
+        errif(fcntl(fd, F_SETFL, flags) == -1, "fcntl error");
+    }
+    //std::cout<<"serv fd: "<<fd<<std::endl;
 }
 
 TcpSocket::TcpSocket(int _fd): fd(_fd) {}

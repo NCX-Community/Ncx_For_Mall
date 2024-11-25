@@ -9,8 +9,9 @@ class TcpSocket
 private:
     int fd;
     int cli_fd;
+    bool is_nonblock_;
 public:
-    TcpSocket();
+    TcpSocket(bool is_nonblock = true);
     TcpSocket(int _fd);
     ~TcpSocket();
     void bind(Endpoint local_endpoint);
