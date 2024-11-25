@@ -16,6 +16,7 @@ public:
     //handle 事件函数集
     void newConnectionHandle(int client_fd);
     void disconnectHandle(const std::shared_ptr<Connection>& conn);
+    void disconnectHandleInLoop(const std::shared_ptr<Connection>& conn);
 
     void bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func);
     void bind_on_message(std::function<void(std::shared_ptr<Connection>)> func);

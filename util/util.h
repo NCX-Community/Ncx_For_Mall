@@ -21,6 +21,7 @@
 #include<mutex>
 #include<condition_variable>
 #include<future>
+#include<sys/eventfd.h>
 
 class EpollRun;
 class Channel;

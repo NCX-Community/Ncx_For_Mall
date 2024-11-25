@@ -2,12 +2,23 @@
 #include "epoll.h"
 #include "channel.h"
 #include "threadPool.h"
+#include "current_thread.h"
 
-EpollRun::EpollRun(): poller(std::make_unique<Epoll>()) {}
+EpollRun::EpollRun(): poller(std::make_unique<Epoll>()){
+    wakeup_fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+    wakeup_channel_ = std::make_unique<Channel>(this, wakeup_fd_);    
+
+    wakeup_channel_->set_read_callback(std::bind(&EpollRun::wakeup_callback, this));
+    wakeup_channel_->enableRead();
+    wakeup_channel_->setEpolled(true);
+}
 EpollRun::~EpollRun() {}
 
 void EpollRun::run()
 {
+    // 将实际运行epoll run的线程tid保存在tid中
+    tid_ = CURRENT_THREAD::tid();
+
     while (true)
     {
         std::vector<Channel *> activeChannels = poller->poll();
@@ -51,4 +62,29 @@ void EpollRun::do_after_handle_events()
     {
         func();
     }
+}
+
+bool EpollRun::isInEpollLoop()
+{
+    return tid_ == CURRENT_THREAD::tid();
+}
+
+void EpollRun::run_on_onwer_thread(std::function<void()> cb)
+{
+    if (isInEpollLoop())cb();
+    else add_to_do(std::move(cb));
+}
+
+void EpollRun::wakeup_callback() {
+    // read
+    uint64_t one = 1;
+    ssize_t n = ::read(wakeup_fd_, &one, sizeof one);
+    if(n != sizeof one) {
+        std::cout<<"EpollRun::wakeup_callback() reads "<<n<<" bytes instead of 1"<<std::endl;
+    }
+    return;
+}
+
+int EpollRun::wakeup_fd() {
+    return wakeup_fd_;
 }
