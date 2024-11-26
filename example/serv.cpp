@@ -18,7 +18,8 @@ static const int BACKLOG = 10;
 
 int main(void)
 {
-    Server* server = new Server(SERVER_IP, SERVER_PORT, BACKLOG);
+    EpollRun* main_reactor = new EpollRun();
+    Server* server = new Server(main_reactor, SERVER_IP, SERVER_PORT, BACKLOG);
     server->start();
     return 0;
 }

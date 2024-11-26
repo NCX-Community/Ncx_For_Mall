@@ -6,6 +6,7 @@
 class Channel;
 constexpr int MAX_EVENTS = 1000;
 
+// use epoll to create and monitor channel 
 class Epoll {
 public:
     Epoll();

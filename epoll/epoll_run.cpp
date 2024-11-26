@@ -1,7 +1,6 @@
 #include "epoll_run.h"
 #include "epoll.h"
 #include "channel.h"
-#include "threadPool.h"
 #include "current_thread.h"
 
 EpollRun::EpollRun(): poller(std::make_unique<Epoll>()){
@@ -12,7 +11,11 @@ EpollRun::EpollRun(): poller(std::make_unique<Epoll>()){
     wakeup_channel_->enableRead();
     wakeup_channel_->setEpolled(true);
 }
-EpollRun::~EpollRun() {}
+EpollRun::~EpollRun() {
+    // close eventfd channel and eventfd
+    poller->delete_channel(wakeup_channel_.get());
+    ::close(wakeup_fd_);
+}
 
 void EpollRun::run()
 {

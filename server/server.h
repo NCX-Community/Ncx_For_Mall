@@ -8,7 +8,7 @@
 class Server {
 public:
     Server() = default;
-    Server(const char* IP, const uint16_t PORT, const int BACKLOG);
+    Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG);
     ~Server();
 
     void start();
@@ -23,9 +23,8 @@ public:
 private:
     std::unique_ptr<EpollRun> main_reactor_;
     std::unique_ptr<Acceptor> acceptor;
-    std::unique_ptr<ThreadPool> tp;     //线程池应该由reactor负责管理
+    std::unique_ptr<EpThreadPool> tp;     //线程池应该由reactor负责管理
     std::unordered_map<int, std::shared_ptr<Connection>> connections;
-    std::vector<std::unique_ptr<EpollRun>> sub_reactors;
 
     std::function<void(std::shared_ptr<Connection>)> on_connect_;
     std::function<void(std::shared_ptr<Connection>)> on_message_;

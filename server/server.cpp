@@ -5,47 +5,36 @@
 #include "endpoint.h"
 #include "acceptor.h"
 #include "connection.h"
-#include "threadPool.h"
 #include "current_thread.h"
+#include "epThreadPool.h"
 
-Server::Server(const char* IP, const uint16_t PORT, const int BACKLOG){
-    // create main reactor
-    auto main_reactor_ = std::make_unique<EpollRun>();
-    auto tp = std::make_unique<ThreadPool>();
+Server::Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
+
+    // create thread pool
+    tp = std::make_unique<EpThreadPool>();
 
     // one loop in a thread
+    // create acceptor
     this->acceptor = std::make_unique<Acceptor>(IP, PORT, BACKLOG, main_reactor_.get());
     acceptor->set_new_connection_callback(std::bind(&Server::newConnectionHandle, this, std::placeholders::_1));
 
-    // create sub-reactor
-    int size = std::thread::hardware_concurrency();
-    for(int i = 0; i < size; i++) {
-        // 创建sub—reactor等待处理连接
-        EpollRun* sub_ep = new EpollRun();
-        sub_reactors.emplace_back(sub_ep);
-    }
 }
 
 Server::~Server() {}
 
 void Server::start() {
-    int size = std::thread::hardware_concurrency();
-    for(int i = 0; i < size; i++) {
-        std::function<void()>sub_loop = std::bind(&EpollRun::run, sub_reactors[i].get());
-        tp->add(sub_loop);
-    }
-
+    tp->Start();
     main_reactor_->run();
 }
 
 void Server::newConnectionHandle(int client_fd) {
-    // load balance schedule algothrm
-    // ramdom schedule
-    
-    int random = client_fd % sub_reactors.size();
+    // choose a sub reactor
+    EpollRun* sub_reactor = tp->NextLoop();
+
     // create a new connection
-    std::shared_ptr<Connection> newConn = std::make_shared<Connection>((std::move(client_fd), sub_reactors[random].get()));
+    std::shared_ptr<Connection> newConn = std::make_shared<Connection>((std::move(client_fd), sub_reactor));
     newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
+
     // add connection to connections
     connections[newConn->get_conn_id()] = std::move(newConn);
     connections[newConn->get_conn_id()]->ConnectionEstablished();
