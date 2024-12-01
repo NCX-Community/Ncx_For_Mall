@@ -11,7 +11,7 @@
 Server::Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
 
     // create thread pool
-    tp = std::make_unique<EpThreadPool>();
+    tp = std::make_unique<EpThreadPool>(pool);
 
     // one loop in a thread
     // create acceptor
@@ -32,7 +32,7 @@ void Server::newConnectionHandle(int client_fd) {
     EpollRun* sub_reactor = tp->NextLoop();
 
     // create a new connection
-    std::shared_ptr<Connection> newConn = std::make_shared<Connection>((std::move(client_fd), sub_reactor));
+    std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), sub_reactor);
     newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
 
     // add connection to connections

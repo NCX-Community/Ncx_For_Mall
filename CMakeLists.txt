@@ -9,25 +9,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # module 
 include_directories(
-    epoll
-    error
-    net_util
-    server
-    socket
+    tcp
     util
-    example
 )
 
-aux_source_directory(epoll EPOLL)
-aux_source_directory(error ERROR)
-aux_source_directory(net_util NET_UTIL)
-aux_source_directory(server SERVER)
-aux_source_directory(socket SOCKET)
+aux_source_directory(tcp TCP)
 aux_source_directory(util, UTIL)
 aux_source_directory(example, EXAMPLE)
 
 # bin
 file(GLOB SERV "example/serv.cpp")
 file(GLOB CLIENT "example/cli.cpp")
-add_executable(ncxs ${SERV} ${EPOLL} ${ERROR} ${NET_UTIL} ${SERVER} ${SOCKET} ${UTIL})
-add_executable(ncxc ${CLIENT} ${NET_UTIL} ${ERROR} ${SOCKET} ${UTIL})
+add_executable(ncxs ${TCP} ${NET_UTIL} ${UTIL})
+add_executable(ncxc ${TCP} ${NET_UTIL} ${UTIL})
