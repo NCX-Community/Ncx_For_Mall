@@ -43,6 +43,10 @@ void Connection::set_message_handle(std::function<void(Connection *)> on_message
 
 void Connection::handle_message()
 {
+    //printf("tcp connection handle message\n");
+    
+    // Read
+    Read();
     if (on_message_)
     {
         on_message_(this);

@@ -26,4 +26,6 @@ EpollRun* EpThreadPool::NextLoop() {
         res = loops_[next_++];
         if(next_ == static_cast<int> (loops_.size())) next_ = 0;
     }
+    //printf("find available epollthread\n");
+    return res;
 }

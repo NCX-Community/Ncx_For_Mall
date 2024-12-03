@@ -11,14 +11,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(
     tcp
     util
+    log
 )
 
 aux_source_directory(tcp TCP)
 aux_source_directory(util, UTIL)
-aux_source_directory(example, EXAMPLE)
+aux_source_directory(log, LOG)
+
 
 # bin
 file(GLOB SERV "example/serv.cpp")
 file(GLOB CLIENT "example/cli.cpp")
-add_executable(ncxs ${TCP} ${NET_UTIL} ${UTIL})
-add_executable(ncxc ${TCP} ${NET_UTIL} ${UTIL})
+add_executable(ncxs ${SERV} ${TCP} ${UTIL} ${LOG})
+add_executable(ncxc ${CLIENT} ${TCP} ${UTIL} ${LOG})
