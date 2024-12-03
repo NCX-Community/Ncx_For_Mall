@@ -24,6 +24,8 @@
 #include<sys/eventfd.h>
 #include<fcntl.h>
 
+#include "log.h"
+
 class EpollRun;
 class Channel;
 class Epoll;

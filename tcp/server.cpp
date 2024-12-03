@@ -34,15 +34,18 @@ void Server::newConnectionHandle(int client_fd) {
     // create a new connection
     std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), sub_reactor);
     newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
-
+    int newConn_id = newConn->get_conn_id();
     // add connection to connections
     connections[newConn->get_conn_id()] = std::move(newConn);
-    connections[newConn->get_conn_id()]->ConnectionEstablished();
+    //printf("insert new connection handle success\n");
+    connections[newConn_id]->ConnectionEstablished();
+
+    //printf("new connection create finish!\n");
 }
 
 void Server::disconnectHandle(const std::shared_ptr<Connection>& conn) {
     std::printf("thread %d disconnect connection\n", CURRENT_THREAD::tid());
-    main_reactor_->add_to_do(std::bind(&Server::disconnectHandle, this, conn));
+    main_reactor_->add_to_do(std::bind(&Server::disconnectHandleInLoop, this, conn));
     //唤醒main_reactor_的epoll_wait
     uint64_t one = 1;
     ssize_t n = write(main_reactor_->wakeup_fd(), &one, sizeof one);

@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#include "util.h"
 #include "merror.h"
 #include "endpoint.h"
 #include "socket.h"
@@ -18,6 +19,7 @@ static const int BACKLOG = 10;
 
 int main(void)
 {
+
     EpollRun* main_reactor = new EpollRun();
     Server* server = new Server(main_reactor, SERVER_IP, SERVER_PORT, BACKLOG);
     server->start();

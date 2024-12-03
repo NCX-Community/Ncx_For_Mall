@@ -28,6 +28,7 @@ void Acceptor::acceptNewConnection() {
     else std::puts("new connection callback not init");
 }
 
+// server.cpp set
 void Acceptor::set_new_connection_callback(std::function<void(int)> handle) {
     new_connection_callback_ = handle;
 }
