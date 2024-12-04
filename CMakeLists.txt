@@ -15,12 +15,21 @@ include_directories(
 )
 
 aux_source_directory(tcp TCP)
-aux_source_directory(util, UTIL)
-aux_source_directory(log, LOG)
+aux_source_directory(util UTIL)
+aux_source_directory(log LOG)
+
+# test for echo
+file(GLOB ECHOSERV "example/echo/serv.cpp")
+file(GLOB ECHOCLIENT "example/echo/cli.cpp")
+add_executable(echoserv ${ECHOSERV} ${TCP} ${UTIL} ${LOG})
+add_executable(echocli ${ECHOCLIENT} ${TCP} ${UTIL} ${LOG})
+
+# test_for_ex
+# file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
+# file(GLOB EXCLIENT "example/ex/test_ex_cli.cpp")
+# add_executable(exserv ${EXSERV} ${TCP} ${UTIL} ${LOG})
+# add_executable(excli ${EXCLIENT} ${TCP} ${UTIL} ${LOG})
 
 
-# bin
-file(GLOB SERV "example/serv.cpp")
-file(GLOB CLIENT "example/cli.cpp")
-add_executable(ncxs ${SERV} ${TCP} ${UTIL} ${LOG})
-add_executable(ncxc ${CLIENT} ${TCP} ${UTIL} ${LOG})
+
+
