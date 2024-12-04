@@ -19,10 +19,18 @@ public:
     void ConnectionConstructor();
 
     void handle_message();
-    void handle_close();
+    void set_message_handle(std::function<void(const std::shared_ptr<Connection>&)> on_message);
 
+    void handle_close();
     void set_disconnect_client_handle(std::function<void(const std::shared_ptr<Connection>&)> disconnectClient);
-    void set_message_handle(std::function<void(Connection*)> on_message);
+
+    // data_in_callback
+    void handle_data_in();
+    void set_data_in_handle(std::function<void(const std::shared_ptr<Connection>&)> on_data_in);
+
+    // data_out_callback
+    void handle_data_out();
+    void set_data_out_handle(std::function<void(const std::shared_ptr<Connection>&)> on_data_out);
 
     void set_output_buffer(const char* data, size_t len);
     Buffer* get_output_buffer();
@@ -38,6 +46,11 @@ public:
     int get_conn_id() const;
     ConnectionState get_state() const;
     EpollRun* get_epoll_run() const;
+
+    void setExChannel(ExChannel* exchannel);
+    void enableExchange();
+
+    void set_nonblocking();
 private:
     int conn_id;
     int client_fd;
@@ -49,9 +62,13 @@ private:
     std::unique_ptr<Buffer> input_buffer;
     std::unique_ptr<Buffer> output_buffer;
 
+    std::unique_ptr<ExChannel> exchannel_;
+
     /// server.h
     std::function<void(const std::shared_ptr<Connection>&)> on_close_;
-    std::function<void(Connection*)> on_message_;
+    std::function<void(const std::shared_ptr<Connection>&)> on_message_;
+    std::function<void(const std::shared_ptr<Connection>&)> on_data_in_;
+    std::function<void(const std::shared_ptr<Connection>&)> on_data_out_;
 
     void ReadNonBlocking();
     void WriteNonBlocking();

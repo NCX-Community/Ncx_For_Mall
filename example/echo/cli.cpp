@@ -61,6 +61,7 @@ int main() {
         printf("Send error: %s\n", strerror(errno));
         return -1;
     }
+    printf("Send\n");
 
     // 非阻塞接收消息
     while(true) {

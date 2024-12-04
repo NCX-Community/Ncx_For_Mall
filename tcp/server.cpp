@@ -7,6 +7,7 @@
 #include "connection.h"
 #include "current_thread.h"
 #include "epThreadPool.h"
+#include "exchannel.h"
 
 Server::Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
 
@@ -33,13 +34,28 @@ void Server::newConnectionHandle(int client_fd) {
 
     // create a new connection
     std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), sub_reactor);
+
+    // set connection nonblocking
+    newConn->set_nonblocking();
+
+    // set connection handle
+    newConn->set_data_in_handle(on_conn_read_);
+    newConn->set_data_out_handle(on_conn_write_);
     newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
+
+
     int newConn_id = newConn->get_conn_id();
     // add connection to connections
     connections[newConn->get_conn_id()] = std::move(newConn);
     //printf("insert new connection handle success\n");
     connections[newConn_id]->ConnectionEstablished();
 
+    // test for exchange pair
+    // if(this->connections.size() == 2) {
+    //     int conn_id1 = connections.begin()->first;
+    //     int conn_id2 = (++connections.begin())->first;
+    //     exchange_pair(conn_id1, conn_id2);
+    // }
     //printf("new connection create finish!\n");
 }
 
@@ -77,10 +93,33 @@ void Server::disconnectHandleInLoop(const std::shared_ptr<Connection>& conn) {
     //delete connection
 }
 
-void Server::bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func) {
+void Server::bind_on_connect(std::function<int(int)> func) {
     on_connect_ = std::move(func);
 }
 
 void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>)> func) {
     on_message_ = std::move(func);
+}
+
+void Server::bind_on_conn_read(std::function<void(std::shared_ptr<Connection>)> func) {
+    on_conn_read_ = std::move(func);
+}
+
+void Server::bind_on_conn_write(std::function<void(std::shared_ptr<Connection>)> func) {
+    on_conn_write_ = std::move(func);
+}
+
+void Server::exchange_pair(int conn_id1, int conn_id2) {
+    Connection* conn1 = connections[conn_id1].get();
+    Connection* conn2 = connections[conn_id2].get();
+
+    // exchannel for conn1
+    ExChannel* exchannel_1 = new ExChannel(conn1, conn2);
+    conn1->setExChannel(exchannel_1);
+    conn1->enableExchange();
+
+    // exchannel for conn2
+    ExChannel* exchannel_2 = new ExChannel(conn2, conn1);
+    conn2->setExChannel(exchannel_2);
+    conn2->enableExchange();
 }
