@@ -1,9 +1,11 @@
-#include "exchannel.h"
+#include "transfer.h"
 #include "connection.h"
 
-ExChannel::ExChannel(Connection* conn1, Connection* conn2): conn1(conn1), conn2(conn2) {}
-ExChannel::~ExChannel() {}
-void ExChannel::handle_exchange() {
+// 注意此交换通道是单向的
+Transfer::Transfer(Connection* conn1, Connection* conn2): conn1(conn1), conn2(conn2) {}
+Transfer::~Transfer() {}
+void Transfer::handle_transfer() {
+    printf("exchange data from conn%d to conn%d\n", conn1->get_conn_id(), conn2->get_conn_id());
     /// conn1 read, send to conn2
     /// send to conn1, transfer to conn2
     conn1->Read();

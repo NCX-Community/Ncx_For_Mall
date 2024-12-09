@@ -38,7 +38,7 @@ class Connection;
 class Buffer;
 class EvPoolThread;
 class EpThreadPool;
-class ExChannel;
+class Transfer;
 
 /// disallow copy constructor
 #define DISALLOW_COPY(TypeName) \

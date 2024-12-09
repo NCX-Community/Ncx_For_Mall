@@ -47,7 +47,7 @@ public:
     ConnectionState get_state() const;
     EpollRun* get_epoll_run() const;
 
-    void setExChannel(ExChannel* exchannel);
+    void setExChannel(Transfer* exchannel);
     void enableExchange();
 
     void set_nonblocking();
@@ -62,7 +62,8 @@ private:
     std::unique_ptr<Buffer> input_buffer;
     std::unique_ptr<Buffer> output_buffer;
 
-    std::unique_ptr<ExChannel> exchannel_;
+    bool is_in_transfer();
+    std::unique_ptr<Transfer> exchannel_;
 
     /// server.h
     std::function<void(const std::shared_ptr<Connection>&)> on_close_;
