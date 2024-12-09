@@ -7,7 +7,8 @@
 #include "connection.h"
 #include "current_thread.h"
 #include "epThreadPool.h"
-#include "exchannel.h"
+#include "transfer.h"
+#include "musl_channel.h"
 
 Server::Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
 
@@ -114,12 +115,12 @@ void Server::exchange_pair(int conn_id1, int conn_id2) {
     Connection* conn2 = connections[conn_id2].get();
 
     // exchannel for conn1
-    ExChannel* exchannel_1 = new ExChannel(conn1, conn2);
+    Transfer* exchannel_1 = new Transfer(conn1, conn2);
     conn1->setExChannel(exchannel_1);
     conn1->enableExchange();
 
     // exchannel for conn2
-    ExChannel* exchannel_2 = new ExChannel(conn2, conn1);
+    Transfer* exchannel_2 = new Transfer(conn2, conn1);
     conn2->setExChannel(exchannel_2);
     conn2->enableExchange();
 }

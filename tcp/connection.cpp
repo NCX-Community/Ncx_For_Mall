@@ -3,7 +3,7 @@
 #include "channel.h"
 #include "buffer.h"
 #include "epoll_run.h"
-#include "exchannel.h"
+#include "transfer.h"
 
 Connection::Connection(int _client_fd, EpollRun *_er) : client_fd(_client_fd), er(_er)
 {
@@ -242,9 +242,9 @@ EpollRun *Connection::get_epoll_run() const
     return er;
 }
 
-void Connection::setExChannel(ExChannel *exchannel)
+void Connection::setExChannel(Transfer *exchannel)
 {
-    exchannel_ = std::unique_ptr<ExChannel>(exchannel);
+    exchannel_ = std::unique_ptr<Transfer>(exchannel);
 }
 
 void Connection::enableExchange()
@@ -252,7 +252,7 @@ void Connection::enableExchange()
     if (exchannel_)
     {
         // 设置读为读后转发
-        this->channel->set_read_callback(std::bind(&ExChannel::handle_exchange, exchannel_.get()));
+        this->channel->set_read_callback(std::bind(&Transfer::handle_transfer, exchannel_.get()));
     }
 }
 
@@ -261,3 +261,5 @@ void Connection::set_nonblocking()
     int flags = fcntl(client_fd, F_GETFL, 0);
     fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 }
+
+bool Connection::is_in_transfer(){ return exchannel_ != nullptr; }

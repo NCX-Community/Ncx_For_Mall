@@ -1,22 +1,26 @@
-#include "util.h"
-#include "socket.h"
-#include "current_thread.h"
-#include "endpoint.h"
+/*
+read client
+*/
 
-const char MSG[] = "hello i am client from ";
+
+#include "util.h"
+#include "endpoint.h"
+#include "merror.h"
+#include "socket.h"
+#include <unistd.h>
+
+const char MSG[] = "hello i am nvxc!";
+
+
+void connect_to_server(Endpoint remote_endpoint, int cli_fd) {
+}
+
 const char SERVER_IP[] = "0.0.0.0";
 const uint16_t SERVER_PORT = 6667;
 const char CLI_OP[] = "127.0.0.1";
-// const uint16_t CLI_PORT = rand() % 10000 + 10000;
+const uint16_t CLI_PORT = 0;
 
 int main() {
-    // 设置随机数种子
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-    // 生成随机端口号
-    const uint16_t CLI_PORT = std::rand() % 10000 + 10000;
-
-    std::cout << "Client port: " << CLI_PORT << std::endl;
     Endpoint remote_endpoint(SERVER_IP, SERVER_PORT);
     Endpoint client_endpoint(CLI_OP, CLI_PORT);
     TcpSocket* cli = new TcpSocket(true); // 非阻塞socket
@@ -56,16 +60,6 @@ int main() {
     }
 
     printf("Connection established\n");
-    sleep(5);
-    // 发送消息
-    char message[1024];
-    snprintf(message, sizeof(message), "%s%d", MSG, CLI_PORT);
-    if (send(cli->get_fd(), message, sizeof(message), 0) < 0) {
-        printf("Send error: %s\n", strerror(errno));
-        return -1;
-    }
-
-    printf("send!");
 
     // 非阻塞接收消息
     while(true) {
@@ -85,10 +79,10 @@ int main() {
         if (result > 0) {
             ssize_t bytes_read = read(cli->get_fd(), buf, sizeof(buf));
             if (bytes_read > 0) {
-                printf("Message from server: %s\n", buf);
-                break;
+                printf("Message from client: %s\n", buf);
+                continue;
             } else if (bytes_read == 0) {
-                printf("Server closed connection\n");
+                printf("client closed connection\n");
                 break;
             } else if (errno != EAGAIN && errno != EWOULDBLOCK) {
                 printf("Read error: %s\n", strerror(errno));

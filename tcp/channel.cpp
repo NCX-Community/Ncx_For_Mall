@@ -55,6 +55,7 @@ void Channel::setRevs(uint32_t _revs) {
 
 void Channel::set_read_callback(std::function<void()> func) {
     read_callback_ = std::move(func);
+    this->enableRead();
 }
 
 void Channel::set_write_callback(std::function<void()> func) {
@@ -78,6 +79,7 @@ void Channel::handle_event() {
 
 void Channel::handle_event_guard() {
     if(ready_events_ & EPOLLIN) {
+        printf("channel read callback\n");
         if(read_callback_) read_callback_();
         else std::puts("channel read callback not init");
     }

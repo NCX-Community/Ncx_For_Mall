@@ -11,6 +11,27 @@ static const char SERVER_IP[] = "0.0.0.0";
 static const uint16_t SERVER_PORT = 6667;
 static const int BACKLOG = 10;
 
+class ExchangeServer {
+public:
+    ExchangeServer(EpollRun* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG);
+    ~ExchangeServer();
+
+    void start();
+private:
+    EpollRun* main_reactor_;
+    std::unique_ptr<Server> server_;
+};
+
+ExchangeServer::ExchangeServer(EpollRun* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG) {
+    main_reactor_ = main_reactor;
+    server_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
+}
+
+ExchangeServer::~ExchangeServer() {}
+
+void ExchangeServer::start() {
+    server_->start();
+}
 
 int main(void)
 {
