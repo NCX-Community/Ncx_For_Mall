@@ -10,9 +10,16 @@ NCXServer::NCXServer(EpollRun* main_reactor, char* IP, uint16_t PORT, int BACKLO
 : main_reactor_(main_reactor) {
     main_acceptor_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
     // 初始化on_connect_函数，当有新连接时，需要创建Control Channel handle
-    main_acceptor_->bind_on_connect([this](std::shared_ptr<Connection> new_conn) {
+    main_acceptor_->bind_on_connect([main_acceptor_ = main_acceptor_.get()](std::shared_ptr<Connection> new_conn) {
         // create control channel handle
-
+        try {
+            PROTOCOL::read_hello(new_conn->get_fd());
+        }
+        catch(const std::exception& e) {
+            printf("read hello error: %s\n", e.what());
+            //close connection
+            main_acceptor_->disconnectHandle(new_conn);
+        }
     });
 }
 
@@ -42,7 +49,8 @@ ControlChannelHandle::ControlChannelHandle(std::shared_ptr<Connection> conn) {
     //转发在这里面执行喔
     run_tcp_pool(bind_ip, bind_port, data_req_ch_tx, data_req_ch_rx.get());
 
-    
+
+
 }
 
 void ControlChannelHandle::run_tcp_pool(
@@ -76,4 +84,11 @@ void ControlChannelHandle::run_tcp_pool(
 
     tcp_conn_pool_->start();
     tcp_conn_pool_reactor_->run();
+}
+
+
+// Control Channel
+ControlChannel::ControlChannel(Connection* conn, MuslChannelRx* data_ch_rx) {
+    conn_ = std::shared_ptr<Connection>(conn);
+    data_ch_rx_ = std::unique_ptr<MuslChannelRx>(data_ch_rx);
 }

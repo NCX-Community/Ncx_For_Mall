@@ -35,4 +35,14 @@ private:
     std::unique_ptr<Server> tcp_conn_pool_;
 };
 
+
+// controlChannel
+class ControlChannel {
+public:
+    ControlChannel(Connection* conn, MuslChannelRx* data_ch_rx);
+private:
+    std::shared_ptr<Connection> conn_;
+    std::unique_ptr<MuslChannelRx> data_ch_rx_;
+};
+
 #endif

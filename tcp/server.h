@@ -38,7 +38,9 @@ private:
     std::unique_ptr<EpThreadPool> tp;     //线程池应该由reactor负责管理
     std::unordered_map<int, std::shared_ptr<Connection>> connections;
 
+    // 连接握手阶段，用于对连接的预处理（鉴权、判断连接请求类型）
     std::function<void(std::shared_ptr<Connection>)> on_connect_;
+    
     //std::function<void(std::shared_ptr<Connection>, std::unique_ptr<MuslChannelRx>, std::shared_ptr<MuslChannelTx>)> on_connect_;
     std::function<void(std::shared_ptr<Connection>)> on_message_;
 

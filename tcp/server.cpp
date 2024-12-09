@@ -47,11 +47,11 @@ void Server::newConnectionHandle(int client_fd) {
 
     int newConn_id = newConn->get_conn_id();
     //printf("insert new connection handle success\n");
-    newConn->ConnectionEstablished();
     if(on_connect_) {
         on_connect_(newConn);
     }
-
+    
+    newConn->ConnectionEstablished();
     // add connection to connections
     connections[newConn->get_conn_id()] = std::move(newConn);
 }
