@@ -67,7 +67,9 @@
         "stop_token": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "optional": "cpp",
+        "iomanip": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/g++-11"
 }

@@ -23,6 +23,10 @@
 #include<future>
 #include<sys/eventfd.h>
 #include<fcntl.h>
+#include<optional>
+#include<memory>
+#include<sstream>
+#include<atomic>
 
 #include "log.h"
 
@@ -39,6 +43,9 @@ class Buffer;
 class EvPoolThread;
 class EpThreadPool;
 class Transfer;
+class MuslChannel;
+class MuslChannelTx;
+class MuslChannelRx;
 
 /// disallow copy constructor
 #define DISALLOW_COPY(TypeName) \

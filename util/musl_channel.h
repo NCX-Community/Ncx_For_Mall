@@ -2,10 +2,8 @@
 #define MUSL_CHANNEL_H
 #include "util.h"
 #include "zmq.hpp"
-#include <memory>
-#include <string>
-#include <sstream>
-#include <atomic>
+
+
 
 // 生成唯一地址的辅助函数
 inline std::string generateUniqueAddr() {
@@ -23,7 +21,7 @@ public:
 
     zmq::context_t& getContext();
     std::shared_ptr<class MuslChannelTx> getSender();
-    std::unique_ptr<class MuslChannelRx> releaseReceiver();
+    std::unique_ptr<class MuslChannelRx> getReceiver();
     const std::string& getAddr() const;
 
 private:
@@ -51,7 +49,7 @@ public:
     ~MuslChannelRx();
 
     template <typename T>
-    T receive();
+    std::optional<T> receive();
 
 private:
     zmq::socket_t receiver_;
@@ -75,7 +73,7 @@ inline std::shared_ptr<MuslChannelTx> MuslChannel::getSender() {
     return sender_;
 }
 
-inline std::unique_ptr<MuslChannelRx> MuslChannel::releaseReceiver() {
+inline std::unique_ptr<MuslChannelRx> MuslChannel::getReceiver() {
     return std::move(receiver_);
 }
 
@@ -111,9 +109,14 @@ inline MuslChannelRx::~MuslChannelRx() {
 }
 
 template <typename T>
-inline T MuslChannelRx::receive() {
+inline std::optional<T> MuslChannelRx::receive() {
     zmq::message_t zmq_message;
-    receiver_.recv(zmq_message, zmq::recv_flags::none);
+    receiver_.recv(zmq_message, zmq::recv_flags::dontwait);
+
+    if(zmq_message.size() == 0) {
+        return std::nullopt;
+    }
+
     T message;
     memcpy(&message, zmq_message.data(), sizeof(T));
     return message;
