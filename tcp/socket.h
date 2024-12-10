@@ -8,7 +8,6 @@ class TcpSocket
 {
 private:
     int fd;
-    int cli_fd;
     bool is_nonblock_;
     bool connect_on_nonblocking(Endpoint remote_endpoint);
 public:
@@ -19,11 +18,10 @@ public:
     void connect(Endpoint remote_endpoint);
     void listen(int backlog);
     int accept(Endpoint &client_endpoint);
-    // void close() override;
-    // Endpoint get_endpoint() override;
-    // Endpoint get_remote_endpoint() override;
     int get_fd();
 
+    size_t read(char *buf);
+    size_t write(const char *buf);
     
 };
 #endif

@@ -11,9 +11,10 @@ extern uint16_t LOCAL_SERV_PORT = 7001;
 
 class NClient {
 public: 
-    NClient();
+    NClient() = default;
     void run_client();
 private:
+    std::unique_ptr<ControlChannelsMap> ccmap_;
 };
 
 class ControlChannelsMap

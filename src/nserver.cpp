@@ -4,6 +4,7 @@
 #include"epoll_run.h"
 #include"protocol.h"
 #include"connection.h"
+#include"transfer.h"
 
 /// NSERVER
 NCXServer::NCXServer(EpollRun* main_reactor, char* IP, uint16_t PORT, int BACKLOG)
@@ -21,7 +22,7 @@ NCXServer::NCXServer(EpollRun* main_reactor, char* IP, uint16_t PORT, int BACKLO
             }
             else if(hello == PROTOCOL::Hello::DataChannelHello) {
                 // create data channel handle
-                do_channel_handleshake(new_conn.get(), ccmap_);
+                do_data_channel_handleshake(new_conn.get(), ccmap_);
             }
             else{
                 // error、close connection
@@ -89,9 +90,6 @@ ControlChannelHandle::ControlChannelHandle(std::shared_ptr<Connection> conn) {
     
     //转发在这里面执行喔
     run_tcp_pool(bind_ip, bind_port, data_req_ch_tx, data_req_ch_rx.get());
-
-
-
 }
 
 void ControlChannelHandle::run_tcp_pool(
@@ -117,9 +115,17 @@ void ControlChannelHandle::run_tcp_pool(
             // 这里需要优化、客户端连接如果断连，需要重新申请一个新的data channel
             ch_conn->set_output_buffer(reinterpret_cast<const char*>(&cmd), sizeof(cmd));
             ch_conn->Write();
-            ch_conn->flash();
+            ch_conn->flash_out_data();
             
-            //todo：进行转发
+            //进行转发
+            Transfer* transfer_for_conn1 = new Transfer(new_conn.get(), ch_conn.get());
+            new_conn->setExChannel(transfer_for_conn1);
+            new_conn->enableExchange();
+
+            // conn2 -> conn1
+            Transfer* transfer_for_conn2 = new Transfer(ch_conn.get(), new_conn.get());
+            ch_conn->setExChannel(transfer_for_conn2);
+            ch_conn->enableExchange();
         }
     });
 
@@ -132,4 +138,11 @@ void ControlChannelHandle::run_tcp_pool(
 ControlChannel::ControlChannel(Connection* conn, MuslChannelRx* data_ch_rx) {
     conn_ = std::shared_ptr<Connection>(conn);
     data_ch_rx_ = std::unique_ptr<MuslChannelRx>(data_ch_rx);
+}
+
+int main() {
+    EpollRun* main_reactor = new EpollRun();
+    NCXServer server(main_reactor, BIND_IP, BIND_PORT, 10);
+    server.run_server();
+    return 0;
 }

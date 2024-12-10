@@ -3,13 +3,12 @@
 #include "socket.h"
 #include "protocol.h"
 #include "connection.h"
-
-NClient::NClient() {
-    // bind and connect to server
-    Endpoint remote_endpoint(NSERV_IP, NSERV_PORT);
-}
+#include "epoll_run.h"
+#include "transfer.h"
 
 void NClient::run_client() {
+    ControlChannelHandle* cc_handle = new ControlChannelHandle();
+    ccmap_->add_control_channel(0, cc_handle);
 }
 
 /// Control Channels Map Guard
@@ -52,19 +51,13 @@ void ControlChannel::run() {
     std::unique_ptr<TcpSocket> client = std::make_unique<TcpSocket>(true);
     client->connect(remote);
 
+    // 通知服务端有新的control channel连接、这里应该为握手过程、但没实现密钥交换、只是简单的通知
+    //todo
+    PROTOCOL::Hello hello = PROTOCOL::Hello::ControlChannelHello;
+    client->write((char*)&hello);
+
     //init connection
     conn_ = std::make_unique<Connection>(client->get_fd(), loop_.get());
-    conn_->set_data_in_handle([](const std::shared_ptr<Connection
-    > conn){
-        // init handle read event: read hello
-        PROTOCOL::Hello hello;
-        conn->Recv((char*)&hello, sizeof(hello));
-    });
-    conn_->ConnectionEstablished();
-
-    // send hello
-    PROTOCOL::Hello hello = PROTOCOL::Hello::ControlChannelHello;
-    conn_->Send((char*)&hello, sizeof(hello));
 
     // renew read event handle: read control channel command and handle it
     conn_->set_data_in_handle([](const std::shared_ptr<Connection> conn){
@@ -73,13 +66,15 @@ void ControlChannel::run() {
         conn->Recv((char*)&cmd, sizeof(cmd));
 
         if(cmd == PROTOCOL::ControlChannelCmd::CreateDataChannel) {
-            
+            run_data_channel(conn);
         }
         else if(cmd == PROTOCOL::ControlChannelCmd::HeartBeat) {
             {}
         }
 
     });
+    conn_->ConnectionEstablished();
+    loop_->run();
 }
 
 std::shared_ptr<Connection> do_data_channel_shake(EpollRun* loop) {
@@ -111,6 +106,7 @@ std::shared_ptr<Connection> do_data_channel_shake(EpollRun* loop) {
             // init connection
             std::shared_ptr<Connection> local_conn = std::make_shared<Connection>(local_sock->get_fd(), loop);
             // set data in exchange between local_conn and conn
+            run_data_channel_for_tcp(local_conn.get(), conn.get());
 
         }
         else if(cmd == PROTOCOL::DataChannelCmd::StartForwardUdp) {
@@ -134,4 +130,23 @@ void run_data_channel(std::shared_ptr<Connection> control_conn) {
 
 void run_data_channel_for_tcp(Connection* conn1, Connection* conn2) {
     // conn1 and conn2 双向转发
+    // conn1 -> conn2
+    Transfer* transfer_for_conn1 = new Transfer(conn1, conn2);
+    conn1->setExChannel(transfer_for_conn1);
+    conn1->enableExchange();
+
+    // conn2 -> conn1
+    Transfer* transfer_for_conn2 = new Transfer(conn2, conn1);
+    conn2->setExChannel(transfer_for_conn2);
+    conn2->enableExchange();
+}
+
+
+int main() {
+    NClient client;
+    client.run_client();
+    // wait shutdown 
+    // todo 
+    while(true);
+    return 0;
 }
