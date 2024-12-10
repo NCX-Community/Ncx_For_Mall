@@ -1,10 +1,12 @@
+/*
+NCX Server: NCX的服务端代码
+*/
 #ifndef SERVER_H
 #define SERVER_H
 
 #include"util.h"
 
 // Reactor模式中的reactor，负责监听事件和分发事件
-
 class Server {
 public:
     Server() = default;
@@ -18,7 +20,11 @@ public:
     void disconnectHandle(const std::shared_ptr<Connection>& conn);
     void disconnectHandleInLoop(const std::shared_ptr<Connection>& conn);
 
-    void bind_on_connect(std::function<int(int)> func);
+    //bind on connect event
+    void bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func);
+    //void bind_on_connect(std::function<void(std::shared_ptr<Connection>, std::unique_ptr<MuslChannelRx>, std::shared_ptr<MuslChannelTx>)> func);
+
+
     void bind_on_message(std::function<void(std::shared_ptr<Connection>)> func);
     void bind_on_conn_read(std::function<void(std::shared_ptr<Connection>)> func);
     void bind_on_conn_write(std::function<void(std::shared_ptr<Connection>)> func);
@@ -32,7 +38,10 @@ private:
     std::unique_ptr<EpThreadPool> tp;     //线程池应该由reactor负责管理
     std::unordered_map<int, std::shared_ptr<Connection>> connections;
 
-    std::function<int(int)> on_connect_;
+    // 连接握手阶段，用于对连接的预处理（鉴权、判断连接请求类型）
+    std::function<void(std::shared_ptr<Connection>)> on_connect_;
+    
+    //std::function<void(std::shared_ptr<Connection>, std::unique_ptr<MuslChannelRx>, std::shared_ptr<MuslChannelTx>)> on_connect_;
     std::function<void(std::shared_ptr<Connection>)> on_message_;
 
     // 对外暴露conntion读写事件处理接口

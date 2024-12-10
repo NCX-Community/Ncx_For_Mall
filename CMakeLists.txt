@@ -12,6 +12,8 @@ include_directories(
     tcp
     util
     log
+    src
+    protocol
 )
 
 # zeromq
@@ -30,6 +32,8 @@ link_libraries(${PC_ZEROMQ_LIBRARIES})
 aux_source_directory(tcp TCP)
 aux_source_directory(util UTIL)
 aux_source_directory(log LOG)
+aux_source_directory(src SRC)
+aux_source_directory(protocol PROTOCOL)
 
 # test code set
 
@@ -40,13 +44,25 @@ aux_source_directory(log LOG)
 # add_executable(echocli ${ECHOCLIENT} ${TCP} ${UTIL} ${LOG})
 
 # test_for_ex
-file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
-file(GLOB EXCLIENT1 "example/ex/test_ex_cli1.cpp")
-file(GLOB EXCLIENT2 "example/ex/test_ex_cli2.cpp")
-add_executable(exserv ${EXSERV} ${TCP} ${UTIL} ${LOG})
-add_executable(excli1 ${EXCLIENT1} ${TCP} ${UTIL} ${LOG})
-add_executable(excli2 ${EXCLIENT2} ${TCP} ${UTIL} ${LOG})
+# file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
+# file(GLOB EXCLIENT1 "example/ex/test_ex_cli1.cpp")
+# file(GLOB EXCLIENT2 "example/ex/test_ex_cli2.cpp")
+# add_executable(exserv ${EXSERV} ${TCP} ${UTIL} ${LOG})
+# add_executable(excli1 ${EXCLIENT1} ${TCP} ${UTIL} ${LOG})
+# add_executable(excli2 ${EXCLIENT2} ${TCP} ${UTIL} ${LOG})
 
+# test_for_musl_channel
+# file(GLOB MUSLTEST "example/mchannel/test.cpp")
+# add_executable(musltest ${MUSLTEST} ${UTIL} ${TCP})
+
+# src 
+file(GLOB NCXS "src/server.cpp")
+file(GLOB NCXC "src/client.cpp")
+add_executable(ncxs ${NCXS} ${TCP} ${UTIL} ${LOG} ${PROTOCOL})
+add_executable(ncxc ${NCXC} ${TCP} ${UTIL} ${LOG} ${PROTOCOL})
 
 # 链接ZeroMQ库到可执行文件
-target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})
+# target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})
+# target_link_libraries(musltest ${PC_ZEROMQ_LIBRARIES})
+target_link_libraries(ncxs ${PC_ZEROMQ_LIBRARIES})
+target_link_libraries(ncxc ${PC_ZEROMQ_LIBRARIES})

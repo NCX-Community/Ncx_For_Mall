@@ -46,18 +46,14 @@ void Server::newConnectionHandle(int client_fd) {
 
 
     int newConn_id = newConn->get_conn_id();
+    //printf("insert new connection handle success\n");
+    if(on_connect_) {
+        on_connect_(newConn);
+    }
+    
+    newConn->ConnectionEstablished();
     // add connection to connections
     connections[newConn->get_conn_id()] = std::move(newConn);
-    //printf("insert new connection handle success\n");
-    connections[newConn_id]->ConnectionEstablished();
-
-    // test for exchange pair
-    // if(this->connections.size() == 2) {
-    //     int conn_id1 = connections.begin()->first;
-    //     int conn_id2 = (++connections.begin())->first;
-    //     exchange_pair(conn_id1, conn_id2);
-    // }
-    //printf("new connection create finish!\n");
 }
 
 void Server::disconnectHandle(const std::shared_ptr<Connection>& conn) {
@@ -94,7 +90,7 @@ void Server::disconnectHandleInLoop(const std::shared_ptr<Connection>& conn) {
     //delete connection
 }
 
-void Server::bind_on_connect(std::function<int(int)> func) {
+void Server::bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func) {
     on_connect_ = std::move(func);
 }
 

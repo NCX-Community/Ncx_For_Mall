@@ -51,6 +51,7 @@ public:
     void enableExchange();
 
     void set_nonblocking();
+    void flash();
 private:
     int conn_id;
     int client_fd;

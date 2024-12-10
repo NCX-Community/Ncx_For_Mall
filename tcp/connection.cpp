@@ -263,3 +263,6 @@ void Connection::set_nonblocking()
 }
 
 bool Connection::is_in_transfer(){ return exchannel_ != nullptr; }
+void Connection::flash() {
+    if (::fsync(client_fd) == -1) { printf("error: fsync error\n"); }
+}

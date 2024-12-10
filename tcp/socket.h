@@ -16,6 +16,7 @@ public:
     ~TcpSocket();
     void bind(Endpoint local_endpoint);
     void connect(Endpoint remote_endpoint);
+    bool connect_on_nonblocking(Endpoint remote_endpoint);
     void listen(int backlog);
     int accept(Endpoint &client_endpoint);
     // void close() override;
