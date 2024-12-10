@@ -38,6 +38,9 @@ public:
 
     void Read();
     void Write();
+
+    void Recv(char* buf);
+    void Recv(char* buf, size_t len);
     void Send(const char* msg, size_t len);
     void Send(const char* msg);
     void Send(const std::string& msg);
@@ -51,7 +54,9 @@ public:
     void enableExchange();
 
     void set_nonblocking();
-    void flash();
+
+    void flash_in_data();
+    void flash_out_data();
 private:
     int conn_id;
     int client_fd;
