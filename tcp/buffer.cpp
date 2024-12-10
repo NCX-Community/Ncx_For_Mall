@@ -8,6 +8,10 @@ void Buffer::clear() {
     buf.clear();
 }
 
+void Buffer::clear(size_t len) {
+    buf.erase(0, len);
+}
+
 size_t Buffer::size() {
     return buf.size();
 }

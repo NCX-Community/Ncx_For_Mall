@@ -11,6 +11,7 @@ public:
     void set_buf(const char* data, size_t len);
     void append(const char* data, size_t len);
     void clear();
+    void clear(size_t len);
     const char* data();
     size_t size();
 };

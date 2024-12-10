@@ -50,7 +50,7 @@ void Connection::ConnectionConstructor()
     er->delete_channel(channel.get());
 }
 
-void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection>&)> on_message)
+void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection> &)> on_message)
 {
     on_message_ = std::move(on_message);
 }
@@ -64,7 +64,7 @@ void Connection::handle_message()
     }
 }
 
-void Connection::set_data_in_handle(std::function<void(const std::shared_ptr<Connection>&)> on_data_in)
+void Connection::set_data_in_handle(std::function<void(const std::shared_ptr<Connection> &)> on_data_in)
 {
     on_data_in_ = std::move(on_data_in);
 }
@@ -79,7 +79,7 @@ void Connection::handle_data_in()
         std::puts("data in callback not init");
 }
 
-void Connection::set_data_out_handle(std::function<void(const std::shared_ptr<Connection>&)> on_data_out)
+void Connection::set_data_out_handle(std::function<void(const std::shared_ptr<Connection> &)> on_data_out)
 {
     on_data_out_ = std::move(on_data_out);
 }
@@ -117,6 +117,19 @@ void Connection::set_output_buffer(const char *data, size_t len) { output_buffer
 Buffer *Connection::get_output_buffer() { return output_buffer.get(); }
 Buffer *Connection::get_input_buffer() { return input_buffer.get(); }
 
+void Connection::Recv(char *buf)
+{
+    Read();
+    std::memcpy(buf, input_buffer->data(), input_buffer->size());
+    input_buffer->clear();
+}
+
+void Connection::Recv(char *buf, size_t len) {
+    Read();
+    std::memcpy(buf, input_buffer->data(), len);
+    input_buffer->clear(len);
+}
+
 void Connection::Send(const char *msg, size_t len)
 {
     output_buffer->append(msg, len);
@@ -148,13 +161,13 @@ void Connection::Read()
     ReadNonBlocking();
 }
 
+
 void Connection::ReadNonBlocking()
 {
     char buf[1024];
     while (true)
     {
         int read_bytes = read(client_fd, buf, sizeof(buf));
-        printf("read %d bytes\n", read_bytes);
         if (read_bytes > 0)
         {
             input_buffer->append(buf, read_bytes);
@@ -256,13 +269,20 @@ void Connection::enableExchange()
     }
 }
 
-void Connection::set_nonblocking() 
+void Connection::set_nonblocking()
 {
     int flags = fcntl(client_fd, F_GETFL, 0);
     fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 }
 
-bool Connection::is_in_transfer(){ return exchannel_ != nullptr; }
-void Connection::flash() {
-    if (::fsync(client_fd) == -1) { printf("error: fsync error\n"); }
+bool Connection::is_in_transfer() { return exchannel_ != nullptr; }
+
+void Connection::flash_in_data()
+{
+    this->input_buffer->clear();
+}
+
+void Connection::flash_out_data()
+{
+    this->output_buffer->clear();
 }
