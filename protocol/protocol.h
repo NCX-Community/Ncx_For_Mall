@@ -36,7 +36,7 @@ namespace PROTOCOL
             else if (bytes_read == 0)
             {
                 // 连接关闭
-                std::cerr << "Connection closed by peer" << std::endl;
+                // std::cerr << "Connection closed by peer" << std::endl;
                 break;
             }
             else
@@ -49,7 +49,7 @@ namespace PROTOCOL
                 else
                 {
                     // 读取错误
-                    std::cerr << "Read error: " << strerror(errno) << std::endl;
+                    // std::cerr << "Read error: " << strerror(errno) << std::endl;
                     break;
                 }
             }

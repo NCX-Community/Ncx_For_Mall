@@ -16,21 +16,44 @@ public:
 
     void run_server();
 
+    // handshake
+    void do_channel_handleshake(Connection* conn, ControlChannelsMap* ccmap);
+    void do_data_channel_handleshake(Connection* conn, ControlChannelsMap* ccmap);
+
 private:
     EpollRun *main_reactor_;
     std::unique_ptr<Server> main_acceptor_;
+    std::unique_ptr<ControlChannelsMap> ccmap_;
+};
+
+/// control channels map
+class ControlChannelsMap
+{
+public:
+    ControlChannelsMap() = default;
+    ~ControlChannelsMap() = default;
+    DISALLOW_COPY_AND_MOVE(ControlChannelsMap);
+
+    void add_control_channel(int id, ControlChannelHandle* cc);
+    void remove_control_channel(int id);
+    ControlChannelHandle* get_control_channel(int id);
+
+private:
+    // id目前先设置为visitor连接体的id
+    std::unordered_map<int, std::unique_ptr<ControlChannelHandle>> ccmap;
+    std::mutex mtx;
 };
 
 /// control channel handle
 class ControlChannelHandle
 {
 public:
+    std::shared_ptr<MuslChannelTx> data_ch_tx_;
     ControlChannelHandle(std::shared_ptr<Connection> conn);
     void run_tcp_pool(const char *IP, const uint16_t PORT, std::shared_ptr<MuslChannelTx> data_ch_req_tx,
                         MuslChannelRx* data_ch_req_rx);
 
 private:
-    std::shared_ptr<MuslChannelRx> data_ch_rx;
     std::unique_ptr<EpollRun> tcp_conn_pool_reactor_;
     std::unique_ptr<Server> tcp_conn_pool_;
 };

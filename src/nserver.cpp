@@ -9,29 +9,70 @@
 NCXServer::NCXServer(EpollRun* main_reactor, char* IP, uint16_t PORT, int BACKLOG)
 : main_reactor_(main_reactor) {
     main_acceptor_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
+    ccmap_ = std::make_unique<ControlChannelsMap>();
     // 初始化on_connect_函数，当有新连接时，需要创建Control Channel handle
-    main_acceptor_->bind_on_connect([main_acceptor_ = main_acceptor_.get()](std::shared_ptr<Connection> new_conn) {
+    main_acceptor_->bind_on_connect([this, main_acceptor_ = main_acceptor_.get(), ccmap_ = ccmap_.get()](std::shared_ptr<Connection> new_conn) {
         // create control channel handle
         try {
-            PROTOCOL::read_hello(new_conn->get_fd());
+            PROTOCOL::Hello hello = PROTOCOL::read_hello(new_conn->get_fd());
+            if(hello == PROTOCOL::Hello::ControlChannelHello) {
+                // create control channel handle
+                do_channel_handleshake(new_conn.get(), ccmap_);
+            }
+            else if(hello == PROTOCOL::Hello::DataChannelHello) {
+                // create data channel handle
+                do_channel_handleshake(new_conn.get(), ccmap_);
+            }
+            else{
+                // error、close connection
+                main_acceptor_->disconnectHandle(new_conn);
+            }
         }
         catch(const std::exception& e) {
             printf("read hello error: %s\n", e.what());
-            //close connection
             main_acceptor_->disconnectHandle(new_conn);
         }
     });
 }
 
 void NCXServer::run_server() {
+    main_acceptor_->start();
+    main_reactor_->run();
+}
 
+void NCXServer::do_channel_handleshake(Connection* conn, ControlChannelsMap* ccmap) {
+    ControlChannelHandle* cch = new ControlChannelHandle(conn->shared_from_this());
+    ccmap->add_control_channel(conn->get_conn_id(), cch);
+}
+
+void NCXServer::do_data_channel_handleshake(Connection* conn, ControlChannelsMap* ccmap) {
+    int id = conn->get_conn_id();
+    ControlChannelHandle* cch = ccmap->get_control_channel(id);
+    // 把这个conn发送到数据通道
+    cch->data_ch_tx_->send(conn->shared_from_this());
+}
+
+/// Control Channels Map Guard
+void ControlChannelsMap::add_control_channel(int id, ControlChannelHandle* cc) {
+    std::lock_guard<std::mutex> lock(mtx);
+    ccmap[id] = std::unique_ptr<ControlChannelHandle>(cc);
+}
+
+void ControlChannelsMap::remove_control_channel(int id) {
+    std::lock_guard<std::mutex> lock(mtx);
+    ccmap.erase(id);
+}
+
+ControlChannelHandle* ControlChannelsMap::get_control_channel(int id) {
+    std::lock_guard<std::mutex> lock(mtx);
+    return ccmap[id].get();
 }
 
 /// Control Channel Handle
 ControlChannelHandle::ControlChannelHandle(std::shared_ptr<Connection> conn) {
     // create data channel and data req channel
     MuslChannel* data_ch = new MuslChannel();
-    std::shared_ptr<MuslChannelTx> data_ch_tx = data_ch->getSender();
+    data_ch_tx_ = data_ch->getSender();
     std::unique_ptr<MuslChannelRx> data_ch_rx = data_ch->getReceiver();
 
     MuslChannel* data_req_ch = new MuslChannel();
