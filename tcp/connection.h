@@ -36,8 +36,8 @@ public:
     Buffer* get_output_buffer();
     Buffer* get_input_buffer();
 
-    void Read();
-    void Write();
+    void Read(); //fixme 置为私有
+    void Write(); //fixme 置为私有
 
     void Recv(char* buf);
     void Recv(char* buf, size_t len);

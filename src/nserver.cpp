@@ -85,23 +85,39 @@ ControlChannelHandle::ControlChannelHandle(std::shared_ptr<Connection> conn) {
         data_req_ch_tx->send(true);
     }
 
+    // create and control Channel
+    std::unique_ptr<ControlChannel> control_channel = std::make_unique<ControlChannel>(conn.get(), data_req_ch_rx.get());
+    std::function<void()> thread_func = [control_channel = std::move(control_channel)]() {
+        control_channel->run();
+    };
+    std::thread control_channel_thread = std::thread(thread_func);
+    //Fixme：任何线程都应该被管理，而不是被放任
+    control_channel_thread.detach();
+
     char* bind_ip = BIND_IP;
     uint16_t bind_port = BIND_PORT;
     
     //转发在这里面执行喔
-    run_tcp_pool(bind_ip, bind_port, data_req_ch_tx, data_req_ch_rx.get());
+    //Fixme 这个任务需要在新的线程中执行，不然会阻塞当前线程
+    std::function<void()> task = [this, bind_ip, bind_port, data_req_ch_tx, data_ch_rx = std::move(data_ch_rx)]() mutable {
+        run_tcp_pool(bind_ip, bind_port, data_req_ch_tx, std::move(data_ch_rx));
+    };
+    //Fixme：任何线程都应该被管理，而不是被放任
+    std::thread tcp_pool_thread(task);
+    tcp_pool_thread.detach();
 }
 
 void ControlChannelHandle::run_tcp_pool(
+    //Fixme 这里的IP和PORT需要从配置文件中读取
     const char* IP, 
     const uint16_t PORT,
     std::shared_ptr<MuslChannelTx> data_ch_req_tx,
-    MuslChannelRx* data_ch_rx) {
+    std::unique_ptr<MuslChannelRx> data_ch_rx) {
     tcp_conn_pool_reactor_ = std::make_unique<EpollRun>();
     tcp_conn_pool_ = std::make_unique<Server>(tcp_conn_pool_reactor_.get(), IP, PORT, 10);
 
     // set on visit Connection
-    tcp_conn_pool_->bind_on_connect([this, data_ch_req_tx, data_ch_rx](std::shared_ptr<Connection> new_conn) {
+    tcp_conn_pool_->bind_on_connect([this, data_ch_req_tx, data_ch_rx = std::move(data_ch_rx)](std::shared_ptr<Connection> new_conn) {
         auto cmd = PROTOCOL::DataChannelCmd::StartForwardTcp;
         // 查看是否有空闲的data channel
         auto ch = data_ch_rx->receive<std::shared_ptr<Connection>>();
@@ -138,6 +154,20 @@ void ControlChannelHandle::run_tcp_pool(
 ControlChannel::ControlChannel(Connection* conn, MuslChannelRx* data_ch_rx) {
     conn_ = std::shared_ptr<Connection>(conn);
     data_ch_rx_ = std::unique_ptr<MuslChannelRx>(data_ch_rx);
+}
+
+void ControlChannel::run() {
+    // Fixme 需要建立Shutdown机制
+    PROTOCOL::ControlChannelCmd cmd = PROTOCOL::ControlChannelCmd::CreateDataChannel;
+    while(true) {
+        auto result = data_ch_rx_->receive<bool>();
+        if(result.has_value()) {
+            conn_->Send(reinterpret_cast<const char*>(&cmd), sizeof(cmd));
+        } else {
+            // 跳过
+            continue;
+        }
+    }
 }
 
 int main() {
