@@ -51,7 +51,7 @@ public:
     std::shared_ptr<MuslChannelTx> data_ch_tx_;
     ControlChannelHandle(std::shared_ptr<Connection> conn);
     void run_tcp_pool(const char *IP, const uint16_t PORT, std::shared_ptr<MuslChannelTx> data_ch_req_tx,
-                        MuslChannelRx* data_ch_req_rx);
+                        std::unique_ptr<MuslChannelRx> data_ch_rx);
 
 private:
     std::unique_ptr<EpollRun> tcp_conn_pool_reactor_;
@@ -63,6 +63,7 @@ private:
 class ControlChannel {
 public:
     ControlChannel(Connection* conn, MuslChannelRx* data_ch_rx);
+    void run();
 private:
     std::shared_ptr<Connection> conn_;
     std::unique_ptr<MuslChannelRx> data_ch_rx_;

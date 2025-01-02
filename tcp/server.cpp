@@ -58,7 +58,7 @@ void Server::newConnectionHandle(int client_fd) {
 
 void Server::disconnectHandle(const std::shared_ptr<Connection>& conn) {
     std::printf("thread %d disconnect connection\n", CURRENT_THREAD::tid());
-    main_reactor_->add_to_do(std::bind(&Server::disconnectHandleInLoop, this, conn));
+    main_reactor_->run_on_onwer_thread(std::bind(&Server::disconnectHandleInLoop, this, conn));
     //唤醒main_reactor_的epoll_wait
     uint64_t one = 1;
     ssize_t n = write(main_reactor_->wakeup_fd(), &one, sizeof one);

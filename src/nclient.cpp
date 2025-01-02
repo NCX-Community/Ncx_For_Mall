@@ -35,7 +35,9 @@ ControlChannelHandle::ControlChannelHandle() {
         control_channel->run();
     };
 
+    //Fixme：任何线程都应该被管理，而不是被放任
     std::thread control_pool = std::thread(thread_func);
+    control_pool.detach();
 }
 
 
