@@ -5,7 +5,7 @@
 #include "EventLoop.h"
 #include "transfer.h"
 
-Connection::Connection(int _client_fd, EventLoop *_er) : client_fd(_client_fd), er(_er)
+Connection::Connection(int _client_fd, EventLoop *loop) : client_fd(_client_fd), loop_(loop)
 {
     // 创建一个随机数生成器
     std::random_device rd;                         // 用于生成种子
@@ -13,17 +13,16 @@ Connection::Connection(int _client_fd, EventLoop *_er) : client_fd(_client_fd), 
     std::uniform_int_distribution<> dis(1, 10000); // 定义随机数分布范围
     this->conn_id = dis(gen);
 
-    if (er)
+    if (loop_)
     {
-        channel = std::make_unique<Channel>(er, client_fd);
-        this->channel->set_et();
+        channel = std::make_unique<Channel>(loop_, client_fd);
     }
 
     input_buffer = std::make_unique<Buffer>();
     output_buffer = std::make_unique<Buffer>();
 }
 
-// 在连接回调函数和各种参数设置完成后调用
+// 在连接回调函数和各种参数设置完成后调用，调用后连接体开始处理读写事件
 void Connection::ConnectionEstablished()
 {
     this->channel->set_tie(shared_from_this());
@@ -37,7 +36,7 @@ Connection::~Connection() {};
 
 void Connection::ConnectionConstructor()
 {
-    er->delete_channel(channel.get());
+    loop_->delete_channel(channel.get());
 }
 
 void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection> &)> on_message)
@@ -83,51 +82,27 @@ void Connection::handle_close()
     }
 }
 
-/// buffer function set
-
-void Connection::set_output_buffer(const char *data, size_t len) { output_buffer->set_buf(data, len); }
-Buffer *Connection::get_output_buffer() { return output_buffer.get(); }
-Buffer *Connection::get_input_buffer() { return input_buffer.get(); }
-
-void Connection::Recv(char *buf)
+void Connection::Recv(std::string& msg)
 {
-    std::memcpy(buf, input_buffer->data(), input_buffer->size());
-    input_buffer->clear();
+    Recv(msg, static_cast<size_t>(msg.size()));
 }
 
-void Connection::Recv(char *buf, size_t len) {
-    std::memcpy(buf, input_buffer->data(), len);
-    input_buffer->clear(len);
+void Connection::Recv(std::string& msg, size_t len) {
+    msg = input_buffer->RetrieveAsString(len);
 }
 
-void Connection::Send(const char *msg, size_t len)
+void Connection::Send(const std::string& msg)
 {
-    output_buffer->append(msg, len);
-    Write();
-}
-
-void Connection::Send(const char *msg)
-{
-    size_t len = strlen(msg);
-    output_buffer->set_buf(msg, len);
-    Write();
-}
-
-void Connection::Send(const std::string &msg)
-{
-    output_buffer->set_buf(msg.c_str(), msg.size());
-    Write();
+    output_buffer->Append(msg);
 }
 
 void Connection::Write()
 {
     WriteNonBlocking();
-    output_buffer->clear();
 }
 
 void Connection::Read()
 {
-    // input_buffer->clear();
     ReadNonBlocking();
 }
 
@@ -141,7 +116,7 @@ void Connection::ReadNonBlocking()
         read_bytes = read(client_fd, buf, sizeof(buf));
         if (read_bytes > 0)
         {
-            input_buffer->append(buf, read_bytes);
+            input_buffer->Append(buf);
         }
         else if (read_bytes < 0)
         {
@@ -173,17 +148,16 @@ void Connection::ReadNonBlocking()
         }
     }
 }
+
 void Connection::WriteNonBlocking()
 {
-    ssize_t send_bytes = output_buffer->size();
-    char send_buf[send_bytes];
-    bzero(send_buf, send_bytes);
-    memcpy(send_buf, output_buffer->data(), send_bytes);
-
+    std::string send_buf = output_buffer->RetrieveAllAsString();
+    ssize_t send_bytes = send_buf.size();
     ssize_t send_left = send_bytes;
+    
     while (send_left > 0)
     {
-        ssize_t sended_bytes = write(client_fd, send_buf, send_bytes);
+        ssize_t sended_bytes = write(client_fd, send_buf.data(), send_bytes);
         if (sended_bytes < 0)
         {
             if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -204,7 +178,7 @@ void Connection::WriteNonBlocking()
     }
 }
 
-/// @brief  get function set
+/// get function set
 
 int Connection::get_conn_id() const
 {
@@ -223,37 +197,11 @@ ConnectionState Connection::get_state() const
 
 EventLoop *Connection::get_epoll_run() const
 {
-    return er;
-}
-
-void Connection::setExChannel(Transfer *exchannel)
-{
-    exchannel_ = std::unique_ptr<Transfer>(exchannel);
-}
-
-void Connection::enableExchange()
-{
-    if (exchannel_)
-    {
-        // 设置读为读后转发
-        this->channel->set_read_callback(std::bind(&Transfer::handle_transfer, exchannel_.get()));
-    }
+    return loop_;
 }
 
 void Connection::set_nonblocking()
 {
     int flags = fcntl(client_fd, F_GETFL, 0);
     fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
-}
-
-bool Connection::is_in_transfer() { return exchannel_ != nullptr; }
-
-void Connection::flash_in_data()
-{
-    this->input_buffer->clear();
-}
-
-void Connection::flash_out_data()
-{
-    this->output_buffer->clear();
 }

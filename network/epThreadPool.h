@@ -16,7 +16,7 @@ public:
 private:
     int thread_num_;
     int next_;  // 轮询法返回下一个可用epoll pool;
-    EventLoop* main_reactor_;
+    EventLoop* loop_;
     std::vector<std::unique_ptr<EvPoolThread>> threads_;
     std::vector<EventLoop*> loops_;
 };

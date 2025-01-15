@@ -1,7 +1,7 @@
 #include "epThreadPool.h"
 #include "evPoolThread.h"
 
-EpThreadPool::EpThreadPool(EventLoop *main_reactor) : main_reactor_(main_reactor), next_(0)
+EpThreadPool::EpThreadPool(EventLoop *main_reactor) : loop_(main_reactor), next_(0)
 {
     thread_num_ = std::thread::hardware_concurrency();
 }
@@ -21,7 +21,7 @@ void EpThreadPool::set_thread_num(int num) {thread_num_ = num;}
 
 EventLoop* EpThreadPool::NextLoop() {
     // 轮询法获取下一个epoll pool，如果无可用epoll pool则返回主线程的epoll
-    EventLoop* res = main_reactor_;
+    EventLoop* res = loop_;
     if(!loops_.empty()) {
         res = loops_[next_++];
         if(next_ == static_cast<int> (loops_.size())) next_ = 0;

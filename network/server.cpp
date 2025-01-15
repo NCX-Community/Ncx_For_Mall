@@ -7,43 +7,30 @@
 #include "connection.h"
 #include "current_thread.h"
 #include "epThreadPool.h"
-#include "transfer.h"
-#include "musl_channel.h"
 
-Server::Server(EventLoop* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
+Server::Server(EventLoop* loop, const char* IP, const uint16_t PORT, const int BACKLOG): loop_(loop){
 
-    // create thread pool
-    tp = std::make_unique<EpThreadPool>(pool);
-
-    // one loop in a thread
     // create acceptor
-    this->acceptor = std::make_unique<Acceptor>(IP, PORT, BACKLOG, main_reactor_.get());
-    acceptor->set_new_connection_callback(std::bind(&Server::newConnectionHandle, this, std::placeholders::_1));
+    server_acceptor_= std::make_unique<Acceptor>(IP, PORT, BACKLOG, loop_);
+    server_acceptor_->set_new_connection_callback(std::bind(&Server::newConnectionHandle, this, std::placeholders::_1));
 
 }
 
 Server::~Server() {}
 
 void Server::start() {
-    tp->Start();
-    main_reactor_->run();
+    loop_->run();
 }
 
 void Server::newConnectionHandle(int client_fd) {
-    // choose a sub reactor
-    EventLoop* sub_reactor = tp->NextLoop();
-
     // create a new connection
-    std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), sub_reactor);
+    std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), loop_);
 
     // set connection nonblocking
     newConn->set_nonblocking();
 
     // set connection handle
-    newConn->set_data_in_handle(on_conn_read_);
-    newConn->set_data_out_handle(on_conn_write_);
     newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
-
 
     int newConn_id = newConn->get_conn_id();
     //printf("insert new connection handle success\n");
@@ -58,10 +45,10 @@ void Server::newConnectionHandle(int client_fd) {
 
 void Server::disconnectHandle(const std::shared_ptr<Connection>& conn) {
     std::printf("thread %d disconnect connection\n", CURRENT_THREAD::tid());
-    main_reactor_->run_on_onwer_thread(std::bind(&Server::disconnectHandleInLoop, this, conn));
+    loop_->run_on_onwer_thread(std::bind(&Server::disconnectHandleInLoop, this, conn));
     //唤醒main_reactor_的epoll_wait
     uint64_t one = 1;
-    ssize_t n = write(main_reactor_->wakeup_fd(), &one, sizeof one);
+    ssize_t n = write(loop_->wakeup_fd(), &one, sizeof one);
     if (n != sizeof one) {
         std::printf("wake up main reactor error\n");
     }
@@ -98,25 +85,17 @@ void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>)> fu
     on_message_ = std::move(func);
 }
 
-void Server::bind_on_conn_read(std::function<void(std::shared_ptr<Connection>)> func) {
-    on_conn_read_ = std::move(func);
-}
+// void Server::exchange_pair(int conn_id1, int conn_id2) {
+//     Connection* conn1 = connections[conn_id1].get();
+//     Connection* conn2 = connections[conn_id2].get();
 
-void Server::bind_on_conn_write(std::function<void(std::shared_ptr<Connection>)> func) {
-    on_conn_write_ = std::move(func);
-}
+//     // exchannel for conn1
+//     Transfer* exchannel_1 = new Transfer(conn1, conn2);
+//     conn1->setExChannel(exchannel_1);
+//     conn1->enableExchange();
 
-void Server::exchange_pair(int conn_id1, int conn_id2) {
-    Connection* conn1 = connections[conn_id1].get();
-    Connection* conn2 = connections[conn_id2].get();
-
-    // exchannel for conn1
-    Transfer* exchannel_1 = new Transfer(conn1, conn2);
-    conn1->setExChannel(exchannel_1);
-    conn1->enableExchange();
-
-    // exchannel for conn2
-    Transfer* exchannel_2 = new Transfer(conn2, conn1);
-    conn2->setExChannel(exchannel_2);
-    conn2->enableExchange();
-}
+//     // exchannel for conn2
+//     Transfer* exchannel_2 = new Transfer(conn2, conn1);
+//     conn2->setExChannel(exchannel_2);
+//     conn2->enableExchange();
+// }
