@@ -7,7 +7,7 @@ EvPoolThread::~EvPoolThread() {};
 void EvPoolThread::ThreadFunc()
 {
     // 线程执行体
-    EpollRun loop;
+    EventLoop loop;
     {
         std::unique_lock<std::mutex> lock(mtx);
         loop_ = &loop;
@@ -23,10 +23,10 @@ void EvPoolThread::ThreadFunc()
     }
 }
 
-EpollRun *EvPoolThread::StartLoop()
+EventLoop *EvPoolThread::StartLoop()
 {
     thread = std::thread(&EvPoolThread::ThreadFunc, this);
-    EpollRun *res = nullptr;
+    EventLoop *res = nullptr;
 
     {
         // wait for loop created

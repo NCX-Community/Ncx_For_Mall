@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package ncx;
+
+message ControlChannelCmd {
+    enum cmd {
+        CreateDataChannel = 0;
+        HeartBeat = 1;
+    }
+}
+
+message DataChannelCmd {
+    enum cmd {
+        StartForwardTcp = 0;
+        StartForwardUdp = 1;
+    }
+}
+
+message Hello {
+    enum helloType {
+        ControlChannelHello = 0;
+        DataChannelHello = 1;
+    }
+}

@@ -10,7 +10,7 @@ uint16_t BIND_PORT = 8000;
 class NCXServer
 {
 public:
-    NCXServer(EpollRun *main_reator, char *IP, uint16_t PORT, int BACKLOG);
+    NCXServer(EventLoop *main_reator, char *IP, uint16_t PORT, int BACKLOG);
     ~NCXServer() = default;
     DISALLOW_COPY_AND_MOVE(NCXServer);
 
@@ -21,7 +21,7 @@ public:
     void do_data_channel_handleshake(Connection* conn, ControlChannelsMap* ccmap);
 
 private:
-    EpollRun *main_reactor_;
+    EventLoop *main_reactor_;
     std::unique_ptr<Server> main_acceptor_;
     std::unique_ptr<ControlChannelsMap> ccmap_;
 };
@@ -54,7 +54,7 @@ public:
                         std::unique_ptr<MuslChannelRx> data_ch_rx);
 
 private:
-    std::unique_ptr<EpollRun> tcp_conn_pool_reactor_;
+    std::unique_ptr<EventLoop> tcp_conn_pool_reactor_;
     std::unique_ptr<Server> tcp_conn_pool_;
 };
 

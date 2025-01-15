@@ -4,10 +4,10 @@
 class Epoll;
 class Channel;
 
-class EpollRun {
+class EventLoop {
 public:
-    EpollRun();
-    ~EpollRun();
+    EventLoop();
+    ~EventLoop();
     void run();
     void do_after_handle_events();
     void add_to_do(std::function<void()> func);

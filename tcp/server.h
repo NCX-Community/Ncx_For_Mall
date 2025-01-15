@@ -10,7 +10,7 @@ NCX Server: NCX的服务端代码
 class Server {
 public:
     Server() = default;
-    Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG);
+    Server(EventLoop* pool, const char* IP, const uint16_t PORT, const int BACKLOG);
     ~Server();
 
     void start();
@@ -33,7 +33,7 @@ public:
     void exchange_pair(int conn_id1, int conn_id2);
 
 private:
-    std::unique_ptr<EpollRun> main_reactor_;
+    std::unique_ptr<EventLoop> main_reactor_;
     std::unique_ptr<Acceptor> acceptor;
     std::unique_ptr<EpThreadPool> tp;     //线程池应该由reactor负责管理
     std::unordered_map<int, std::shared_ptr<Connection>> connections;

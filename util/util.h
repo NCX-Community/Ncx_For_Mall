@@ -28,13 +28,11 @@
 #include<sstream>
 #include<atomic>
 
-#include "log.h"
-
-class EpollRun;
+class EventLoop;
 class Channel;
 class Epoll;
-class Endpoint;
-class EpollRun;
+class InetAddress;
+class EventLoop;
 class TcpSocket;
 class Server;
 class Acceptor;

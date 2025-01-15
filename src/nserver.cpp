@@ -7,7 +7,7 @@
 #include"transfer.h"
 
 /// NSERVER
-NCXServer::NCXServer(EpollRun* main_reactor, char* IP, uint16_t PORT, int BACKLOG)
+NCXServer::NCXServer(EventLoop* main_reactor, char* IP, uint16_t PORT, int BACKLOG)
 : main_reactor_(main_reactor) {
     main_acceptor_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
     ccmap_ = std::make_unique<ControlChannelsMap>();
@@ -113,7 +113,7 @@ void ControlChannelHandle::run_tcp_pool(
     const uint16_t PORT,
     std::shared_ptr<MuslChannelTx> data_ch_req_tx,
     std::unique_ptr<MuslChannelRx> data_ch_rx) {
-    tcp_conn_pool_reactor_ = std::make_unique<EpollRun>();
+    tcp_conn_pool_reactor_ = std::make_unique<EventLoop>();
     tcp_conn_pool_ = std::make_unique<Server>(tcp_conn_pool_reactor_.get(), IP, PORT, 10);
 
     // set on visit Connection
@@ -171,7 +171,7 @@ void ControlChannel::run() {
 }
 
 int main() {
-    EpollRun* main_reactor = new EpollRun();
+    EventLoop* main_reactor = new EventLoop();
     NCXServer server(main_reactor, BIND_IP, BIND_PORT, 10);
     server.run_server();
     return 0;

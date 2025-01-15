@@ -1,13 +1,13 @@
 #include"acceptor.h"
-#include"epoll_run.h"
+#include"EventLoop.h"
 #include"socket.h"
 #include"channel.h"
-#include"endpoint.h"
+#include"InetAddress.h"
 #include"server.h"
 
-Acceptor::Acceptor(const char* IP, const uint16_t PORT, const int BACKLOG, EpollRun* _er) {
+Acceptor::Acceptor(const char* IP, const uint16_t PORT, const int BACKLOG, EventLoop* _er) {
     // create tcp server
-    Endpoint server_endpoint(IP, PORT);
+    InetAddress server_endpoint(IP, PORT);
     this->sock = std::make_unique<TcpSocket>(false);
     sock->bind(server_endpoint);
     sock->listen(BACKLOG);
@@ -21,7 +21,7 @@ Acceptor::Acceptor(const char* IP, const uint16_t PORT, const int BACKLOG, Epoll
 
 void Acceptor::acceptNewConnection() {
     printf("accept new connection\n");
-    Endpoint client_addr;
+    InetAddress client_addr;
     if(new_connection_callback_) {
         new_connection_callback_(sock->accept(client_addr));
     }

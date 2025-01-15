@@ -1,23 +1,23 @@
-#include "epoll_run.h"
+#include "EventLoop.h"
 #include "epoll.h"
 #include "channel.h"
 #include "current_thread.h"
 
-EpollRun::EpollRun(): poller(std::make_unique<Epoll>()){
+EventLoop::EventLoop(): poller(std::make_unique<Epoll>()){
     wakeup_fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
     wakeup_channel_ = std::make_unique<Channel>(this, wakeup_fd_);    
 
-    wakeup_channel_->set_read_callback(std::bind(&EpollRun::wakeup_callback, this));
+    wakeup_channel_->set_read_callback(std::bind(&EventLoop::wakeup_callback, this));
     wakeup_channel_->enableRead();
     wakeup_channel_->setEpolled(true);
 }
-EpollRun::~EpollRun() {
+EventLoop::~EventLoop() {
     // close eventfd channel and eventfd
     poller->delete_channel(wakeup_channel_.get());
     ::close(wakeup_fd_);
 }
 
-void EpollRun::run()
+void EventLoop::run()
 {
     // 将实际运行epoll run的线程tid保存在tid中
     tid_ = CURRENT_THREAD::tid();
@@ -38,23 +38,23 @@ void EpollRun::run()
     }
 }
 
-void EpollRun::update_channel(Channel *channel)
+void EventLoop::update_channel(Channel *channel)
 {
     poller->update_channel(channel);
 }
 
-void EpollRun::delete_channel(Channel *channel)
+void EventLoop::delete_channel(Channel *channel)
 {
     poller->delete_channel(channel);
 }
 
-void EpollRun::add_to_do(std::function<void()> func)
+void EventLoop::add_to_do(std::function<void()> func)
 {
     std::lock_guard<std::mutex> lock(mtx);
     to_do_list.emplace_back(std::move(func));
 }
 
-void EpollRun::do_after_handle_events()
+void EventLoop::do_after_handle_events()
 {
     std::vector<std::function<void()>> funcs;
     {
@@ -67,18 +67,18 @@ void EpollRun::do_after_handle_events()
     }
 }
 
-bool EpollRun::isInEpollLoop()
+bool EventLoop::isInEpollLoop()
 {
     return tid_ == CURRENT_THREAD::tid();
 }
 
-void EpollRun::run_on_onwer_thread(std::function<void()> cb)
+void EventLoop::run_on_onwer_thread(std::function<void()> cb)
 {
     if (isInEpollLoop())cb();
     else add_to_do(std::move(cb));
 }
 
-void EpollRun::wakeup_callback() {
+void EventLoop::wakeup_callback() {
     // read
     uint64_t one = 1;
     ssize_t n = ::read(wakeup_fd_, &one, sizeof one);
@@ -88,6 +88,6 @@ void EpollRun::wakeup_callback() {
     return;
 }
 
-int EpollRun::wakeup_fd() {
+int EventLoop::wakeup_fd() {
     return wakeup_fd_;
 }

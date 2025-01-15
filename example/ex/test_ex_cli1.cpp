@@ -10,7 +10,7 @@ send client
 #include <unistd.h>
 #include <sstream>
 
-void connect_to_server(Endpoint remote_endpoint, int cli_fd)
+void connect_to_server(InetAddress remote_endpoint, int cli_fd)
 {
 }
 
@@ -27,8 +27,8 @@ int main()
     std::string msg_with_pid = oss.str();
     const char *MSG = msg_with_pid.c_str();
 
-    Endpoint remote_endpoint(SERVER_IP, SERVER_PORT);
-    Endpoint client_endpoint(CLI_OP, CLI_PORT);
+    InetAddress remote_endpoint(SERVER_IP, SERVER_PORT);
+    InetAddress client_endpoint(CLI_OP, CLI_PORT);
     TcpSocket *cli = new TcpSocket(true); // 非阻塞socket
     cli->bind(client_endpoint);
 

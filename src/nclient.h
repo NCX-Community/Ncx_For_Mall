@@ -45,7 +45,7 @@ public:
     ~ControlChannel();
     void run();
 private:
-    std::unique_ptr<EpollRun> loop_;
+    std::unique_ptr<EventLoop> loop_;
     std::shared_ptr<Connection> conn_; 
 };
 
