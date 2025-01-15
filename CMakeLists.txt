@@ -55,14 +55,18 @@ aux_source_directory(protocol PROTOCOL)
 # file(GLOB MUSLTEST "example/mchannel/test.cpp")
 # add_executable(musltest ${MUSLTEST} ${UTIL} ${TCP})
 
+# test_for_buffer
+file(GLOB BUFFER "example/buffer/test_buffer.cpp")
+add_executable(buffertest ${BUFFER} ${TCP})
+
 # src 
-file(GLOB NCXS "src/server.cpp")
-file(GLOB NCXC "src/client.cpp")
-add_executable(ncxs ${NCXS} ${TCP} ${UTIL} ${LOG} ${PROTOCOL})
-add_executable(ncxc ${NCXC} ${TCP} ${UTIL} ${LOG} ${PROTOCOL})
+# file(GLOB NCXS "src/server.cpp")
+# file(GLOB NCXC "src/client.cpp")
+# add_executable(ncxs ${NCXS} ${TCP} ${UTIL} ${LOG} ${PROTOCOL})
+# add_executable(ncxc ${NCXC} ${TCP} ${UTIL} ${LOG} ${PROTOCOL})
 
 # 链接ZeroMQ库到可执行文件
 # target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})
 # target_link_libraries(musltest ${PC_ZEROMQ_LIBRARIES})
-target_link_libraries(ncxs ${PC_ZEROMQ_LIBRARIES})
-target_link_libraries(ncxc ${PC_ZEROMQ_LIBRARIES})
+# target_link_libraries(ncxs ${PC_ZEROMQ_LIBRARIES})
+# target_link_libraries(ncxc ${PC_ZEROMQ_LIBRARIES})

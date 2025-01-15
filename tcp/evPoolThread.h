@@ -1,5 +1,5 @@
-#ifndef EPOLLTHREAD_H
-#define EPOLLTHREAD_H
+#ifndef EVPOOLTHREAD_H
+#define EVPOOLTHREAD_H
 #include"util.h"
 
 class EvPoolThread {
@@ -8,9 +8,9 @@ public:
     EvPoolThread();
     ~EvPoolThread();
 
-    EpollRun* StartLoop();
+    EventLoop* StartLoop();
 private: 
-    EpollRun* loop_;   // 指向子线程创建的epoll
+    EventLoop* loop_;   // 指向子线程创建的epoll
     std::thread thread; // 子线程
     std::mutex mtx; // 互斥锁
     std::condition_variable cv;

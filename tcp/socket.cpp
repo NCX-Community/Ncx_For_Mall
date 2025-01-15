@@ -24,12 +24,12 @@ TcpSocket::~TcpSocket()
     ::close(fd);
 };
 
-void TcpSocket::bind(Endpoint local)
+void TcpSocket::bind(InetAddress local)
 {
     errif(::bind(fd, (sockaddr *)&local.addr, sizeof(local.addr)), "tcp bind error");
 }
 
-void TcpSocket::connect(Endpoint remote)
+void TcpSocket::connect(InetAddress remote)
 {
     if (is_nonblock_)
     {
@@ -43,7 +43,7 @@ void TcpSocket::listen(int backlog)
     errif(::listen(fd, backlog), "tcp listen error");
 }
 
-int TcpSocket::accept(Endpoint &client)
+int TcpSocket::accept(InetAddress &client)
 {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
@@ -57,7 +57,7 @@ int TcpSocket::accept(Endpoint &client)
 
 int TcpSocket::get_fd() { return fd; }
 
-bool TcpSocket::connect_on_nonblocking(Endpoint remote_endpoint)
+bool TcpSocket::connect_on_nonblocking(InetAddress remote_endpoint)
 {
     // 连接服务器
     socklen_t len = sizeof(remote_endpoint.addr);

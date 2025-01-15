@@ -13,16 +13,16 @@ static const int BACKLOG = 10;
 
 class ExchangeServer {
 public:
-    ExchangeServer(EpollRun* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG);
+    ExchangeServer(EventLoop* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG);
     ~ExchangeServer();
 
     void start();
 private:
-    EpollRun* main_reactor_;
+    EventLoop* main_reactor_;
     std::unique_ptr<Server> server_;
 };
 
-ExchangeServer::ExchangeServer(EpollRun* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG) {
+ExchangeServer::ExchangeServer(EventLoop* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG) {
     main_reactor_ = main_reactor;
     server_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
 }
@@ -36,7 +36,7 @@ void ExchangeServer::start() {
 int main(void)
 {
 
-    EpollRun* main_reactor = new EpollRun();
+    EventLoop* main_reactor = new EventLoop();
     Server* server = new Server(main_reactor, SERVER_IP, SERVER_PORT, BACKLOG);
     
     server->start();

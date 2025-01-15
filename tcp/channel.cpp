@@ -1,10 +1,10 @@
 #include"channel.h"
 #include"epoll.h"
-#include"epoll_run.h"
+#include"EventLoop.h"
 #include"util.h"
 
 
-Channel::Channel(EpollRun* _er, int _fd): epoll_run_(_er), fd_(_fd), listen_events_(0), ready_events_(0), is_epolled_(false){}
+Channel::Channel(EventLoop* _er, int _fd): epoll_run_(_er), fd_(_fd), listen_events_(0), ready_events_(0), is_epolled_(false){}
 Channel::~Channel(){
     if(fd_ > 0) {close(fd_);}
 }

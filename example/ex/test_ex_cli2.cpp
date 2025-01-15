@@ -12,7 +12,7 @@ read client
 const char MSG[] = "hello i am nvxc!";
 
 
-void connect_to_server(Endpoint remote_endpoint, int cli_fd) {
+void connect_to_server(InetAddress remote_endpoint, int cli_fd) {
 }
 
 const char SERVER_IP[] = "0.0.0.0";
@@ -21,8 +21,8 @@ const char CLI_OP[] = "127.0.0.1";
 const uint16_t CLI_PORT = 0;
 
 int main() {
-    Endpoint remote_endpoint(SERVER_IP, SERVER_PORT);
-    Endpoint client_endpoint(CLI_OP, CLI_PORT);
+    InetAddress remote_endpoint(SERVER_IP, SERVER_PORT);
+    InetAddress client_endpoint(CLI_OP, CLI_PORT);
     TcpSocket* cli = new TcpSocket(true); // 非阻塞socket
     cli->bind(client_endpoint);
 

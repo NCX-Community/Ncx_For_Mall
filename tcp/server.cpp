@@ -1,8 +1,8 @@
 #include "server.h"
-#include "epoll_run.h"
+#include "EventLoop.h"
 #include "socket.h"
 #include "channel.h"
-#include "endpoint.h"
+#include "InetAddress.h"
 #include "acceptor.h"
 #include "connection.h"
 #include "current_thread.h"
@@ -10,7 +10,7 @@
 #include "transfer.h"
 #include "musl_channel.h"
 
-Server::Server(EpollRun* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
+Server::Server(EventLoop* pool, const char* IP, const uint16_t PORT, const int BACKLOG): main_reactor_(pool){
 
     // create thread pool
     tp = std::make_unique<EpThreadPool>(pool);
@@ -31,7 +31,7 @@ void Server::start() {
 
 void Server::newConnectionHandle(int client_fd) {
     // choose a sub reactor
-    EpollRun* sub_reactor = tp->NextLoop();
+    EventLoop* sub_reactor = tp->NextLoop();
 
     // create a new connection
     std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), sub_reactor);

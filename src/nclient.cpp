@@ -43,13 +43,13 @@ ControlChannelHandle::ControlChannelHandle() {
 
 /// Control Channel
 ControlChannel::ControlChannel(): conn_(nullptr) {
-    loop_ = std::make_unique<EpollRun>();
+    loop_ = std::make_unique<EventLoop>();
 }
 
 void ControlChannel::run() {
     // connect remote
-    Endpoint remote = Endpoint(NSERV_IP, NSERV_PORT);
-    Endpoint local = Endpoint(CLI_IP, CLI_PORT);
+    InetAddress remote = InetAddress(NSERV_IP, NSERV_PORT);
+    InetAddress local = InetAddress(CLI_IP, CLI_PORT);
     std::unique_ptr<TcpSocket> client = std::make_unique<TcpSocket>(true);
     client->connect(remote);
 
@@ -79,10 +79,10 @@ void ControlChannel::run() {
     loop_->run();
 }
 
-std::shared_ptr<Connection> do_data_channel_shake(EpollRun* loop) {
+std::shared_ptr<Connection> do_data_channel_shake(EventLoop* loop) {
     // create new connect remote
-    Endpoint remote = Endpoint(NSERV_IP, NSERV_PORT);
-    Endpoint local = Endpoint(CLI_IP, CLI_PORT);
+    InetAddress remote = InetAddress(NSERV_IP, NSERV_PORT);
+    InetAddress local = InetAddress(CLI_IP, CLI_PORT);
     std::unique_ptr<TcpSocket> client = std::make_unique<TcpSocket>(true);
     client->connect(remote);
     printf("data channel connected\n");
@@ -98,8 +98,8 @@ std::shared_ptr<Connection> do_data_channel_shake(EpollRun* loop) {
         
         if(cmd == PROTOCOL::DataChannelCmd::StartForwardTcp) {
             // start forward tcp
-            Endpoint local = Endpoint(LOCAL_SERV_IP, LOCAL_SERV_PORT);
-            Endpoint client = Endpoint(CLI_IP, CLI_PORT);
+            InetAddress local = InetAddress(LOCAL_SERV_IP, LOCAL_SERV_PORT);
+            InetAddress client = InetAddress(CLI_IP, CLI_PORT);
             TcpSocket* local_sock = new TcpSocket(true);
             local_sock->bind(client);
             local_sock->connect(local);

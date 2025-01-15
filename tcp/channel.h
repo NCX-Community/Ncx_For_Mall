@@ -2,13 +2,13 @@
 #define CHANNEL_H
 #include"util.h"
 
-class EpollRun;
+class EventLoop;
 
 class Channel {
 public:
     DISALLOW_MOVE(Channel);
 
-    Channel(EpollRun* er, int fd);
+    Channel(EventLoop* er, int fd);
     ~Channel();
 
     void enableRead();
@@ -33,7 +33,7 @@ public:
 
 private:
     int fd_;
-    EpollRun* epoll_run_;
+    EventLoop* epoll_run_;
     std::weak_ptr<void> tie_; 
     
     short listen_events_;

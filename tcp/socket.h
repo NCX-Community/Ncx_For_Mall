@@ -9,15 +9,15 @@ class TcpSocket
 private:
     int fd;
     bool is_nonblock_;
-    bool connect_on_nonblocking(Endpoint remote_endpoint);
+    bool connect_on_nonblocking(InetAddress remote_endpoint);
 public:
     TcpSocket(bool is_nonblock = true);
     TcpSocket(int _fd);
     ~TcpSocket();
-    void bind(Endpoint local_endpoint);
-    void connect(Endpoint remote_endpoint);
+    void bind(InetAddress local_endpoint);
+    void connect(InetAddress remote_endpoint);
     void listen(int backlog);
-    int accept(Endpoint &client_endpoint);
+    int accept(InetAddress &client_endpoint);
     int get_fd();
 
     size_t read(char *buf);

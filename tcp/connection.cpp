@@ -2,10 +2,10 @@
 #include "socket.h"
 #include "channel.h"
 #include "buffer.h"
-#include "epoll_run.h"
+#include "EventLoop.h"
 #include "transfer.h"
 
-Connection::Connection(int _client_fd, EpollRun *_er) : client_fd(_client_fd), er(_er)
+Connection::Connection(int _client_fd, EventLoop *_er) : client_fd(_client_fd), er(_er)
 {
     // 创建一个随机数生成器
     std::random_device rd;                         // 用于生成种子
@@ -27,18 +27,8 @@ Connection::Connection(int _client_fd, EpollRun *_er) : client_fd(_client_fd), e
 void Connection::ConnectionEstablished()
 {
     this->channel->set_tie(shared_from_this());
-
-    if (on_data_in_)
-    {
-        this->channel->set_read_callback(std::bind(&Connection::handle_data_in, this));
-        this->channel->enableRead();
-    }
-
-    if (on_data_out_)
-    {
-        this->channel->set_write_callback(std::bind(&Connection::handle_data_out, this));
-        this->channel->enableWrite();
-    }
+    this->channel->enableRead();
+    this->channel->enableWrite();
 
     state = ConnectionState::CONNECTED;
 }
@@ -64,34 +54,16 @@ void Connection::handle_message()
     }
 }
 
-void Connection::set_data_in_handle(std::function<void(const std::shared_ptr<Connection> &)> on_data_in)
-{
-    on_data_in_ = std::move(on_data_in);
-}
-
+// 连接体非阻塞读取数据进Buffer
 void Connection::handle_data_in()
 {
-    if (on_data_in_)
-    {
-        on_data_in_(shared_from_this());
-    }
-    else
-        std::puts("data in callback not init");
+    ReadNonBlocking();
 }
 
-void Connection::set_data_out_handle(std::function<void(const std::shared_ptr<Connection> &)> on_data_out)
-{
-    on_data_out_ = std::move(on_data_out);
-}
-
+// 连接体非阻塞发送Buffer中的数据
 void Connection::handle_data_out()
 {
-    if (on_data_out_)
-    {
-        on_data_out_(shared_from_this());
-    }
-    else
-        std::puts("data out callback not init");
+    WriteNonBlocking();
 }
 
 void Connection::set_disconnect_client_handle(std::function<void(const std::shared_ptr<Connection> &)> disconnectClient)
@@ -119,13 +91,11 @@ Buffer *Connection::get_input_buffer() { return input_buffer.get(); }
 
 void Connection::Recv(char *buf)
 {
-    Read();
     std::memcpy(buf, input_buffer->data(), input_buffer->size());
     input_buffer->clear();
 }
 
 void Connection::Recv(char *buf, size_t len) {
-    Read();
     std::memcpy(buf, input_buffer->data(), len);
     input_buffer->clear(len);
 }
@@ -157,7 +127,7 @@ void Connection::Write()
 
 void Connection::Read()
 {
-    input_buffer->clear();
+    // input_buffer->clear();
     ReadNonBlocking();
 }
 
@@ -165,9 +135,10 @@ void Connection::Read()
 void Connection::ReadNonBlocking()
 {
     char buf[1024];
+    ssize_t read_bytes = 0;
     while (true)
     {
-        int read_bytes = read(client_fd, buf, sizeof(buf));
+        read_bytes = read(client_fd, buf, sizeof(buf));
         if (read_bytes > 0)
         {
             input_buffer->append(buf, read_bytes);
@@ -178,7 +149,7 @@ void Connection::ReadNonBlocking()
             if (errno == EAGAIN || errno == EWOULDBLOCK)
             {
                 // 非阻塞模式下没有数据可读
-                std::puts("no data to read");
+                // std::puts("no data to read");
                 break;
             }
             else if (errno == EINTR)
@@ -250,7 +221,7 @@ ConnectionState Connection::get_state() const
     return state;
 }
 
-EpollRun *Connection::get_epoll_run() const
+EventLoop *Connection::get_epoll_run() const
 {
     return er;
 }
