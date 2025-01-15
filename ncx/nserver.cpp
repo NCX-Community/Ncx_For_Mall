@@ -1,15 +1,15 @@
 #include"nserver.h"
 #include"musl_channel.h"
 #include"server.h"
-#include"epoll_run.h"
+#include"EventLoop.h"
 #include"protocol.h"
 #include"connection.h"
 #include"transfer.h"
 
 /// NSERVER
 NCXServer::NCXServer(EventLoop* main_reactor, char* IP, uint16_t PORT, int BACKLOG)
-: main_reactor_(main_reactor) {
-    main_acceptor_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
+: loop_(main_reactor) {
+    main_acceptor_ = std::make_unique<Server>(loop_, IP, PORT, BACKLOG);
     ccmap_ = std::make_unique<ControlChannelsMap>();
     // 初始化on_connect_函数，当有新连接时，需要创建Control Channel handle
     main_acceptor_->bind_on_connect([this, main_acceptor_ = main_acceptor_.get(), ccmap_ = ccmap_.get()](std::shared_ptr<Connection> new_conn) {
@@ -38,7 +38,7 @@ NCXServer::NCXServer(EventLoop* main_reactor, char* IP, uint16_t PORT, int BACKL
 
 void NCXServer::run_server() {
     main_acceptor_->start();
-    main_reactor_->run();
+    loop_->run();
 }
 
 void NCXServer::do_channel_handleshake(Connection* conn, ControlChannelsMap* ccmap) {

@@ -5,7 +5,7 @@
 
 enum ConnectionState {
     Invalid = -1,
-    CONNECTED,
+    CONNECTED = 0,
     DISCONNECTED
 };
 
@@ -24,23 +24,11 @@ public:
     void handle_close();
     void set_disconnect_client_handle(std::function<void(const std::shared_ptr<Connection>&)> disconnectClient);
 
-    // data_in_callback
     void handle_data_in();
-
-    // data_out_callback
     void handle_data_out();
 
-    void set_output_buffer(const char* data, size_t len);
-    Buffer* get_output_buffer();
-    Buffer* get_input_buffer();
-
-    void Read(); //fixme 置为私有
-    void Write(); //fixme 置为私有
-
-    void Recv(char* buf);
-    void Recv(char* buf, size_t len);
-    void Send(const char* msg, size_t len);
-    void Send(const char* msg);
+    void Recv(std::string& buf);
+    void Recv(std::string& buf, size_t len);
     void Send(const std::string& msg);
     
     int get_fd() const;
@@ -53,26 +41,23 @@ public:
 
     void set_nonblocking();
 
-    void flash_in_data();
-    void flash_out_data();
 private:
     int conn_id;
     int client_fd;
     ConnectionState state;
 
-    EventLoop* er;
+    EventLoop* loop_;
 
     std::unique_ptr<Channel> channel;
     std::unique_ptr<Buffer> input_buffer;   // 输入缓冲区
-    std::unique_ptr<Buffer> output_buffer;
-
-    bool is_in_transfer();
-    std::unique_ptr<Transfer> exchannel_;
+    std::unique_ptr<Buffer> output_buffer;  // 输出缓冲区
 
     /// server.h
     std::function<void(const std::shared_ptr<Connection>&)> on_close_;
     std::function<void(const std::shared_ptr<Connection>&)> on_message_;
 
+    void Read(); 
+    void Write(); 
     void ReadNonBlocking();
     void WriteNonBlocking();
 };
