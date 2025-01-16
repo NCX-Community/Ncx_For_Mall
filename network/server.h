@@ -22,7 +22,7 @@ public:
 
     //连接体回调函数
     void bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func);
-    void bind_on_message(std::function<void(std::shared_ptr<Connection>)> func);
+    void bind_on_message(std::function<void(std::shared_ptr<Connection>, Buffer*)> func);
 
 private:
     EventLoop* loop_;
@@ -33,7 +33,7 @@ private:
     // 连接握手阶段，用于对连接的预处理（鉴权、判断连接请求类型）
     std::function<void(std::shared_ptr<Connection>)> on_connect_;
     
-    std::function<void(std::shared_ptr<Connection>)> on_message_;
+    std::function<void(std::shared_ptr<Connection>, Buffer*)> on_message_;
 
 };
 

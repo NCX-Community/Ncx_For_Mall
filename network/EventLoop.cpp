@@ -75,7 +75,12 @@ bool EventLoop::isInEpollLoop()
 void EventLoop::run_on_onwer_thread(std::function<void()> cb)
 {
     if (isInEpollLoop())cb();
-    else add_to_do(std::move(cb));
+    else 
+    {
+        add_to_do(std::move(cb));
+        wakeup_loop();
+    }
+
 }
 
 void EventLoop::wakeup_callback() {
@@ -90,4 +95,14 @@ void EventLoop::wakeup_callback() {
 
 int EventLoop::wakeup_fd() {
     return wakeup_fd_;
+}
+
+// wake up loop
+void EventLoop::wakeup_loop() {
+    //唤醒main_reactor_的epoll_wait
+    uint64_t one = 1;
+    ssize_t n = write(wakeup_fd(), &one, sizeof one);
+    if (n != sizeof one) {
+        std::printf("wake up main reactor error\n");
+    }
 }

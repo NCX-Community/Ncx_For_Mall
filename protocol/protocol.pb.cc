@@ -14,7 +14,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-namespace ncx {
+namespace protocol {
 class ControlChannelCmdDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ControlChannelCmd> _instance;
@@ -27,16 +27,16 @@ class HelloDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Hello> _instance;
 } _Hello_default_instance_;
-}  // namespace ncx
+}  // namespace protocol
 static void InitDefaultsscc_info_ControlChannelCmd_protocol_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::ncx::_ControlChannelCmd_default_instance_;
-    new (ptr) ::ncx::ControlChannelCmd();
+    void* ptr = &::protocol::_ControlChannelCmd_default_instance_;
+    new (ptr) ::protocol::ControlChannelCmd();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::ncx::ControlChannelCmd::InitAsDefaultInstance();
+  ::protocol::ControlChannelCmd::InitAsDefaultInstance();
 }
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ControlChannelCmd_protocol_2eproto =
@@ -46,11 +46,11 @@ static void InitDefaultsscc_info_DataChannelCmd_protocol_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::ncx::_DataChannelCmd_default_instance_;
-    new (ptr) ::ncx::DataChannelCmd();
+    void* ptr = &::protocol::_DataChannelCmd_default_instance_;
+    new (ptr) ::protocol::DataChannelCmd();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::ncx::DataChannelCmd::InitAsDefaultInstance();
+  ::protocol::DataChannelCmd::InitAsDefaultInstance();
 }
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_DataChannelCmd_protocol_2eproto =
@@ -60,11 +60,11 @@ static void InitDefaultsscc_info_Hello_protocol_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::ncx::_Hello_default_instance_;
-    new (ptr) ::ncx::Hello();
+    void* ptr = &::protocol::_Hello_default_instance_;
+    new (ptr) ::protocol::Hello();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::ncx::Hello::InitAsDefaultInstance();
+  ::protocol::Hello::InitAsDefaultInstance();
 }
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Hello_protocol_2eproto =
@@ -75,41 +75,54 @@ static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptor
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protocol_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::ncx::ControlChannelCmd, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::protocol::ControlChannelCmd, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::protocol::ControlChannelCmd, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::ncx::DataChannelCmd, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::protocol::ControlChannelCmd, control_channel_cmd_),
+  0,
+  PROTOBUF_FIELD_OFFSET(::protocol::DataChannelCmd, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::protocol::DataChannelCmd, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::ncx::Hello, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::protocol::DataChannelCmd, data_channel_cmd_),
+  0,
+  PROTOBUF_FIELD_OFFSET(::protocol::Hello, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Hello, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::protocol::Hello, hello_type_),
+  0,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::ncx::ControlChannelCmd)},
-  { 5, -1, sizeof(::ncx::DataChannelCmd)},
-  { 10, -1, sizeof(::ncx::Hello)},
+  { 0, 6, sizeof(::protocol::ControlChannelCmd)},
+  { 7, 13, sizeof(::protocol::DataChannelCmd)},
+  { 14, 20, sizeof(::protocol::Hello)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ncx::_ControlChannelCmd_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ncx::_DataChannelCmd_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ncx::_Hello_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::protocol::_ControlChannelCmd_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::protocol::_DataChannelCmd_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::protocol::_Hello_default_instance_),
 };
 
 const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\016protocol.proto\022\003ncx\"@\n\021ControlChannelC"
-  "md\"+\n\003cmd\022\025\n\021CreateDataChannel\020\000\022\r\n\tHear"
-  "tBeat\020\001\"A\n\016DataChannelCmd\"/\n\003cmd\022\023\n\017Star"
-  "tForwardTcp\020\000\022\023\n\017StartForwardUdp\020\001\"C\n\005He"
-  "llo\":\n\thelloType\022\027\n\023ControlChannelHello\020"
-  "\000\022\024\n\020DataChannelHello\020\001b\006proto3"
+  "\n\016protocol.proto\022\010protocol\"\237\001\n\021ControlCh"
+  "annelCmd\022B\n\023control_channel_cmd\030\001 \001(\0162 ."
+  "protocol.ControlChannelCmd.CCmdH\000\210\001\001\".\n\004"
+  "CCmd\022\027\n\023CREATE_DATA_CHANNEL\020\000\022\r\n\tHEARTBE"
+  "AT\020\001B\026\n\024_control_channel_cmd\"\231\001\n\016DataCha"
+  "nnelCmd\022<\n\020data_channel_cmd\030\001 \001(\0162\035.prot"
+  "ocol.DataChannelCmd.DCmdH\000\210\001\001\"4\n\004DCmd\022\025\n"
+  "\021START_FORWARD_TCP\020\000\022\025\n\021START_FORWARD_UD"
+  "P\020\001B\023\n\021_data_channel_cmd\"\212\001\n\005Hello\0222\n\nhe"
+  "llo_type\030\001 \001(\0162\031.protocol.Hello.HelloTyp"
+  "eH\000\210\001\001\">\n\tHelloType\022\031\n\025CONTROL_CHANNEL_H"
+  "ELLO\020\000\022\026\n\022DATA_CHANNEL_HELLO\020\001B\r\n\013_hello"
+  "_typeb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_protocol_2eproto_deps[1] = {
 };
@@ -120,7 +133,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pro
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto = {
-  false, false, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 231,
+  false, false, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 493,
   &descriptor_table_protocol_2eproto_once, descriptor_table_protocol_2eproto_sccs, descriptor_table_protocol_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_protocol_2eproto::offsets,
   file_level_metadata_protocol_2eproto, 3, file_level_enum_descriptors_protocol_2eproto, file_level_service_descriptors_protocol_2eproto,
@@ -128,12 +141,12 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protoc
 
 // Force running AddDescriptors() at dynamic initialization time.
 static bool dynamic_init_dummy_protocol_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_protocol_2eproto)), true);
-namespace ncx {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ControlChannelCmd_cmd_descriptor() {
+namespace protocol {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ControlChannelCmd_CCmd_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protocol_2eproto);
   return file_level_enum_descriptors_protocol_2eproto[0];
 }
-bool ControlChannelCmd_cmd_IsValid(int value) {
+bool ControlChannelCmd_CCmd_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -144,17 +157,17 @@ bool ControlChannelCmd_cmd_IsValid(int value) {
 }
 
 #if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr ControlChannelCmd_cmd ControlChannelCmd::CreateDataChannel;
-constexpr ControlChannelCmd_cmd ControlChannelCmd::HeartBeat;
-constexpr ControlChannelCmd_cmd ControlChannelCmd::cmd_MIN;
-constexpr ControlChannelCmd_cmd ControlChannelCmd::cmd_MAX;
-constexpr int ControlChannelCmd::cmd_ARRAYSIZE;
+constexpr ControlChannelCmd_CCmd ControlChannelCmd::CREATE_DATA_CHANNEL;
+constexpr ControlChannelCmd_CCmd ControlChannelCmd::HEARTBEAT;
+constexpr ControlChannelCmd_CCmd ControlChannelCmd::CCmd_MIN;
+constexpr ControlChannelCmd_CCmd ControlChannelCmd::CCmd_MAX;
+constexpr int ControlChannelCmd::CCmd_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DataChannelCmd_cmd_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DataChannelCmd_DCmd_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protocol_2eproto);
   return file_level_enum_descriptors_protocol_2eproto[1];
 }
-bool DataChannelCmd_cmd_IsValid(int value) {
+bool DataChannelCmd_DCmd_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -165,17 +178,17 @@ bool DataChannelCmd_cmd_IsValid(int value) {
 }
 
 #if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr DataChannelCmd_cmd DataChannelCmd::StartForwardTcp;
-constexpr DataChannelCmd_cmd DataChannelCmd::StartForwardUdp;
-constexpr DataChannelCmd_cmd DataChannelCmd::cmd_MIN;
-constexpr DataChannelCmd_cmd DataChannelCmd::cmd_MAX;
-constexpr int DataChannelCmd::cmd_ARRAYSIZE;
+constexpr DataChannelCmd_DCmd DataChannelCmd::START_FORWARD_TCP;
+constexpr DataChannelCmd_DCmd DataChannelCmd::START_FORWARD_UDP;
+constexpr DataChannelCmd_DCmd DataChannelCmd::DCmd_MIN;
+constexpr DataChannelCmd_DCmd DataChannelCmd::DCmd_MAX;
+constexpr int DataChannelCmd::DCmd_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Hello_helloType_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Hello_HelloType_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protocol_2eproto);
   return file_level_enum_descriptors_protocol_2eproto[2];
 }
-bool Hello_helloType_IsValid(int value) {
+bool Hello_HelloType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -186,11 +199,11 @@ bool Hello_helloType_IsValid(int value) {
 }
 
 #if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr Hello_helloType Hello::ControlChannelHello;
-constexpr Hello_helloType Hello::DataChannelHello;
-constexpr Hello_helloType Hello::helloType_MIN;
-constexpr Hello_helloType Hello::helloType_MAX;
-constexpr int Hello::helloType_ARRAYSIZE;
+constexpr Hello_HelloType Hello::CONTROL_CHANNEL_HELLO;
+constexpr Hello_HelloType Hello::DATA_CHANNEL_HELLO;
+constexpr Hello_HelloType Hello::HelloType_MIN;
+constexpr Hello_HelloType Hello::HelloType_MAX;
+constexpr int Hello::HelloType_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
 
 // ===================================================================
@@ -199,25 +212,32 @@ void ControlChannelCmd::InitAsDefaultInstance() {
 }
 class ControlChannelCmd::_Internal {
  public:
+  using HasBits = decltype(std::declval<ControlChannelCmd>()._has_bits_);
+  static void set_has_control_channel_cmd(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
 };
 
 ControlChannelCmd::ControlChannelCmd(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
   RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:ncx.ControlChannelCmd)
+  // @@protoc_insertion_point(arena_constructor:protocol.ControlChannelCmd)
 }
 ControlChannelCmd::ControlChannelCmd(const ControlChannelCmd& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:ncx.ControlChannelCmd)
+  control_channel_cmd_ = from.control_channel_cmd_;
+  // @@protoc_insertion_point(copy_constructor:protocol.ControlChannelCmd)
 }
 
 void ControlChannelCmd::SharedCtor() {
+  control_channel_cmd_ = 0;
 }
 
 ControlChannelCmd::~ControlChannelCmd() {
-  // @@protoc_insertion_point(destructor:ncx.ControlChannelCmd)
+  // @@protoc_insertion_point(destructor:protocol.ControlChannelCmd)
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -242,21 +262,35 @@ const ControlChannelCmd& ControlChannelCmd::default_instance() {
 
 
 void ControlChannelCmd::Clear() {
-// @@protoc_insertion_point(message_clear_start:ncx.ControlChannelCmd)
+// @@protoc_insertion_point(message_clear_start:protocol.ControlChannelCmd)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  control_channel_cmd_ = 0;
+  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* ControlChannelCmd::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
+    switch (tag >> 3) {
+      // .protocol.ControlChannelCmd.CCmd control_channel_cmd = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_control_channel_cmd(static_cast<::protocol::ControlChannelCmd_CCmd>(val));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
           ctx->SetLastTag(tag);
           goto success;
@@ -266,8 +300,11 @@ const char* ControlChannelCmd::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
             ptr, ctx);
         CHK_(ptr != nullptr);
         continue;
+      }
+    }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -277,25 +314,39 @@ failure:
 
 ::PROTOBUF_NAMESPACE_ID::uint8* ControlChannelCmd::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:ncx.ControlChannelCmd)
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.ControlChannelCmd)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
+
+  // .protocol.ControlChannelCmd.CCmd control_channel_cmd = 1;
+  if (_internal_has_control_channel_cmd()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_control_channel_cmd(), target);
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:ncx.ControlChannelCmd)
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.ControlChannelCmd)
   return target;
 }
 
 size_t ControlChannelCmd::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ncx.ControlChannelCmd)
+// @@protoc_insertion_point(message_byte_size_start:protocol.ControlChannelCmd)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // .protocol.ControlChannelCmd.CCmd control_channel_cmd = 1;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_control_channel_cmd());
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -307,38 +358,41 @@ size_t ControlChannelCmd::ByteSizeLong() const {
 }
 
 void ControlChannelCmd::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ncx.ControlChannelCmd)
+// @@protoc_insertion_point(generalized_merge_from_start:protocol.ControlChannelCmd)
   GOOGLE_DCHECK_NE(&from, this);
   const ControlChannelCmd* source =
       ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ControlChannelCmd>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ncx.ControlChannelCmd)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:protocol.ControlChannelCmd)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ncx.ControlChannelCmd)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:protocol.ControlChannelCmd)
     MergeFrom(*source);
   }
 }
 
 void ControlChannelCmd::MergeFrom(const ControlChannelCmd& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ncx.ControlChannelCmd)
+// @@protoc_insertion_point(class_specific_merge_from_start:protocol.ControlChannelCmd)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_has_control_channel_cmd()) {
+    _internal_set_control_channel_cmd(from._internal_control_channel_cmd());
+  }
 }
 
 void ControlChannelCmd::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ncx.ControlChannelCmd)
+// @@protoc_insertion_point(generalized_copy_from_start:protocol.ControlChannelCmd)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void ControlChannelCmd::CopyFrom(const ControlChannelCmd& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ncx.ControlChannelCmd)
+// @@protoc_insertion_point(class_specific_copy_from_start:protocol.ControlChannelCmd)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -351,6 +405,8 @@ bool ControlChannelCmd::IsInitialized() const {
 void ControlChannelCmd::InternalSwap(ControlChannelCmd* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(control_channel_cmd_, other->control_channel_cmd_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ControlChannelCmd::GetMetadata() const {
@@ -364,25 +420,32 @@ void DataChannelCmd::InitAsDefaultInstance() {
 }
 class DataChannelCmd::_Internal {
  public:
+  using HasBits = decltype(std::declval<DataChannelCmd>()._has_bits_);
+  static void set_has_data_channel_cmd(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
 };
 
 DataChannelCmd::DataChannelCmd(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
   RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:ncx.DataChannelCmd)
+  // @@protoc_insertion_point(arena_constructor:protocol.DataChannelCmd)
 }
 DataChannelCmd::DataChannelCmd(const DataChannelCmd& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:ncx.DataChannelCmd)
+  data_channel_cmd_ = from.data_channel_cmd_;
+  // @@protoc_insertion_point(copy_constructor:protocol.DataChannelCmd)
 }
 
 void DataChannelCmd::SharedCtor() {
+  data_channel_cmd_ = 0;
 }
 
 DataChannelCmd::~DataChannelCmd() {
-  // @@protoc_insertion_point(destructor:ncx.DataChannelCmd)
+  // @@protoc_insertion_point(destructor:protocol.DataChannelCmd)
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -407,21 +470,35 @@ const DataChannelCmd& DataChannelCmd::default_instance() {
 
 
 void DataChannelCmd::Clear() {
-// @@protoc_insertion_point(message_clear_start:ncx.DataChannelCmd)
+// @@protoc_insertion_point(message_clear_start:protocol.DataChannelCmd)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  data_channel_cmd_ = 0;
+  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* DataChannelCmd::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
+    switch (tag >> 3) {
+      // .protocol.DataChannelCmd.DCmd data_channel_cmd = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_data_channel_cmd(static_cast<::protocol::DataChannelCmd_DCmd>(val));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
           ctx->SetLastTag(tag);
           goto success;
@@ -431,8 +508,11 @@ const char* DataChannelCmd::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
             ptr, ctx);
         CHK_(ptr != nullptr);
         continue;
+      }
+    }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -442,25 +522,39 @@ failure:
 
 ::PROTOBUF_NAMESPACE_ID::uint8* DataChannelCmd::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:ncx.DataChannelCmd)
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.DataChannelCmd)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
+
+  // .protocol.DataChannelCmd.DCmd data_channel_cmd = 1;
+  if (_internal_has_data_channel_cmd()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_data_channel_cmd(), target);
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:ncx.DataChannelCmd)
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.DataChannelCmd)
   return target;
 }
 
 size_t DataChannelCmd::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ncx.DataChannelCmd)
+// @@protoc_insertion_point(message_byte_size_start:protocol.DataChannelCmd)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // .protocol.DataChannelCmd.DCmd data_channel_cmd = 1;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_data_channel_cmd());
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -472,38 +566,41 @@ size_t DataChannelCmd::ByteSizeLong() const {
 }
 
 void DataChannelCmd::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ncx.DataChannelCmd)
+// @@protoc_insertion_point(generalized_merge_from_start:protocol.DataChannelCmd)
   GOOGLE_DCHECK_NE(&from, this);
   const DataChannelCmd* source =
       ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<DataChannelCmd>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ncx.DataChannelCmd)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:protocol.DataChannelCmd)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ncx.DataChannelCmd)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:protocol.DataChannelCmd)
     MergeFrom(*source);
   }
 }
 
 void DataChannelCmd::MergeFrom(const DataChannelCmd& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ncx.DataChannelCmd)
+// @@protoc_insertion_point(class_specific_merge_from_start:protocol.DataChannelCmd)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_has_data_channel_cmd()) {
+    _internal_set_data_channel_cmd(from._internal_data_channel_cmd());
+  }
 }
 
 void DataChannelCmd::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ncx.DataChannelCmd)
+// @@protoc_insertion_point(generalized_copy_from_start:protocol.DataChannelCmd)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void DataChannelCmd::CopyFrom(const DataChannelCmd& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ncx.DataChannelCmd)
+// @@protoc_insertion_point(class_specific_copy_from_start:protocol.DataChannelCmd)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -516,6 +613,8 @@ bool DataChannelCmd::IsInitialized() const {
 void DataChannelCmd::InternalSwap(DataChannelCmd* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(data_channel_cmd_, other->data_channel_cmd_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata DataChannelCmd::GetMetadata() const {
@@ -529,25 +628,32 @@ void Hello::InitAsDefaultInstance() {
 }
 class Hello::_Internal {
  public:
+  using HasBits = decltype(std::declval<Hello>()._has_bits_);
+  static void set_has_hello_type(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
 };
 
 Hello::Hello(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
   RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:ncx.Hello)
+  // @@protoc_insertion_point(arena_constructor:protocol.Hello)
 }
 Hello::Hello(const Hello& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:ncx.Hello)
+  hello_type_ = from.hello_type_;
+  // @@protoc_insertion_point(copy_constructor:protocol.Hello)
 }
 
 void Hello::SharedCtor() {
+  hello_type_ = 0;
 }
 
 Hello::~Hello() {
-  // @@protoc_insertion_point(destructor:ncx.Hello)
+  // @@protoc_insertion_point(destructor:protocol.Hello)
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -572,21 +678,35 @@ const Hello& Hello::default_instance() {
 
 
 void Hello::Clear() {
-// @@protoc_insertion_point(message_clear_start:ncx.Hello)
+// @@protoc_insertion_point(message_clear_start:protocol.Hello)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  hello_type_ = 0;
+  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* Hello::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
+    switch (tag >> 3) {
+      // .protocol.Hello.HelloType hello_type = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_hello_type(static_cast<::protocol::Hello_HelloType>(val));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
           ctx->SetLastTag(tag);
           goto success;
@@ -596,8 +716,11 @@ const char* Hello::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inte
             ptr, ctx);
         CHK_(ptr != nullptr);
         continue;
+      }
+    }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -607,25 +730,39 @@ failure:
 
 ::PROTOBUF_NAMESPACE_ID::uint8* Hello::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:ncx.Hello)
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.Hello)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
+
+  // .protocol.Hello.HelloType hello_type = 1;
+  if (_internal_has_hello_type()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_hello_type(), target);
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:ncx.Hello)
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.Hello)
   return target;
 }
 
 size_t Hello::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ncx.Hello)
+// @@protoc_insertion_point(message_byte_size_start:protocol.Hello)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // .protocol.Hello.HelloType hello_type = 1;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_hello_type());
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -637,38 +774,41 @@ size_t Hello::ByteSizeLong() const {
 }
 
 void Hello::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ncx.Hello)
+// @@protoc_insertion_point(generalized_merge_from_start:protocol.Hello)
   GOOGLE_DCHECK_NE(&from, this);
   const Hello* source =
       ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Hello>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ncx.Hello)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:protocol.Hello)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ncx.Hello)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:protocol.Hello)
     MergeFrom(*source);
   }
 }
 
 void Hello::MergeFrom(const Hello& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ncx.Hello)
+// @@protoc_insertion_point(class_specific_merge_from_start:protocol.Hello)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_has_hello_type()) {
+    _internal_set_hello_type(from._internal_hello_type());
+  }
 }
 
 void Hello::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ncx.Hello)
+// @@protoc_insertion_point(generalized_copy_from_start:protocol.Hello)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void Hello::CopyFrom(const Hello& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ncx.Hello)
+// @@protoc_insertion_point(class_specific_copy_from_start:protocol.Hello)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -681,6 +821,8 @@ bool Hello::IsInitialized() const {
 void Hello::InternalSwap(Hello* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(hello_type_, other->hello_type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Hello::GetMetadata() const {
@@ -689,16 +831,16 @@ void Hello::InternalSwap(Hello* other) {
 
 
 // @@protoc_insertion_point(namespace_scope)
-}  // namespace ncx
+}  // namespace protocol
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::ncx::ControlChannelCmd* Arena::CreateMaybeMessage< ::ncx::ControlChannelCmd >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::ncx::ControlChannelCmd >(arena);
+template<> PROTOBUF_NOINLINE ::protocol::ControlChannelCmd* Arena::CreateMaybeMessage< ::protocol::ControlChannelCmd >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::protocol::ControlChannelCmd >(arena);
 }
-template<> PROTOBUF_NOINLINE ::ncx::DataChannelCmd* Arena::CreateMaybeMessage< ::ncx::DataChannelCmd >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::ncx::DataChannelCmd >(arena);
+template<> PROTOBUF_NOINLINE ::protocol::DataChannelCmd* Arena::CreateMaybeMessage< ::protocol::DataChannelCmd >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::protocol::DataChannelCmd >(arena);
 }
-template<> PROTOBUF_NOINLINE ::ncx::Hello* Arena::CreateMaybeMessage< ::ncx::Hello >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::ncx::Hello >(arena);
+template<> PROTOBUF_NOINLINE ::protocol::Hello* Arena::CreateMaybeMessage< ::protocol::Hello >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::protocol::Hello >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

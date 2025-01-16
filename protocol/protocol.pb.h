@@ -55,7 +55,7 @@ struct TableStruct_protocol_2eproto {
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto;
-namespace ncx {
+namespace protocol {
 class ControlChannelCmd;
 class ControlChannelCmdDefaultTypeInternal;
 extern ControlChannelCmdDefaultTypeInternal _ControlChannelCmd_default_instance_;
@@ -65,93 +65,93 @@ extern DataChannelCmdDefaultTypeInternal _DataChannelCmd_default_instance_;
 class Hello;
 class HelloDefaultTypeInternal;
 extern HelloDefaultTypeInternal _Hello_default_instance_;
-}  // namespace ncx
+}  // namespace protocol
 PROTOBUF_NAMESPACE_OPEN
-template<> ::ncx::ControlChannelCmd* Arena::CreateMaybeMessage<::ncx::ControlChannelCmd>(Arena*);
-template<> ::ncx::DataChannelCmd* Arena::CreateMaybeMessage<::ncx::DataChannelCmd>(Arena*);
-template<> ::ncx::Hello* Arena::CreateMaybeMessage<::ncx::Hello>(Arena*);
+template<> ::protocol::ControlChannelCmd* Arena::CreateMaybeMessage<::protocol::ControlChannelCmd>(Arena*);
+template<> ::protocol::DataChannelCmd* Arena::CreateMaybeMessage<::protocol::DataChannelCmd>(Arena*);
+template<> ::protocol::Hello* Arena::CreateMaybeMessage<::protocol::Hello>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
-namespace ncx {
+namespace protocol {
 
-enum ControlChannelCmd_cmd : int {
-  ControlChannelCmd_cmd_CreateDataChannel = 0,
-  ControlChannelCmd_cmd_HeartBeat = 1,
-  ControlChannelCmd_cmd_ControlChannelCmd_cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
-  ControlChannelCmd_cmd_ControlChannelCmd_cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+enum ControlChannelCmd_CCmd : int {
+  ControlChannelCmd_CCmd_CREATE_DATA_CHANNEL = 0,
+  ControlChannelCmd_CCmd_HEARTBEAT = 1,
+  ControlChannelCmd_CCmd_ControlChannelCmd_CCmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  ControlChannelCmd_CCmd_ControlChannelCmd_CCmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
-bool ControlChannelCmd_cmd_IsValid(int value);
-constexpr ControlChannelCmd_cmd ControlChannelCmd_cmd_cmd_MIN = ControlChannelCmd_cmd_CreateDataChannel;
-constexpr ControlChannelCmd_cmd ControlChannelCmd_cmd_cmd_MAX = ControlChannelCmd_cmd_HeartBeat;
-constexpr int ControlChannelCmd_cmd_cmd_ARRAYSIZE = ControlChannelCmd_cmd_cmd_MAX + 1;
+bool ControlChannelCmd_CCmd_IsValid(int value);
+constexpr ControlChannelCmd_CCmd ControlChannelCmd_CCmd_CCmd_MIN = ControlChannelCmd_CCmd_CREATE_DATA_CHANNEL;
+constexpr ControlChannelCmd_CCmd ControlChannelCmd_CCmd_CCmd_MAX = ControlChannelCmd_CCmd_HEARTBEAT;
+constexpr int ControlChannelCmd_CCmd_CCmd_ARRAYSIZE = ControlChannelCmd_CCmd_CCmd_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ControlChannelCmd_cmd_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ControlChannelCmd_CCmd_descriptor();
 template<typename T>
-inline const std::string& ControlChannelCmd_cmd_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, ControlChannelCmd_cmd>::value ||
+inline const std::string& ControlChannelCmd_CCmd_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ControlChannelCmd_CCmd>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function ControlChannelCmd_cmd_Name.");
+    "Incorrect type passed to function ControlChannelCmd_CCmd_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    ControlChannelCmd_cmd_descriptor(), enum_t_value);
+    ControlChannelCmd_CCmd_descriptor(), enum_t_value);
 }
-inline bool ControlChannelCmd_cmd_Parse(
-    const std::string& name, ControlChannelCmd_cmd* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ControlChannelCmd_cmd>(
-    ControlChannelCmd_cmd_descriptor(), name, value);
+inline bool ControlChannelCmd_CCmd_Parse(
+    const std::string& name, ControlChannelCmd_CCmd* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ControlChannelCmd_CCmd>(
+    ControlChannelCmd_CCmd_descriptor(), name, value);
 }
-enum DataChannelCmd_cmd : int {
-  DataChannelCmd_cmd_StartForwardTcp = 0,
-  DataChannelCmd_cmd_StartForwardUdp = 1,
-  DataChannelCmd_cmd_DataChannelCmd_cmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
-  DataChannelCmd_cmd_DataChannelCmd_cmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+enum DataChannelCmd_DCmd : int {
+  DataChannelCmd_DCmd_START_FORWARD_TCP = 0,
+  DataChannelCmd_DCmd_START_FORWARD_UDP = 1,
+  DataChannelCmd_DCmd_DataChannelCmd_DCmd_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  DataChannelCmd_DCmd_DataChannelCmd_DCmd_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
-bool DataChannelCmd_cmd_IsValid(int value);
-constexpr DataChannelCmd_cmd DataChannelCmd_cmd_cmd_MIN = DataChannelCmd_cmd_StartForwardTcp;
-constexpr DataChannelCmd_cmd DataChannelCmd_cmd_cmd_MAX = DataChannelCmd_cmd_StartForwardUdp;
-constexpr int DataChannelCmd_cmd_cmd_ARRAYSIZE = DataChannelCmd_cmd_cmd_MAX + 1;
+bool DataChannelCmd_DCmd_IsValid(int value);
+constexpr DataChannelCmd_DCmd DataChannelCmd_DCmd_DCmd_MIN = DataChannelCmd_DCmd_START_FORWARD_TCP;
+constexpr DataChannelCmd_DCmd DataChannelCmd_DCmd_DCmd_MAX = DataChannelCmd_DCmd_START_FORWARD_UDP;
+constexpr int DataChannelCmd_DCmd_DCmd_ARRAYSIZE = DataChannelCmd_DCmd_DCmd_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DataChannelCmd_cmd_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DataChannelCmd_DCmd_descriptor();
 template<typename T>
-inline const std::string& DataChannelCmd_cmd_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, DataChannelCmd_cmd>::value ||
+inline const std::string& DataChannelCmd_DCmd_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, DataChannelCmd_DCmd>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function DataChannelCmd_cmd_Name.");
+    "Incorrect type passed to function DataChannelCmd_DCmd_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    DataChannelCmd_cmd_descriptor(), enum_t_value);
+    DataChannelCmd_DCmd_descriptor(), enum_t_value);
 }
-inline bool DataChannelCmd_cmd_Parse(
-    const std::string& name, DataChannelCmd_cmd* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<DataChannelCmd_cmd>(
-    DataChannelCmd_cmd_descriptor(), name, value);
+inline bool DataChannelCmd_DCmd_Parse(
+    const std::string& name, DataChannelCmd_DCmd* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<DataChannelCmd_DCmd>(
+    DataChannelCmd_DCmd_descriptor(), name, value);
 }
-enum Hello_helloType : int {
-  Hello_helloType_ControlChannelHello = 0,
-  Hello_helloType_DataChannelHello = 1,
-  Hello_helloType_Hello_helloType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
-  Hello_helloType_Hello_helloType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+enum Hello_HelloType : int {
+  Hello_HelloType_CONTROL_CHANNEL_HELLO = 0,
+  Hello_HelloType_DATA_CHANNEL_HELLO = 1,
+  Hello_HelloType_Hello_HelloType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  Hello_HelloType_Hello_HelloType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
-bool Hello_helloType_IsValid(int value);
-constexpr Hello_helloType Hello_helloType_helloType_MIN = Hello_helloType_ControlChannelHello;
-constexpr Hello_helloType Hello_helloType_helloType_MAX = Hello_helloType_DataChannelHello;
-constexpr int Hello_helloType_helloType_ARRAYSIZE = Hello_helloType_helloType_MAX + 1;
+bool Hello_HelloType_IsValid(int value);
+constexpr Hello_HelloType Hello_HelloType_HelloType_MIN = Hello_HelloType_CONTROL_CHANNEL_HELLO;
+constexpr Hello_HelloType Hello_HelloType_HelloType_MAX = Hello_HelloType_DATA_CHANNEL_HELLO;
+constexpr int Hello_HelloType_HelloType_ARRAYSIZE = Hello_HelloType_HelloType_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Hello_helloType_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Hello_HelloType_descriptor();
 template<typename T>
-inline const std::string& Hello_helloType_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, Hello_helloType>::value ||
+inline const std::string& Hello_HelloType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, Hello_HelloType>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function Hello_helloType_Name.");
+    "Incorrect type passed to function Hello_HelloType_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    Hello_helloType_descriptor(), enum_t_value);
+    Hello_HelloType_descriptor(), enum_t_value);
 }
-inline bool Hello_helloType_Parse(
-    const std::string& name, Hello_helloType* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Hello_helloType>(
-    Hello_helloType_descriptor(), name, value);
+inline bool Hello_HelloType_Parse(
+    const std::string& name, Hello_HelloType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Hello_HelloType>(
+    Hello_HelloType_descriptor(), name, value);
 }
 // ===================================================================
 
 class ControlChannelCmd PROTOBUF_FINAL :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ncx.ControlChannelCmd) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.ControlChannelCmd) */ {
  public:
   inline ControlChannelCmd() : ControlChannelCmd(nullptr) {};
   virtual ~ControlChannelCmd();
@@ -240,7 +240,7 @@ class ControlChannelCmd PROTOBUF_FINAL :
   void InternalSwap(ControlChannelCmd* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ncx.ControlChannelCmd";
+    return "protocol.ControlChannelCmd";
   }
   protected:
   explicit ControlChannelCmd(::PROTOBUF_NAMESPACE_ID::Arena* arena);
@@ -260,52 +260,70 @@ class ControlChannelCmd PROTOBUF_FINAL :
 
   // nested types ----------------------------------------------------
 
-  typedef ControlChannelCmd_cmd cmd;
-  static constexpr cmd CreateDataChannel =
-    ControlChannelCmd_cmd_CreateDataChannel;
-  static constexpr cmd HeartBeat =
-    ControlChannelCmd_cmd_HeartBeat;
-  static inline bool cmd_IsValid(int value) {
-    return ControlChannelCmd_cmd_IsValid(value);
+  typedef ControlChannelCmd_CCmd CCmd;
+  static constexpr CCmd CREATE_DATA_CHANNEL =
+    ControlChannelCmd_CCmd_CREATE_DATA_CHANNEL;
+  static constexpr CCmd HEARTBEAT =
+    ControlChannelCmd_CCmd_HEARTBEAT;
+  static inline bool CCmd_IsValid(int value) {
+    return ControlChannelCmd_CCmd_IsValid(value);
   }
-  static constexpr cmd cmd_MIN =
-    ControlChannelCmd_cmd_cmd_MIN;
-  static constexpr cmd cmd_MAX =
-    ControlChannelCmd_cmd_cmd_MAX;
-  static constexpr int cmd_ARRAYSIZE =
-    ControlChannelCmd_cmd_cmd_ARRAYSIZE;
+  static constexpr CCmd CCmd_MIN =
+    ControlChannelCmd_CCmd_CCmd_MIN;
+  static constexpr CCmd CCmd_MAX =
+    ControlChannelCmd_CCmd_CCmd_MAX;
+  static constexpr int CCmd_ARRAYSIZE =
+    ControlChannelCmd_CCmd_CCmd_ARRAYSIZE;
   static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  cmd_descriptor() {
-    return ControlChannelCmd_cmd_descriptor();
+  CCmd_descriptor() {
+    return ControlChannelCmd_CCmd_descriptor();
   }
   template<typename T>
-  static inline const std::string& cmd_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, cmd>::value ||
+  static inline const std::string& CCmd_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, CCmd>::value ||
       ::std::is_integral<T>::value,
-      "Incorrect type passed to function cmd_Name.");
-    return ControlChannelCmd_cmd_Name(enum_t_value);
+      "Incorrect type passed to function CCmd_Name.");
+    return ControlChannelCmd_CCmd_Name(enum_t_value);
   }
-  static inline bool cmd_Parse(const std::string& name,
-      cmd* value) {
-    return ControlChannelCmd_cmd_Parse(name, value);
+  static inline bool CCmd_Parse(const std::string& name,
+      CCmd* value) {
+    return ControlChannelCmd_CCmd_Parse(name, value);
   }
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:ncx.ControlChannelCmd)
+  enum : int {
+    kControlChannelCmdFieldNumber = 1,
+  };
+  // .protocol.ControlChannelCmd.CCmd control_channel_cmd = 1;
+  bool has_control_channel_cmd() const;
+  private:
+  bool _internal_has_control_channel_cmd() const;
+  public:
+  void clear_control_channel_cmd();
+  ::protocol::ControlChannelCmd_CCmd control_channel_cmd() const;
+  void set_control_channel_cmd(::protocol::ControlChannelCmd_CCmd value);
+  private:
+  ::protocol::ControlChannelCmd_CCmd _internal_control_channel_cmd() const;
+  void _internal_set_control_channel_cmd(::protocol::ControlChannelCmd_CCmd value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.ControlChannelCmd)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  int control_channel_cmd_;
   friend struct ::TableStruct_protocol_2eproto;
 };
 // -------------------------------------------------------------------
 
 class DataChannelCmd PROTOBUF_FINAL :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ncx.DataChannelCmd) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.DataChannelCmd) */ {
  public:
   inline DataChannelCmd() : DataChannelCmd(nullptr) {};
   virtual ~DataChannelCmd();
@@ -394,7 +412,7 @@ class DataChannelCmd PROTOBUF_FINAL :
   void InternalSwap(DataChannelCmd* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ncx.DataChannelCmd";
+    return "protocol.DataChannelCmd";
   }
   protected:
   explicit DataChannelCmd(::PROTOBUF_NAMESPACE_ID::Arena* arena);
@@ -414,52 +432,70 @@ class DataChannelCmd PROTOBUF_FINAL :
 
   // nested types ----------------------------------------------------
 
-  typedef DataChannelCmd_cmd cmd;
-  static constexpr cmd StartForwardTcp =
-    DataChannelCmd_cmd_StartForwardTcp;
-  static constexpr cmd StartForwardUdp =
-    DataChannelCmd_cmd_StartForwardUdp;
-  static inline bool cmd_IsValid(int value) {
-    return DataChannelCmd_cmd_IsValid(value);
+  typedef DataChannelCmd_DCmd DCmd;
+  static constexpr DCmd START_FORWARD_TCP =
+    DataChannelCmd_DCmd_START_FORWARD_TCP;
+  static constexpr DCmd START_FORWARD_UDP =
+    DataChannelCmd_DCmd_START_FORWARD_UDP;
+  static inline bool DCmd_IsValid(int value) {
+    return DataChannelCmd_DCmd_IsValid(value);
   }
-  static constexpr cmd cmd_MIN =
-    DataChannelCmd_cmd_cmd_MIN;
-  static constexpr cmd cmd_MAX =
-    DataChannelCmd_cmd_cmd_MAX;
-  static constexpr int cmd_ARRAYSIZE =
-    DataChannelCmd_cmd_cmd_ARRAYSIZE;
+  static constexpr DCmd DCmd_MIN =
+    DataChannelCmd_DCmd_DCmd_MIN;
+  static constexpr DCmd DCmd_MAX =
+    DataChannelCmd_DCmd_DCmd_MAX;
+  static constexpr int DCmd_ARRAYSIZE =
+    DataChannelCmd_DCmd_DCmd_ARRAYSIZE;
   static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  cmd_descriptor() {
-    return DataChannelCmd_cmd_descriptor();
+  DCmd_descriptor() {
+    return DataChannelCmd_DCmd_descriptor();
   }
   template<typename T>
-  static inline const std::string& cmd_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, cmd>::value ||
+  static inline const std::string& DCmd_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, DCmd>::value ||
       ::std::is_integral<T>::value,
-      "Incorrect type passed to function cmd_Name.");
-    return DataChannelCmd_cmd_Name(enum_t_value);
+      "Incorrect type passed to function DCmd_Name.");
+    return DataChannelCmd_DCmd_Name(enum_t_value);
   }
-  static inline bool cmd_Parse(const std::string& name,
-      cmd* value) {
-    return DataChannelCmd_cmd_Parse(name, value);
+  static inline bool DCmd_Parse(const std::string& name,
+      DCmd* value) {
+    return DataChannelCmd_DCmd_Parse(name, value);
   }
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:ncx.DataChannelCmd)
+  enum : int {
+    kDataChannelCmdFieldNumber = 1,
+  };
+  // .protocol.DataChannelCmd.DCmd data_channel_cmd = 1;
+  bool has_data_channel_cmd() const;
+  private:
+  bool _internal_has_data_channel_cmd() const;
+  public:
+  void clear_data_channel_cmd();
+  ::protocol::DataChannelCmd_DCmd data_channel_cmd() const;
+  void set_data_channel_cmd(::protocol::DataChannelCmd_DCmd value);
+  private:
+  ::protocol::DataChannelCmd_DCmd _internal_data_channel_cmd() const;
+  void _internal_set_data_channel_cmd(::protocol::DataChannelCmd_DCmd value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.DataChannelCmd)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  int data_channel_cmd_;
   friend struct ::TableStruct_protocol_2eproto;
 };
 // -------------------------------------------------------------------
 
 class Hello PROTOBUF_FINAL :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ncx.Hello) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.Hello) */ {
  public:
   inline Hello() : Hello(nullptr) {};
   virtual ~Hello();
@@ -548,7 +584,7 @@ class Hello PROTOBUF_FINAL :
   void InternalSwap(Hello* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ncx.Hello";
+    return "protocol.Hello";
   }
   protected:
   explicit Hello(::PROTOBUF_NAMESPACE_ID::Arena* arena);
@@ -568,46 +604,64 @@ class Hello PROTOBUF_FINAL :
 
   // nested types ----------------------------------------------------
 
-  typedef Hello_helloType helloType;
-  static constexpr helloType ControlChannelHello =
-    Hello_helloType_ControlChannelHello;
-  static constexpr helloType DataChannelHello =
-    Hello_helloType_DataChannelHello;
-  static inline bool helloType_IsValid(int value) {
-    return Hello_helloType_IsValid(value);
+  typedef Hello_HelloType HelloType;
+  static constexpr HelloType CONTROL_CHANNEL_HELLO =
+    Hello_HelloType_CONTROL_CHANNEL_HELLO;
+  static constexpr HelloType DATA_CHANNEL_HELLO =
+    Hello_HelloType_DATA_CHANNEL_HELLO;
+  static inline bool HelloType_IsValid(int value) {
+    return Hello_HelloType_IsValid(value);
   }
-  static constexpr helloType helloType_MIN =
-    Hello_helloType_helloType_MIN;
-  static constexpr helloType helloType_MAX =
-    Hello_helloType_helloType_MAX;
-  static constexpr int helloType_ARRAYSIZE =
-    Hello_helloType_helloType_ARRAYSIZE;
+  static constexpr HelloType HelloType_MIN =
+    Hello_HelloType_HelloType_MIN;
+  static constexpr HelloType HelloType_MAX =
+    Hello_HelloType_HelloType_MAX;
+  static constexpr int HelloType_ARRAYSIZE =
+    Hello_HelloType_HelloType_ARRAYSIZE;
   static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  helloType_descriptor() {
-    return Hello_helloType_descriptor();
+  HelloType_descriptor() {
+    return Hello_HelloType_descriptor();
   }
   template<typename T>
-  static inline const std::string& helloType_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, helloType>::value ||
+  static inline const std::string& HelloType_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, HelloType>::value ||
       ::std::is_integral<T>::value,
-      "Incorrect type passed to function helloType_Name.");
-    return Hello_helloType_Name(enum_t_value);
+      "Incorrect type passed to function HelloType_Name.");
+    return Hello_HelloType_Name(enum_t_value);
   }
-  static inline bool helloType_Parse(const std::string& name,
-      helloType* value) {
-    return Hello_helloType_Parse(name, value);
+  static inline bool HelloType_Parse(const std::string& name,
+      HelloType* value) {
+    return Hello_HelloType_Parse(name, value);
   }
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:ncx.Hello)
+  enum : int {
+    kHelloTypeFieldNumber = 1,
+  };
+  // .protocol.Hello.HelloType hello_type = 1;
+  bool has_hello_type() const;
+  private:
+  bool _internal_has_hello_type() const;
+  public:
+  void clear_hello_type();
+  ::protocol::Hello_HelloType hello_type() const;
+  void set_hello_type(::protocol::Hello_HelloType value);
+  private:
+  ::protocol::Hello_HelloType _internal_hello_type() const;
+  void _internal_set_hello_type(::protocol::Hello_HelloType value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.Hello)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  int hello_type_;
   friend struct ::TableStruct_protocol_2eproto;
 };
 // ===================================================================
@@ -621,13 +675,97 @@ class Hello PROTOBUF_FINAL :
 #endif  // __GNUC__
 // ControlChannelCmd
 
+// .protocol.ControlChannelCmd.CCmd control_channel_cmd = 1;
+inline bool ControlChannelCmd::_internal_has_control_channel_cmd() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool ControlChannelCmd::has_control_channel_cmd() const {
+  return _internal_has_control_channel_cmd();
+}
+inline void ControlChannelCmd::clear_control_channel_cmd() {
+  control_channel_cmd_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::protocol::ControlChannelCmd_CCmd ControlChannelCmd::_internal_control_channel_cmd() const {
+  return static_cast< ::protocol::ControlChannelCmd_CCmd >(control_channel_cmd_);
+}
+inline ::protocol::ControlChannelCmd_CCmd ControlChannelCmd::control_channel_cmd() const {
+  // @@protoc_insertion_point(field_get:protocol.ControlChannelCmd.control_channel_cmd)
+  return _internal_control_channel_cmd();
+}
+inline void ControlChannelCmd::_internal_set_control_channel_cmd(::protocol::ControlChannelCmd_CCmd value) {
+  _has_bits_[0] |= 0x00000001u;
+  control_channel_cmd_ = value;
+}
+inline void ControlChannelCmd::set_control_channel_cmd(::protocol::ControlChannelCmd_CCmd value) {
+  _internal_set_control_channel_cmd(value);
+  // @@protoc_insertion_point(field_set:protocol.ControlChannelCmd.control_channel_cmd)
+}
+
 // -------------------------------------------------------------------
 
 // DataChannelCmd
 
+// .protocol.DataChannelCmd.DCmd data_channel_cmd = 1;
+inline bool DataChannelCmd::_internal_has_data_channel_cmd() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool DataChannelCmd::has_data_channel_cmd() const {
+  return _internal_has_data_channel_cmd();
+}
+inline void DataChannelCmd::clear_data_channel_cmd() {
+  data_channel_cmd_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::protocol::DataChannelCmd_DCmd DataChannelCmd::_internal_data_channel_cmd() const {
+  return static_cast< ::protocol::DataChannelCmd_DCmd >(data_channel_cmd_);
+}
+inline ::protocol::DataChannelCmd_DCmd DataChannelCmd::data_channel_cmd() const {
+  // @@protoc_insertion_point(field_get:protocol.DataChannelCmd.data_channel_cmd)
+  return _internal_data_channel_cmd();
+}
+inline void DataChannelCmd::_internal_set_data_channel_cmd(::protocol::DataChannelCmd_DCmd value) {
+  _has_bits_[0] |= 0x00000001u;
+  data_channel_cmd_ = value;
+}
+inline void DataChannelCmd::set_data_channel_cmd(::protocol::DataChannelCmd_DCmd value) {
+  _internal_set_data_channel_cmd(value);
+  // @@protoc_insertion_point(field_set:protocol.DataChannelCmd.data_channel_cmd)
+}
+
 // -------------------------------------------------------------------
 
 // Hello
+
+// .protocol.Hello.HelloType hello_type = 1;
+inline bool Hello::_internal_has_hello_type() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Hello::has_hello_type() const {
+  return _internal_has_hello_type();
+}
+inline void Hello::clear_hello_type() {
+  hello_type_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::protocol::Hello_HelloType Hello::_internal_hello_type() const {
+  return static_cast< ::protocol::Hello_HelloType >(hello_type_);
+}
+inline ::protocol::Hello_HelloType Hello::hello_type() const {
+  // @@protoc_insertion_point(field_get:protocol.Hello.hello_type)
+  return _internal_hello_type();
+}
+inline void Hello::_internal_set_hello_type(::protocol::Hello_HelloType value) {
+  _has_bits_[0] |= 0x00000001u;
+  hello_type_ = value;
+}
+inline void Hello::set_hello_type(::protocol::Hello_HelloType value) {
+  _internal_set_hello_type(value);
+  // @@protoc_insertion_point(field_set:protocol.Hello.hello_type)
+}
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
@@ -639,24 +777,24 @@ class Hello PROTOBUF_FINAL :
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace ncx
+}  // namespace protocol
 
 PROTOBUF_NAMESPACE_OPEN
 
-template <> struct is_proto_enum< ::ncx::ControlChannelCmd_cmd> : ::std::true_type {};
+template <> struct is_proto_enum< ::protocol::ControlChannelCmd_CCmd> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ncx::ControlChannelCmd_cmd>() {
-  return ::ncx::ControlChannelCmd_cmd_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::ControlChannelCmd_CCmd>() {
+  return ::protocol::ControlChannelCmd_CCmd_descriptor();
 }
-template <> struct is_proto_enum< ::ncx::DataChannelCmd_cmd> : ::std::true_type {};
+template <> struct is_proto_enum< ::protocol::DataChannelCmd_DCmd> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ncx::DataChannelCmd_cmd>() {
-  return ::ncx::DataChannelCmd_cmd_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::DataChannelCmd_DCmd>() {
+  return ::protocol::DataChannelCmd_DCmd_descriptor();
 }
-template <> struct is_proto_enum< ::ncx::Hello_helloType> : ::std::true_type {};
+template <> struct is_proto_enum< ::protocol::Hello_HelloType> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ncx::Hello_helloType>() {
-  return ::ncx::Hello_helloType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::Hello_HelloType>() {
+  return ::protocol::Hello_HelloType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

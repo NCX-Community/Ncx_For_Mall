@@ -1,7 +1,7 @@
 // 动态分配socket接口
 #include "socket.h"
 #include "merror.h"
-#include "endpoint.h"
+#include "InetAddress.h"
 
 TcpSocket::TcpSocket(bool is_nonblock) : is_nonblock_(is_nonblock)
 {

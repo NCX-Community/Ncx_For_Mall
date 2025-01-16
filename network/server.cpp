@@ -6,7 +6,6 @@
 #include "acceptor.h"
 #include "connection.h"
 #include "current_thread.h"
-#include "epThreadPool.h"
 
 Server::Server(EventLoop* loop, const char* IP, const uint16_t PORT, const int BACKLOG): loop_(loop){
 
@@ -72,7 +71,7 @@ void Server::disconnectHandleInLoop(const std::shared_ptr<Connection>& conn) {
 
     // todo: 等待当前wait分发完handle时,如果wait一直没有时间,那么channel的删除连接操作无法执行,epoll需要监听的事件无法减少,导致服务器性能下降.需要修复
 
-    conn->get_epoll_run()->add_to_do(std::bind(&Connection::ConnectionConstructor, conn));
+    conn->get_epoll_run()->run_on_onwer_thread(std::bind(&Connection::ConnectionConstructor, conn));
     // printf("disconnect connection finish\n");
     //delete connection
 }
@@ -81,7 +80,7 @@ void Server::bind_on_connect(std::function<void(std::shared_ptr<Connection>)> fu
     on_connect_ = std::move(func);
 }
 
-void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>)> func) {
+void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>, Buffer*)> func) {
     on_message_ = std::move(func);
 }
 

@@ -14,6 +14,7 @@ public:
     void enableRead();
     void enableWrite();
     void disableWrite();
+    void disableAll() { listen_events_ = 0; loop_->update_channel(this); }
 
     int getFd();
     short listen_events();
@@ -31,9 +32,11 @@ public:
     void handle_event();
     void handle_event_guard();
 
+    void remove() { loop_->delete_channel(this); }
+
 private:
     int fd_;
-    EventLoop* epoll_run_;
+    EventLoop* loop_;
     std::weak_ptr<void> tie_; 
     
     short listen_events_;

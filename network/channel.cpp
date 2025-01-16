@@ -4,24 +4,24 @@
 #include"util.h"
 
 
-Channel::Channel(EventLoop* _er, int _fd): epoll_run_(_er), fd_(_fd), listen_events_(0), ready_events_(0), is_epolled_(false){}
+Channel::Channel(EventLoop* _er, int _fd): loop_(_er), fd_(_fd), listen_events_(0), ready_events_(0), is_epolled_(false){}
 Channel::~Channel(){
     if(fd_ > 0) {close(fd_);}
 }
 
 void Channel::enableRead() {
     listen_events_ |= EPOLLIN | EPOLLPRI;
-    epoll_run_->update_channel(this); //this like self in rust
+    loop_->update_channel(this); //this like self in rust
 }
 
 void Channel::enableWrite() {
     listen_events_ |= EPOLLOUT;
-    epoll_run_->update_channel(this);
+    loop_->update_channel(this);
 }
 
 void Channel::disableWrite() {
     listen_events_ &= ~EPOLLOUT;
-    epoll_run_->update_channel(this);
+    loop_->update_channel(this);
 }
 
 void Channel::setEpolled(bool in) {
@@ -30,7 +30,7 @@ void Channel::setEpolled(bool in) {
 
 void Channel::set_et() {
     listen_events_ |= EPOLLET;
-    epoll_run_->update_channel(this);
+    loop_->update_channel(this);
 }
 
 short Channel::listen_events() {

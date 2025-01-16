@@ -5,7 +5,12 @@
 #include "EventLoop.h"
 #include "transfer.h"
 
-Connection::Connection(int _client_fd, EventLoop *loop) : client_fd(_client_fd), loop_(loop)
+Connection::Connection(int _client_fd, EventLoop *loop, const InetAddress &local, const InetAddress &peer) : 
+            client_fd(_client_fd), 
+            loop_(loop),
+            state(ConnectionState::CONNECTING),
+            local_addr_(local),
+            peer_addr_(peer)
 {
     // 创建一个随机数生成器
     std::random_device rd;                         // 用于生成种子
@@ -30,16 +35,31 @@ void Connection::ConnectionEstablished()
     this->channel->enableWrite();
 
     state = ConnectionState::CONNECTED;
+    handle_conn();
 }
 
 Connection::~Connection() {};
 
+// 在连接体析构时调用，用于删除连接体的channel
 void Connection::ConnectionConstructor()
 {
     loop_->delete_channel(channel.get());
 }
 
-void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection> &)> on_message)
+void Connection::set_conn_handle(std::function<void(const std::shared_ptr<Connection> &)> on_conn)
+{
+    on_conn_ = std::move(on_conn);
+}
+
+void Connection::handle_conn()
+{
+    if (on_conn_)
+    {
+        on_conn_(shared_from_this());
+    }
+}
+
+void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection> &, Buffer*)> on_message)
 {
     on_message_ = std::move(on_message);
 }
@@ -49,7 +69,7 @@ void Connection::handle_message()
     // printf("tcp connection handle message\n");
     if (on_message_)
     {
-        on_message_(shared_from_this());
+        on_message_(shared_from_this(), input_buffer.get());
     }
 }
 
@@ -57,6 +77,7 @@ void Connection::handle_message()
 void Connection::handle_data_in()
 {
     ReadNonBlocking();
+    handle_message();
 }
 
 // 连接体非阻塞发送Buffer中的数据
@@ -74,11 +95,23 @@ void Connection::handle_close()
 {
     if (state != ConnectionState::DISCONNECTED)
     {
-        state = ConnectionState::DISCONNECTED;
         if (on_close_)
         {
             on_close_(shared_from_this());
         }
+        state = ConnectionState::DISCONNECTED;
+    }
+}
+
+// 强制关闭连接
+void Connection::force_close()
+{
+    if(state == ConnectionState::CONNECTED || state == ConnectionState::DISCONNECTING)
+    {
+        state = ConnectionState::DISCONNECTING;
+        loop_->run_on_onwer_thread(
+            std::bind(&Connection::handle_close, this)
+        );
     }
 }
 
