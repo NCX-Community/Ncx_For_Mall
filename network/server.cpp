@@ -6,6 +6,7 @@
 #include "acceptor.h"
 #include "connection.h"
 #include "current_thread.h"
+#include "socketops.h"
 
 Server::Server(EventLoop* loop, const char* IP, const uint16_t PORT, const int BACKLOG): loop_(loop){
 
@@ -23,20 +24,26 @@ void Server::start() {
 
 void Server::newConnectionHandle(int client_fd) {
     // create a new connection
-    std::shared_ptr<Connection> newConn = std::make_shared<Connection>(std::move(client_fd), loop_);
+    InetAddress localAddr(getLocalAddr(client_fd));
+    InetAddress peerAddr(getPeerAddr(client_fd));
+    std::shared_ptr<Connection> newConn = std::make_shared<Connection>(client_fd, 
+                                                                       loop_,
+                                                                       localAddr,
+                                                                       peerAddr
+
+    );
 
     // set connection nonblocking
     newConn->set_nonblocking();
 
     // set connection handle
+    newConn->set_conn_handle(on_connect_);
+    newConn->set_message_handle(on_message_);
     newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
 
     int newConn_id = newConn->get_conn_id();
     //printf("insert new connection handle success\n");
-    if(on_connect_) {
-        on_connect_(newConn);
-    }
-    
+
     newConn->ConnectionEstablished();
     // add connection to connections
     connections[newConn->get_conn_id()] = std::move(newConn);

@@ -81,7 +81,7 @@ std::string Buffer::RetrieveUtilAsString(const char* end) {
 }
 
 std::string Buffer::RetrieveAllAsString() {
-    assert(readAbleBytes() > 0);
+    assert(readAbleBytes() >= 0);
     std::string ret = std::move(PeekAllAsString());
     RetrieveAll();
     return ret;

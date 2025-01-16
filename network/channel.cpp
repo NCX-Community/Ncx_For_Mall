@@ -5,9 +5,7 @@
 
 
 Channel::Channel(EventLoop* _er, int _fd): loop_(_er), fd_(_fd), listen_events_(0), ready_events_(0), is_epolled_(false){}
-Channel::~Channel(){
-    if(fd_ > 0) {close(fd_);}
-}
+Channel::~Channel(){}
 
 void Channel::enableRead() {
     listen_events_ |= EPOLLIN | EPOLLPRI;
@@ -21,6 +19,11 @@ void Channel::enableWrite() {
 
 void Channel::disableWrite() {
     listen_events_ &= ~EPOLLOUT;
+    loop_->update_channel(this);
+}
+
+void Channel::disableAll() {
+    listen_events_ = 0;
     loop_->update_channel(this);
 }
 
@@ -89,4 +92,7 @@ void Channel::handle_event_guard() {
     }
 }
 
+void Channel::remove() {
+    loop_->delete_channel(this);
+}
 

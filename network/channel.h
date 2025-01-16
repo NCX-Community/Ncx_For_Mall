@@ -6,7 +6,7 @@ class EventLoop;
 
 class Channel {
 public:
-    DISALLOW_MOVE(Channel);
+    DISALLOW_COPY(Channel);
 
     Channel(EventLoop* er, int fd);
     ~Channel();
@@ -14,7 +14,7 @@ public:
     void enableRead();
     void enableWrite();
     void disableWrite();
-    void disableAll() { listen_events_ = 0; loop_->update_channel(this); }
+    void disableAll();
 
     int getFd();
     short listen_events();
@@ -32,7 +32,7 @@ public:
     void handle_event();
     void handle_event_guard();
 
-    void remove() { loop_->delete_channel(this); }
+    void remove();
 
 private:
     int fd_;

@@ -27,12 +27,13 @@ private:
     int connect();
     void connecting(int sockfd);
     int removeAndResetChannel();
-    void resetChannel() { channel_.reset(); }
+    void resetChannel(); 
 
 
     EventLoop* loop_;
     InetAddress server_addr_;
     bool connect_;
+    std::unique_ptr<TcpSocket> socket_;
     std::unique_ptr<Channel> channel_;
     std::function<void(int sockfd)> new_conn_cb_;
     States state_;

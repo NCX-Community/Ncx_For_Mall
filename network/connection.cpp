@@ -3,7 +3,6 @@
 #include "channel.h"
 #include "buffer.h"
 #include "EventLoop.h"
-#include "transfer.h"
 
 Connection::Connection(int _client_fd, EventLoop *loop, const InetAddress &local, const InetAddress &peer) : 
             client_fd(_client_fd), 
@@ -21,6 +20,12 @@ Connection::Connection(int _client_fd, EventLoop *loop, const InetAddress &local
     if (loop_)
     {
         channel = std::make_unique<Channel>(loop_, client_fd);
+        channel->set_read_callback([this](){
+            this->handle_data_in();
+        });
+        channel->set_write_callback([this](){
+            this->handle_data_out();
+        });
     }
 
     input_buffer = std::make_unique<Buffer>();
@@ -32,7 +37,7 @@ void Connection::ConnectionEstablished()
 {
     this->channel->set_tie(shared_from_this());
     this->channel->enableRead();
-    this->channel->enableWrite();
+    //this->channel->enableWrite();
 
     state = ConnectionState::CONNECTED;
     handle_conn();
@@ -43,7 +48,13 @@ Connection::~Connection() {};
 // 在连接体析构时调用，用于删除连接体的channel
 void Connection::ConnectionConstructor()
 {
-    loop_->delete_channel(channel.get());
+    if (state == ConnectionState::CONNECTED)
+    {
+        state = ConnectionState::DISCONNECTED;
+        channel->disableAll();
+    }
+    
+    channel->remove();
 }
 
 void Connection::set_conn_handle(std::function<void(const std::shared_ptr<Connection> &)> on_conn)
@@ -127,6 +138,7 @@ void Connection::Recv(std::string& msg, size_t len) {
 void Connection::Send(const std::string& msg)
 {
     output_buffer->Append(msg);
+    Write(); // todo: 监听写事件
 }
 
 void Connection::Write()
@@ -149,7 +161,8 @@ void Connection::ReadNonBlocking()
         read_bytes = read(client_fd, buf, sizeof(buf));
         if (read_bytes > 0)
         {
-            input_buffer->Append(buf);
+            std::cout<<buf<<std::endl;
+            input_buffer->Append(buf, read_bytes);
         }
         else if (read_bytes < 0)
         {

@@ -5,6 +5,7 @@
 
 class InetAddress{
 public:
+    InetAddress() = default;
     InetAddress(const char* ip, uint16_t port);
     InetAddress(sockaddr_in ip_addr);
     struct sockaddr_in addr;

@@ -9,7 +9,8 @@ Connector::Connector(EventLoop* loop, const InetAddress& server_addr)
     : loop_(loop),
       server_addr_(server_addr),
       connect_(false),
-      state_(kDisconnected)
+      state_(kDisconnected),
+      socket_(new TcpSocket(true))
 {}
 
 Connector::~Connector() {}
@@ -49,9 +50,8 @@ void Connector::startInLoop() {
 
 // 连接函数
 int Connector::connect() {
-    TcpSocket sock = TcpSocket(true);
-    sock.connect(server_addr_);
-    return sock.get_fd();
+    socket_->connect(server_addr_);
+    return socket_->get_fd();
     // TODO: 实现断线重连尝试
 }
 
@@ -62,4 +62,8 @@ int Connector::removeAndResetChannel() {
     loop_->run_on_onwer_thread(std::bind(&Connector::resetChannel, this));
 
     return sockfd;
+}
+
+void Connector::resetChannel() {
+    channel_.reset();
 }
