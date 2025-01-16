@@ -9,18 +9,22 @@ public:
     EventLoop();
     ~EventLoop();
     void run();
-    void do_after_handle_events();
-    void add_to_do(std::function<void()> func);
+
     void update_channel(Channel* channel);
     void delete_channel(Channel* channel);
+
     void run_on_onwer_thread(std::function<void()> cb);
 
-    //wake up function
+
     int wakeup_fd();
-    void wakeup_callback();
+    void wakeup_loop(); //wake up function
 
     bool isInEpollLoop();
 private:
+    void add_to_do(std::function<void()> func);
+    void do_after_handle_events();
+    void wakeup_callback();
+
     pid_t tid_;
     std::mutex mtx;
     std::vector<std::function<void()>> to_do_list;

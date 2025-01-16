@@ -27,6 +27,7 @@
 #include<memory>
 #include<sstream>
 #include<atomic>
+#include<assert.h>
 
 class EventLoop;
 class Channel;
@@ -44,6 +45,8 @@ class Transfer;
 class MuslChannel;
 class MuslChannelTx;
 class MuslChannelRx;
+class Connector;
+class Client;
 
 /// disallow copy constructor
 #define DISALLOW_COPY(TypeName) \

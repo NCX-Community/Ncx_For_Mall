@@ -1,24 +1,30 @@
 syntax = "proto3";
 
-package ncx;
+package protocol;
 
 message ControlChannelCmd {
-    enum cmd {
-        CreateDataChannel = 0;
-        HeartBeat = 1;
+    enum CCmd {
+        CREATE_DATA_CHANNEL = 0;
+        HEARTBEAT = 1;
     }
+
+    optional CCmd control_channel_cmd = 1;
 }
 
 message DataChannelCmd {
-    enum cmd {
-        StartForwardTcp = 0;
-        StartForwardUdp = 1;
+    enum DCmd {
+        START_FORWARD_TCP = 0;
+        START_FORWARD_UDP = 1;
     }
+
+    optional DCmd data_channel_cmd = 1;
 }
 
 message Hello {
-    enum helloType {
-        ControlChannelHello = 0;
-        DataChannelHello = 1;
+    enum HelloType {
+        CONTROL_CHANNEL_HELLO = 0;
+        DATA_CHANNEL_HELLO = 1;
     }
+
+    optional HelloType hello_type = 1;
 }
