@@ -68,6 +68,7 @@ void Client::newConnection(int sockfd) {
                                      localAddr,
                                      peerAddr));
     
+    conn->set_nonblocking();
     conn->set_conn_handle(on_connect_);
     conn->set_message_handle(on_message_);
     conn->set_disconnect_client_handle(

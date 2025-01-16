@@ -1,8 +1,8 @@
 #include "util.h"
 #include "merror.h"
-#include "endpoint.h"
+#include "InetAddress.h"
 #include "socket.h"
-#include "epoll_run.h"
+#include "EventLoop.h"
 #include "connection.h"
 #include "server.h"
 #include "common.h"
@@ -16,7 +16,6 @@ public:
     EchoServer(EventLoop* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG);
     ~EchoServer();
     void start();
-    void on_conn_read(const std::shared_ptr<Connection>& conn);
 private:
     EventLoop* main_reactor_;
     std::unique_ptr<Server> server_;
@@ -25,26 +24,18 @@ private:
 EchoServer::EchoServer(EventLoop* main_reactor, const char* IP, const uint16_t PORT, const int BACKLOG) {
     main_reactor_ = main_reactor;
     server_ = std::make_unique<Server>(main_reactor_, IP, PORT, BACKLOG);
-
-    server_->bind_on_conn_read([this](const std::shared_ptr<Connection>& conn) {
-        this->on_conn_read(conn);
+    // set message callback
+    server_->bind_on_message([this](const std::shared_ptr<Connection>& conn, Buffer* buf) {
+        std::string msg = buf->RetrieveAllAsString();
+        if(!msg.empty()) {
+            std::cout<< conn->get_conn_id() << "echo:" << msg.size() << " bytes" << std::endl;
+            conn->Send(msg);
+        }
     });
 }
 
 EchoServer::~EchoServer() {}
 
-void EchoServer::on_conn_read(const std::shared_ptr<Connection>& conn) {
-    if(conn->get_state() == ConnectionState::CONNECTED) {
-        conn->Read();
-        if(conn->get_input_buffer()->size() == 0) {
-            return;
-        }
-        printf("read from client: %s\n", conn->get_input_buffer()->data());
-        conn->get_output_buffer()->clear();
-        conn->get_output_buffer()->append(conn->get_input_buffer()->data(), conn->get_input_buffer()->size());
-        conn->Write();
-    }
-}
 void EchoServer::start() {
     server_->start();
 }
