@@ -10,10 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # module 
 include_directories(
     util
-    log
-    src
     protocol
     network
+    ncx_client
+    ncx_server
 )
 
 # zeromq
@@ -41,8 +41,8 @@ message(STATUS "Protobuf libraries: ${Protobuf_LIBRARIES}")
 # source code
 aux_source_directory(network NET)
 aux_source_directory(util UTIL)
-aux_source_directory(log LOG)
-aux_source_directory(src SRC)
+aux_source_directory(ncx_client NCX_CLIENT)
+aux_source_directory(ncx_server NCX_SERVER)
 aux_source_directory(protocol PROTOCOL)
 
 # test code set
@@ -50,8 +50,8 @@ aux_source_directory(protocol PROTOCOL)
 # test for echo
 file(GLOB ECHOSERV "example/echo/serv.cpp")
 file(GLOB ECHOCLIENT "example/echo/cli.cpp")
-add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL} ${LOG})
-add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL} ${LOG})
+add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
+add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
 
 # test_for_ex
 # file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
@@ -70,15 +70,18 @@ add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL} ${LOG})
 # add_executable(buffertest ${BUFFER} ${NET})
 
 # test_for_protocol
-file(GLOB PROTO "protocol/test_protocol.cpp")
-add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
-target_link_libraries(protest ${Protobuf_LIBRARIES})
+# file(GLOB PROTO "protocol/test_protocol.cpp")
+# add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
+# target_link_libraries(protest ${Protobuf_LIBRARIES})
 
 # src 
-# file(GLOB NCXS "src/server.cpp")
-# file(GLOB NCXC "src/client.cpp")
-# add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${LOG} ${PROTOCOL})
-# add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${LOG} ${PROTOCOL})
+file(GLOB NCXS "ncx_server/ncxs.cpp")
+file(GLOB NCXC "ncx_client/ncxc.cpp")
+add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL})
+add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL})
+
+target_link_libraries(ncxc ${Protobuf_LIBRARIES})
+target_link_libraries(ncxs ${Protobuf_LIBRARIES})
 
 # 链接ZeroMQ库到可执行文件
 # target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})

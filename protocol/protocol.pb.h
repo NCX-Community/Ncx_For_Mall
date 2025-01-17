@@ -48,7 +48,7 @@ struct TableStruct_protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[4]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -56,6 +56,9 @@ struct TableStruct_protocol_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto;
 namespace protocol {
+class Ack;
+class AckDefaultTypeInternal;
+extern AckDefaultTypeInternal _Ack_default_instance_;
 class ControlChannelCmd;
 class ControlChannelCmdDefaultTypeInternal;
 extern ControlChannelCmdDefaultTypeInternal _ControlChannelCmd_default_instance_;
@@ -67,6 +70,7 @@ class HelloDefaultTypeInternal;
 extern HelloDefaultTypeInternal _Hello_default_instance_;
 }  // namespace protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> ::protocol::Ack* Arena::CreateMaybeMessage<::protocol::Ack>(Arena*);
 template<> ::protocol::ControlChannelCmd* Arena::CreateMaybeMessage<::protocol::ControlChannelCmd>(Arena*);
 template<> ::protocol::DataChannelCmd* Arena::CreateMaybeMessage<::protocol::DataChannelCmd>(Arena*);
 template<> ::protocol::Hello* Arena::CreateMaybeMessage<::protocol::Hello>(Arena*);
@@ -147,6 +151,31 @@ inline bool Hello_HelloType_Parse(
     const std::string& name, Hello_HelloType* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Hello_HelloType>(
     Hello_HelloType_descriptor(), name, value);
+}
+enum Ack_AckContent : int {
+  Ack_AckContent_OK = 0,
+  Ack_AckContent_AUTH_ERROR = 1,
+  Ack_AckContent_Ack_AckContent_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  Ack_AckContent_Ack_AckContent_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool Ack_AckContent_IsValid(int value);
+constexpr Ack_AckContent Ack_AckContent_AckContent_MIN = Ack_AckContent_OK;
+constexpr Ack_AckContent Ack_AckContent_AckContent_MAX = Ack_AckContent_AUTH_ERROR;
+constexpr int Ack_AckContent_AckContent_ARRAYSIZE = Ack_AckContent_AckContent_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Ack_AckContent_descriptor();
+template<typename T>
+inline const std::string& Ack_AckContent_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, Ack_AckContent>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function Ack_AckContent_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    Ack_AckContent_descriptor(), enum_t_value);
+}
+inline bool Ack_AckContent_Parse(
+    const std::string& name, Ack_AckContent* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Ack_AckContent>(
+    Ack_AckContent_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -664,6 +693,178 @@ class Hello PROTOBUF_FINAL :
   int hello_type_;
   friend struct ::TableStruct_protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Ack PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.Ack) */ {
+ public:
+  inline Ack() : Ack(nullptr) {};
+  virtual ~Ack();
+
+  Ack(const Ack& from);
+  Ack(Ack&& from) noexcept
+    : Ack() {
+    *this = ::std::move(from);
+  }
+
+  inline Ack& operator=(const Ack& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Ack& operator=(Ack&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Ack& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Ack* internal_default_instance() {
+    return reinterpret_cast<const Ack*>(
+               &_Ack_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(Ack& a, Ack& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Ack* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Ack* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Ack* New() const final {
+    return CreateMaybeMessage<Ack>(nullptr);
+  }
+
+  Ack* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Ack>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Ack& from);
+  void MergeFrom(const Ack& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Ack* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.Ack";
+  }
+  protected:
+  explicit Ack(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_protocol_2eproto);
+    return ::descriptor_table_protocol_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  typedef Ack_AckContent AckContent;
+  static constexpr AckContent OK =
+    Ack_AckContent_OK;
+  static constexpr AckContent AUTH_ERROR =
+    Ack_AckContent_AUTH_ERROR;
+  static inline bool AckContent_IsValid(int value) {
+    return Ack_AckContent_IsValid(value);
+  }
+  static constexpr AckContent AckContent_MIN =
+    Ack_AckContent_AckContent_MIN;
+  static constexpr AckContent AckContent_MAX =
+    Ack_AckContent_AckContent_MAX;
+  static constexpr int AckContent_ARRAYSIZE =
+    Ack_AckContent_AckContent_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  AckContent_descriptor() {
+    return Ack_AckContent_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& AckContent_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, AckContent>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function AckContent_Name.");
+    return Ack_AckContent_Name(enum_t_value);
+  }
+  static inline bool AckContent_Parse(const std::string& name,
+      AckContent* value) {
+    return Ack_AckContent_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAckContentFieldNumber = 1,
+  };
+  // .protocol.Ack.AckContent ack_content = 1;
+  bool has_ack_content() const;
+  private:
+  bool _internal_has_ack_content() const;
+  public:
+  void clear_ack_content();
+  ::protocol::Ack_AckContent ack_content() const;
+  void set_ack_content(::protocol::Ack_AckContent value);
+  private:
+  ::protocol::Ack_AckContent _internal_ack_content() const;
+  void _internal_set_ack_content(::protocol::Ack_AckContent value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.Ack)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  int ack_content_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -767,9 +968,43 @@ inline void Hello::set_hello_type(::protocol::Hello_HelloType value) {
   // @@protoc_insertion_point(field_set:protocol.Hello.hello_type)
 }
 
+// -------------------------------------------------------------------
+
+// Ack
+
+// .protocol.Ack.AckContent ack_content = 1;
+inline bool Ack::_internal_has_ack_content() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Ack::has_ack_content() const {
+  return _internal_has_ack_content();
+}
+inline void Ack::clear_ack_content() {
+  ack_content_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::protocol::Ack_AckContent Ack::_internal_ack_content() const {
+  return static_cast< ::protocol::Ack_AckContent >(ack_content_);
+}
+inline ::protocol::Ack_AckContent Ack::ack_content() const {
+  // @@protoc_insertion_point(field_get:protocol.Ack.ack_content)
+  return _internal_ack_content();
+}
+inline void Ack::_internal_set_ack_content(::protocol::Ack_AckContent value) {
+  _has_bits_[0] |= 0x00000001u;
+  ack_content_ = value;
+}
+inline void Ack::set_ack_content(::protocol::Ack_AckContent value) {
+  _internal_set_ack_content(value);
+  // @@protoc_insertion_point(field_set:protocol.Ack.ack_content)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -795,6 +1030,11 @@ template <> struct is_proto_enum< ::protocol::Hello_HelloType> : ::std::true_typ
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::protocol::Hello_HelloType>() {
   return ::protocol::Hello_HelloType_descriptor();
+}
+template <> struct is_proto_enum< ::protocol::Ack_AckContent> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::Ack_AckContent>() {
+  return ::protocol::Ack_AckContent_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

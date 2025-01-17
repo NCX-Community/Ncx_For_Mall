@@ -82,7 +82,7 @@ void Channel::handle_event() {
 
 void Channel::handle_event_guard() {
     if(ready_events_ & EPOLLIN) {
-        printf("channel read callback\n");
+        //printf("channel read callback\n");
         if(read_callback_) read_callback_();
         else std::puts("channel read callback not init");
     }
