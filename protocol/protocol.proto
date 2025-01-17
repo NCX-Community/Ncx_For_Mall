@@ -28,3 +28,12 @@ message Hello {
 
     optional HelloType hello_type = 1;
 }
+
+message Ack {
+    enum AckContent {
+        OK = 0;
+        AUTH_ERROR = 1;
+    }
+
+    optional AckContent ack_content = 1;
+}

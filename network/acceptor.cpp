@@ -19,6 +19,19 @@ Acceptor::Acceptor(const char* IP, const uint16_t PORT, const int BACKLOG, Event
     acceptChanel->set_et();
 }
 
+Acceptor::Acceptor(const InetAddress& addr, const int BACKLOG, EventLoop* _er) {
+    // create tcp server
+    this->sock = std::make_unique<TcpSocket>(false);
+    sock->bind(addr);
+    sock->listen(BACKLOG);
+
+    this->er = _er;
+    this->acceptChanel = new Channel(er, sock->get_fd()); 
+    acceptChanel->set_read_callback(std::bind(&Acceptor::acceptNewConnection, this));
+    acceptChanel->enableRead();
+    acceptChanel->set_et();
+}
+
 void Acceptor::acceptNewConnection() {
     printf("accept new connection\n");
     InetAddress client_addr;

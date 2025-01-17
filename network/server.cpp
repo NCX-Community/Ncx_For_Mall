@@ -16,6 +16,12 @@ Server::Server(EventLoop* loop, const char* IP, const uint16_t PORT, const int B
 
 }
 
+Server::Server(EventLoop* loop, const InetAddress& addr, const int BACKLOG): loop_(loop) {
+    // create acceptor
+    server_acceptor_= std::make_unique<Acceptor>(addr, BACKLOG, loop_);
+    server_acceptor_->set_new_connection_callback(std::bind(&Server::newConnectionHandle, this, std::placeholders::_1));
+}
+
 Server::~Server() {}
 
 void Server::start() {
@@ -89,6 +95,19 @@ void Server::bind_on_connect(std::function<void(std::shared_ptr<Connection>)> fu
 
 void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>, Buffer*)> func) {
     on_message_ = std::move(func);
+}
+
+void Server::update_on_message(std::shared_ptr<Connection> conn, std::function<void(std::shared_ptr<Connection>, Buffer*)> func) {
+    conn->set_message_handle(func);
+}
+
+std::shared_ptr<Connection> Server::getConnection(int conn_id) {
+    if(connections.find(conn_id) != connections.end()) {
+        return connections[conn_id];
+    }
+    else {
+        return nullptr;
+    }
 }
 
 // void Server::exchange_pair(int conn_id1, int conn_id2) {

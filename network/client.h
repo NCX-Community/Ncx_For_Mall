@@ -1,6 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 #include"util.h"
+#include"connection.h"
 
 typedef std::shared_ptr<Connector> ConnectorPtr;
 typedef std::shared_ptr<Connection> ConnectionPtr;
@@ -27,13 +28,23 @@ public:
 
     EventLoop* getLoop() const { return loop_; }
 
-    // set callback
+    // callback function set
     void set_on_connect_cb(std::function<void(std::shared_ptr<Connection>)> cb) {
         on_connect_ = std::move(cb);
+        if(conn_)
+        {
+            // 连接体存在后修改回调函数
+            conn_->set_conn_handle(on_connect_);
+        }
     }
 
     void set_on_message_cb(std::function<void(std::shared_ptr<Connection>, Buffer*)> cb) {
         on_message_ = std::move(cb);
+        if(conn_)
+        {
+            // 连接体存在后修改回调函数
+            conn_->set_message_handle(on_message_);
+        }
     }
 
 private:

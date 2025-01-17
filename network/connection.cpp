@@ -82,6 +82,7 @@ void Connection::handle_message()
     {
         on_message_(shared_from_this(), input_buffer.get());
     }
+    else std::puts("handle message doesn't init!");
 }
 
 // 连接体非阻塞读取数据进Buffer
