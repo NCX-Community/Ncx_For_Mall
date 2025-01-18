@@ -7,6 +7,7 @@
 #include "connection.h"
 #include "EventLoop.h"
 #include "protocol.pb.h"
+#include "protoMsgUtil.h"
 
 typedef std::unordered_map<int, std::unique_ptr<SControlChannel>> SControlChannelMap;
 

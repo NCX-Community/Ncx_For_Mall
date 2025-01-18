@@ -82,9 +82,9 @@ aux_source_directory(protocol PROTOCOL)
 # add_executable(buffertest ${BUFFER} ${NET})
 
 # test_for_protocol
-# file(GLOB PROTO "protocol/test_protocol.cpp")
-# add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
-# target_link_libraries(protest ${Protobuf_LIBRARIES})
+file(GLOB PROTO "example/protobuf/test_protobuf.cpp")
+add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
+target_link_libraries(protest ${Protobuf_LIBRARIES})
 
 # test_for_uuid
 file(GLOB UUID "example/uuid/test_uuid.cpp")
@@ -92,18 +92,18 @@ add_executable(uuidtest ${UUID} ${UTIL})
 target_link_libraries(uuidtest ${Boost_LIBRARIES})
 
 # # src 
-# file(GLOB NCXS "ncx_server/ncxs.cpp")
-# file(GLOB NCXC "ncx_client/ncxc.cpp")
-# add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL})
-# add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL})
+file(GLOB NCXS "ncx_server/ncxs.cpp")
+file(GLOB NCXC "ncx_client/ncxc.cpp")
+add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL})
+add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL})
 
-# # link protobuf
-# target_link_libraries(ncxc ${Protobuf_LIBRARIES})
-# target_link_libraries(ncxs ${Protobuf_LIBRARIES})
+# link protobuf
+target_link_libraries(ncxc ${Protobuf_LIBRARIES})
+target_link_libraries(ncxs ${Protobuf_LIBRARIES})
 
-# # link boost.UUID
-# target_link_libraries(ncxc ${Boost_LIBRARIES})
-# target_link_libraries(ncxs ${Boost_LIBRARIES})
+# link boost.UUID
+target_link_libraries(ncxc ${Boost_LIBRARIES})
+target_link_libraries(ncxs ${Boost_LIBRARIES})
 
 # 链接ZeroMQ库到可执行文件
 # target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})

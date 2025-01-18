@@ -1,6 +1,3 @@
-#include "ccontrolchannel.h"
-#include "protocol.pb.h"
-#include "connection.h"
 #include "client.h"
 
 CControlChannel::CControlChannel(EventLoop* loop, CControlChannelArgs args) :
@@ -22,18 +19,19 @@ void CControlChannel::do_control_channel_handshake(std::shared_ptr<Connection> s
     protocol::Hello hello;
     hello.set_hello_type(protocol::Hello::CONTROL_CHANNEL_HELLO);
     std::string send_msg = hello.SerializeAsString();
-    server_conn->Send(send_msg);
+    std::string send_msg_with_header = PROTOMSGUTIL::HeaderInstaller(send_msg);
+    server_conn->Send(send_msg_with_header);
 }
 
 void CControlChannel::wait_ack(std::shared_ptr<Connection> server_conn, Buffer* conn_input_buf) 
 {
     std::puts("WAIT ACK CALL!");
+    uint32_t msg_len = PROTOMSGUTIL::CanReadMsg(conn_input_buf);
+    // 没有完整的消息可读
+    if(!msg_len) return;
     // read Ack
     protocol::Ack ack;
-    size_t ack_len = sizeof(ack);
-    // ack消息被分包，需要等待完整消息
-    if(conn_input_buf->readAbleBytes() == 0) return;
-    std::string recv_ack = conn_input_buf->RetrieveAllAsString();
+    std::string recv_ack = conn_input_buf->RetrieveAsString(msg_len);
     if(!ack.ParseFromString(recv_ack)) {
         std::cerr << "ParseFromString failed" << std::endl;
     }
