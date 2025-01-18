@@ -27,6 +27,7 @@ message Hello {
     }
 
     optional HelloType hello_type = 1;
+    optional string digest = 2; // 传递唯一标识，比如nonce、token等
 }
 
 message Ack {

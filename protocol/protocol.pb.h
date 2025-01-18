@@ -666,8 +666,38 @@ class Hello PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kDigestFieldNumber = 2,
     kHelloTypeFieldNumber = 1,
   };
+  // string digest = 2;
+  bool has_digest() const;
+  private:
+  bool _internal_has_digest() const;
+  public:
+  void clear_digest();
+  const std::string& digest() const;
+  void set_digest(const std::string& value);
+  void set_digest(std::string&& value);
+  void set_digest(const char* value);
+  void set_digest(const char* value, size_t size);
+  std::string* mutable_digest();
+  std::string* release_digest();
+  void set_allocated_digest(std::string* digest);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_digest();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_digest(
+      std::string* digest);
+  private:
+  const std::string& _internal_digest() const;
+  void _internal_set_digest(const std::string& value);
+  std::string* _internal_mutable_digest();
+  public:
+
   // .protocol.Hello.HelloType hello_type = 1;
   bool has_hello_type() const;
   private:
@@ -690,6 +720,7 @@ class Hello PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr digest_;
   int hello_type_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -942,7 +973,7 @@ inline void DataChannelCmd::set_data_channel_cmd(::protocol::DataChannelCmd_DCmd
 
 // .protocol.Hello.HelloType hello_type = 1;
 inline bool Hello::_internal_has_hello_type() const {
-  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline bool Hello::has_hello_type() const {
@@ -950,7 +981,7 @@ inline bool Hello::has_hello_type() const {
 }
 inline void Hello::clear_hello_type() {
   hello_type_ = 0;
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline ::protocol::Hello_HelloType Hello::_internal_hello_type() const {
   return static_cast< ::protocol::Hello_HelloType >(hello_type_);
@@ -960,12 +991,105 @@ inline ::protocol::Hello_HelloType Hello::hello_type() const {
   return _internal_hello_type();
 }
 inline void Hello::_internal_set_hello_type(::protocol::Hello_HelloType value) {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
   hello_type_ = value;
 }
 inline void Hello::set_hello_type(::protocol::Hello_HelloType value) {
   _internal_set_hello_type(value);
   // @@protoc_insertion_point(field_set:protocol.Hello.hello_type)
+}
+
+// string digest = 2;
+inline bool Hello::_internal_has_digest() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Hello::has_digest() const {
+  return _internal_has_digest();
+}
+inline void Hello::clear_digest() {
+  digest_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& Hello::digest() const {
+  // @@protoc_insertion_point(field_get:protocol.Hello.digest)
+  return _internal_digest();
+}
+inline void Hello::set_digest(const std::string& value) {
+  _internal_set_digest(value);
+  // @@protoc_insertion_point(field_set:protocol.Hello.digest)
+}
+inline std::string* Hello::mutable_digest() {
+  // @@protoc_insertion_point(field_mutable:protocol.Hello.digest)
+  return _internal_mutable_digest();
+}
+inline const std::string& Hello::_internal_digest() const {
+  return digest_.Get();
+}
+inline void Hello::_internal_set_digest(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  digest_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void Hello::set_digest(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  digest_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:protocol.Hello.digest)
+}
+inline void Hello::set_digest(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  digest_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:protocol.Hello.digest)
+}
+inline void Hello::set_digest(const char* value,
+    size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  digest_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:protocol.Hello.digest)
+}
+inline std::string* Hello::_internal_mutable_digest() {
+  _has_bits_[0] |= 0x00000001u;
+  return digest_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* Hello::release_digest() {
+  // @@protoc_insertion_point(field_release:protocol.Hello.digest)
+  if (!_internal_has_digest()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return digest_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void Hello::set_allocated_digest(std::string* digest) {
+  if (digest != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  digest_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), digest,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:protocol.Hello.digest)
+}
+inline std::string* Hello::unsafe_arena_release_digest() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:protocol.Hello.digest)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  _has_bits_[0] &= ~0x00000001u;
+  return digest_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void Hello::unsafe_arena_set_allocated_digest(
+    std::string* digest) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (digest != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  digest_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      digest, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protocol.Hello.digest)
 }
 
 // -------------------------------------------------------------------

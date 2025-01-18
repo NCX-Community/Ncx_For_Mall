@@ -31,11 +31,23 @@ link_libraries(${PC_ZEROMQ_LIBRARIES})
 # protobuf
 # 查找Protobuf库
 find_package(Protobuf REQUIRED)
-
 # 打印 Protobuf 信息
 message(STATUS "Using Protobuf ${Protobuf_VERSION}")
 message(STATUS "Protobuf include dirs: ${Protobuf_INCLUDE_DIRS}")
 message(STATUS "Protobuf libraries: ${Protobuf_LIBRARIES}")
+
+# Boost
+## Boost.UUID
+find_package(Boost REQUIRED)
+
+if(BOOST_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    message(STATUS "Using Boost ${Boost_VERSION}")
+    message(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
+    message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
+else()
+    message(FATAL_ERROR "Boost not found")
+endif()
 
 
 # source code
@@ -48,10 +60,10 @@ aux_source_directory(protocol PROTOCOL)
 # test code set
 
 # test for echo
-file(GLOB ECHOSERV "example/echo/serv.cpp")
-file(GLOB ECHOCLIENT "example/echo/cli.cpp")
-add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
-add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
+# file(GLOB ECHOSERV "example/echo/serv.cpp")
+# file(GLOB ECHOCLIENT "example/echo/cli.cpp")
+# add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
+# add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
 
 # test_for_ex
 # file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
@@ -74,14 +86,24 @@ add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
 # add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
 # target_link_libraries(protest ${Protobuf_LIBRARIES})
 
-# src 
-file(GLOB NCXS "ncx_server/ncxs.cpp")
-file(GLOB NCXC "ncx_client/ncxc.cpp")
-add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL})
-add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL})
+# test_for_uuid
+file(GLOB UUID "example/uuid/test_uuid.cpp")
+add_executable(uuidtest ${UUID} ${UTIL})
+target_link_libraries(uuidtest ${Boost_LIBRARIES})
 
-target_link_libraries(ncxc ${Protobuf_LIBRARIES})
-target_link_libraries(ncxs ${Protobuf_LIBRARIES})
+# # src 
+# file(GLOB NCXS "ncx_server/ncxs.cpp")
+# file(GLOB NCXC "ncx_client/ncxc.cpp")
+# add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL})
+# add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL})
+
+# # link protobuf
+# target_link_libraries(ncxc ${Protobuf_LIBRARIES})
+# target_link_libraries(ncxs ${Protobuf_LIBRARIES})
+
+# # link boost.UUID
+# target_link_libraries(ncxc ${Boost_LIBRARIES})
+# target_link_libraries(ncxs ${Boost_LIBRARIES})
 
 # 链接ZeroMQ库到可执行文件
 # target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})
