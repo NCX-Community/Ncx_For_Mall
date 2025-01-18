@@ -34,8 +34,25 @@ void test_hello() {
 
 }
 
-int main() {
+void test_msg_header()
+{
+    // test msgheader
+    // 序列化
+    MessageHeader msg_header1;
+    msg_header1.set_message_length(100);
+    std::cout<<"message header length: "<<msg_header1.SerializeAsString().size()<<std::endl;
+
+    MessageHeader msg_header2;
+    msg_header2.set_message_length(10000);
+    std::cout<<"message header length: "<<msg_header2.SerializeAsString().size()<<std::endl;
+
+}
+
+int 
+main() 
+{
     test_hello();
+    test_msg_header();
     return 0;
 }
 

@@ -15,13 +15,12 @@ NServer::NServer(ServerArgs args) :
 
 void NServer::handle_new_connection(std::shared_ptr<Connection> origin_conn, Buffer* conn_input_buf) 
 {
-    // read hello
-    protocol::Hello hello;
-    size_t hello_len = sizeof(hello);
-    // hello消息被分包，需要等待完整消息
-    if(conn_input_buf->readAbleBytes() == 0) return;
+    uint32_t msg_len = PROTOMSGUTIL::CanReadMsg(conn_input_buf);
+    if(!msg_len) return;
 
-    std::string recv_msg = conn_input_buf->RetrieveAllAsString();
+    // 接受到足够的数据，可以read hello
+    protocol::Hello hello;
+    std::string recv_msg = conn_input_buf->RetrieveAsString(msg_len);
     if(!hello.ParseFromString(recv_msg)) {
         std::cerr << "ParseFromString failed" << std::endl;
     }
@@ -35,11 +34,11 @@ void NServer::handle_new_connection(std::shared_ptr<Connection> origin_conn, Buf
             break;
     }
 
-    // 处理完成发送ack
     protocol::Ack ack;
     ack.set_ack_content(protocol::Ack::OK);
     std::string send_ack = ack.SerializeAsString();
-    origin_conn->Send(send_ack);
+    std::string send_ack_with_header = PROTOMSGUTIL::HeaderInstaller(send_ack);
+    origin_conn->Send(send_ack_with_header);
     // std::puts("SEND ACK OK");
 }
 

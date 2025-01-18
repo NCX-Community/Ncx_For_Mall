@@ -9,6 +9,7 @@
 class UUID : public Singleton<UUID> 
 {
 public:
+    //UUID() : generator(std::make_unique<boost::uuids::random_generator>()) {std::cout << "UUID constructor" << std::endl;}
     static boost::uuids::uuid GenerateUUID() 
     {
         return GetInstance().generator->operator()();

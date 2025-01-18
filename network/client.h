@@ -1,7 +1,11 @@
 #ifndef CLIENT_H
 #define CLIENT_H
+
 #include"util.h"
 #include"connection.h"
+#include "ccontrolchannel.h"
+#include "protocol.pb.h"
+#include "protoMsgUtil.h"
 
 typedef std::shared_ptr<Connector> ConnectorPtr;
 typedef std::shared_ptr<Connection> ConnectionPtr;
