@@ -162,7 +162,6 @@ void Connection::ReadNonBlocking()
         read_bytes = read(client_fd, buf, sizeof(buf));
         if (read_bytes > 0)
         {
-            std::cout<<buf<<std::endl;
             input_buffer->Append(buf, read_bytes);
         }
         else if (read_bytes < 0)

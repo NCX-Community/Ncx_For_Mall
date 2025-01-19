@@ -28,18 +28,27 @@ void NServer::handle_new_connection(std::shared_ptr<Connection> origin_conn, Buf
     switch (hello.hello_type()) {
         case protocol::Hello::CONTROL_CHANNEL_HELLO :
             std::puts("RECV CONTROL_CHANNEL_HELLO");
+            // handle control channel hello
+            handle_control_channel_hello(origin_conn);
             break;
         case protocol::Hello::DATA_CHANNEL_HELLO :
             std::puts("RECV DATA_CHANNEL_HELLO");
             break;
     }
+}
 
-    protocol::Ack ack;
-    ack.set_ack_content(protocol::Ack::OK);
-    std::string send_ack = ack.SerializeAsString();
-    std::string send_ack_with_header = PROTOMSGUTIL::HeaderInstaller(send_ack);
-    origin_conn->Send(send_ack_with_header);
-    // std::puts("SEND ACK OK");
+void NServer::handle_control_channel_hello(std::shared_ptr<Connection> origin_conn)
+{
+    // send hello back
+    // 生成唯一标识controlchannel的id标识
+    std::string nonce = UUID::GenerateUUIDAsString();
+    protocol::Hello control_hello;
+    control_hello.set_hello_type(protocol::Hello::CONTROL_CHANNEL_HELLO);
+    control_hello.set_digest(nonce);
+    std::string serialized_control_hello = control_hello.SerializeAsString();
+    std::string control_hello_with_header = PROTOMSGUTIL::HeaderInstaller(serialized_control_hello);
+    origin_conn->Send(control_hello_with_header);
+    std::puts("SERVER SEND CONTROL_CHANNEL_HELLO");
 }
 
 void NServer::run_server()
