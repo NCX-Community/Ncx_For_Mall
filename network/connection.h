@@ -42,6 +42,8 @@ public:
     int get_conn_id() const;
     ConnectionState get_state() const;
     EventLoop* get_epoll_run() const;
+    Buffer* get_input_buffer() const;
+    Buffer* get_output_buffer() const;
 
     void set_nonblocking();
 

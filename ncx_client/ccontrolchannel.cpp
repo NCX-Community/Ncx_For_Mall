@@ -1,4 +1,4 @@
-#include "client.h"
+#include "ccontrolchannel.h"
 
 CControlChannel::CControlChannel(EventLoop* loop, std::string id, CControlChannelArgs args) :
     loop_(loop),
@@ -35,6 +35,7 @@ void CControlChannel::wait_control_channel_hello(std::shared_ptr<Connection> ser
     if(!hello.ParseFromString(recv_hello)) {
         std::cerr << "ParseFromString failed" << std::endl;
     }
+    //std::printf("RECV NONCE: %s\n", hello.digest().c_str());
     // switch hello type
     switch (hello.hello_type()) {
         case protocol::Hello::CONTROL_CHANNEL_HELLO :
@@ -45,6 +46,13 @@ void CControlChannel::wait_control_channel_hello(std::shared_ptr<Connection> ser
             std::puts("RECV DATA_CHANNEL_HELLO");
             break;
     }
+
+    // 服务端验证完成，此控制通道现在合法，可以开始接受来自服务端的命令
+    control_client_->set_on_message_cb(
+        [this](std::shared_ptr<Connection> conn, Buffer* buf) {
+            wait_server_cmd(conn, buf);
+        }
+    );
 }
 
 /// @brief 接受到来自服务端的control channel hello消息后进行处理
@@ -81,6 +89,38 @@ void CControlChannel::wait_ack(std::shared_ptr<Connection> server_conn, Buffer* 
         case protocol::Ack::AUTH_ERROR :
             break;
     }
+}
+
+void CControlChannel::wait_server_cmd(std::shared_ptr<Connection> server_conn, Buffer* conn_input_buf)
+{
+    std::puts("WAIT SERVER CMD CALL!");
+    uint32_t msg_len = PROTOMSGUTIL::CanReadMsg(conn_input_buf);
+    // 没有完整的消息可读
+    if(!msg_len) return;
+    // read server cmd
+    protocol::ControlChannelCmd server_cmd;
+    std::string recv_server_cmd = conn_input_buf->RetrieveAsString(msg_len);
+    if(!server_cmd.ParseFromString(recv_server_cmd)) {
+        std::cerr << "ParseFromString failed" << std::endl;
+    }
+
+    // handle server cmd
+    switch (server_cmd.control_channel_cmd()) {
+        case protocol::ControlChannelCmd::CREATE_DATA_CHANNEL :
+            std::puts("RECV CREATE_DATA_CHANNEL");
+            handle_cmd_create_datachannel();
+            break;
+        case protocol::ControlChannelCmd::HEARTBEAT :
+            std::puts("RECV HEARTBEAT");
+            break;
+    }
+}
+
+void CControlChannel::handle_cmd_create_datachannel()
+{
+    std::unique_ptr<DataChannel> data_channel = std::make_unique<DataChannel>(loop_, args_.server_addr_, args_.service_addr_, id_);
+    std::string id = data_channel->get_id();
+    data_pool_.emplace(id, std::move(data_channel));
 }
 
 void CControlChannel::start()

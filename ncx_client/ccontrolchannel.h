@@ -4,6 +4,9 @@
 #include "util.h"
 #include "InetAddress.h"
 #include "client.h"
+#include "datachannel.h"
+
+typedef std::unordered_map<std::string, std::unique_ptr<DataChannel>> DataChannelPool;
 
 struct CControlChannelArgs {
     InetAddress server_addr_;
@@ -26,6 +29,12 @@ public:
     void handle_ack(std::shared_ptr<Connection> server_conn);
     std::function<void(std::string, std::string)> register_control_channel_;
 
+    // 合法阶段(完成握手后触发)
+    void wait_server_cmd(std::shared_ptr<Connection> server_conn, Buffer* conn_input_buf);
+
+    /// @brief 处理数据通道创建命令
+    void handle_cmd_create_datachannel();
+
     // 向服务端发起连接建立控制通道
     void start();
 private:
@@ -34,6 +43,8 @@ private:
     CControlChannelArgs args_;
     // 负责和NCX Server通信、发送处理control cmd
     std::unique_ptr<Client> control_client_;
+    // 转发池，内部的所有客户机的任务就是转发数据
+    DataChannelPool data_pool_;
 };
 
 #endif
