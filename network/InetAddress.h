@@ -8,6 +8,9 @@ public:
     InetAddress() = default;
     InetAddress(const char* ip, uint16_t port);
     InetAddress(sockaddr_in ip_addr);
+
+    void print() const;
+
     struct sockaddr_in addr;
 };
 

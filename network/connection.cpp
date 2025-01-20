@@ -162,7 +162,6 @@ void Connection::ReadNonBlocking()
         read_bytes = read(client_fd, buf, sizeof(buf));
         if (read_bytes > 0)
         {
-            std::cout<<buf<<std::endl;
             input_buffer->Append(buf, read_bytes);
         }
         else if (read_bytes < 0)
@@ -226,26 +225,12 @@ void Connection::WriteNonBlocking()
 }
 
 /// get function set
-
-int Connection::get_conn_id() const
-{
-    return conn_id;
-}
-
-int Connection::get_fd() const
-{
-    return client_fd;
-}
-
-ConnectionState Connection::get_state() const
-{
-    return state;
-}
-
-EventLoop *Connection::get_epoll_run() const
-{
-    return loop_;
-}
+int Connection::get_conn_id() const { return conn_id; }
+int Connection::get_fd() const { return client_fd; }
+ConnectionState Connection::get_state() const { return state; }
+EventLoop *Connection::get_epoll_run() const { return loop_; }
+Buffer *Connection::get_input_buffer() const { return input_buffer.get(); }
+Buffer *Connection::get_output_buffer() const { return output_buffer.get(); }
 
 void Connection::set_nonblocking()
 {

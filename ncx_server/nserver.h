@@ -8,12 +8,14 @@
 #include "EventLoop.h"
 #include "protocol.pb.h"
 #include "protoMsgUtil.h"
+#include "uuid.h"
 
-typedef std::unordered_map<int, std::unique_ptr<SControlChannel>> SControlChannelMap;
+typedef std::unordered_map<std::string, std::unique_ptr<SControlChannel>> SControlChannelMap;
 
 struct ServerArgs{
     InetAddress server_addr_;
     int backlog_ {256};
+    SControlChannelArgs sc_args_;
 };
 
 class NServer {
@@ -23,8 +25,15 @@ public:
 
     /// control channel 建立连接回调函数集
     void handle_new_connection(std::shared_ptr<Connection> conn, Buffer* conn_input_buf);
-    void handle_control_channel_handshake(std::shared_ptr<Connection> conn);
-    void handle_data_channel_handshake(std::shared_ptr<Connection> conn);
+
+    /// @brief 处理接收到的control channel hello
+    /// @param conn 接受到的原始连接体
+    void handle_control_channel_hello(std::shared_ptr<Connection> conn);
+    
+    /// @brief 处理接受到的data channel hello
+    /// @param conn 接受到的数据通道
+    /// @param nonce 控制通道的唯一标识
+    void handle_data_channel_hello(std::shared_ptr<Connection> conn, std::string nonce);
 
     void run_server();
 
@@ -39,4 +48,4 @@ private:
     std::unique_ptr<SControlChannelMap> sc_map_;
 };
 
-#endif
+#endif //NSERVER_H

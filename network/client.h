@@ -51,6 +51,8 @@ public:
         }
     }
 
+    std::shared_ptr<Connection> get_connection() const { return conn_; }
+
 private:
     /// Not thread safe, but in loop
     void newConnection(int sockfd);
@@ -71,6 +73,6 @@ private:
 
 };
 
-#endif
+#endif // CLIENT_H
 
 
