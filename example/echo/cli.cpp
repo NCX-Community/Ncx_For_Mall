@@ -8,7 +8,7 @@
 
 #include <unistd.h>
 
-static const InetAddress SERVER_ADDR("0.0.0.0", 6667);
+static const InetAddress SERVER_ADDR("0.0.0.0", 7777);
 
 class EchoClient {
 public:

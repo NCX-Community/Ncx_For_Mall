@@ -60,10 +60,10 @@ aux_source_directory(protocol PROTOCOL)
 # test code set
 
 # test for echo
-# file(GLOB ECHOSERV "example/echo/serv.cpp")
-# file(GLOB ECHOCLIENT "example/echo/cli.cpp")
-# add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
-# add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
+file(GLOB ECHOSERV "example/echo/serv.cpp")
+file(GLOB ECHOCLIENT "example/echo/cli.cpp")
+add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
+add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
 
 # test_for_ex
 # file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
