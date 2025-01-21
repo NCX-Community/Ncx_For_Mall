@@ -8,7 +8,7 @@
 #include "common.h"
 
 static const char SERVER_IP[] = "0.0.0.0";
-static const uint16_t SERVER_PORT = 6667;
+static const uint16_t SERVER_PORT = 6666;
 static const int BACKLOG = 10;
 
 class EchoServer {

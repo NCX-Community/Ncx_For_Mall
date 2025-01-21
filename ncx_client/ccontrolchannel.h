@@ -6,6 +6,8 @@
 #include "client.h"
 #include "datachannel.h"
 
+class DataChannel;
+
 typedef std::unordered_map<std::string, std::unique_ptr<DataChannel>> DataChannelPool;
 
 struct CControlChannelArgs {

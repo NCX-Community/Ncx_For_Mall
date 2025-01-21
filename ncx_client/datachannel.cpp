@@ -67,23 +67,22 @@ void DataChannel::wait_data_channel_start_cmd(std::shared_ptr<Connection> server
 
 void DataChannel::do_data_channel_transforward()
 {
-    std::shared_ptr<Connection> server_conn = server_client_->get_connection();
-    std::shared_ptr<Connection> service_conn = service_client_->get_connection();
-
     // 设置好转发回调然后和内网服务发起connect
     server_client_->set_on_message_cb(
-        [service_conn](std::shared_ptr<Connection> conn, Buffer* buf)
+        [this](std::shared_ptr<Connection> conn, Buffer* buf)
         {
             // service_conn -> server_conn
-            service_conn->Send(buf->RetrieveAllAsString());
+            if(buf->readAbleBytes() > 0)
+            this->service_client_->get_connection()->Send(buf->RetrieveAllAsString());
         }
     );
 
     service_client_->set_on_message_cb(
-        [server_conn](std::shared_ptr<Connection> conn, Buffer* buf)
+        [this](std::shared_ptr<Connection> conn, Buffer* buf)
         {
             // server_conn -> service_conn
-            server_conn->Send(buf->RetrieveAllAsString());
+            if(buf->readAbleBytes() > 0)
+            this->server_client_->get_connection()->Send(buf->RetrieveAllAsString());
         }
     );
 

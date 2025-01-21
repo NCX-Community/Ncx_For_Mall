@@ -5,6 +5,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#define MESSAGE "hello ncx"
+
 int main() {
     int sockfd;
     struct sockaddr_in servaddr;
@@ -32,6 +34,10 @@ int main() {
     }
 
     std::cout << "Connected to 127.0.0.1:7777" << std::endl;
+
+    // 发送消息到服务器
+    send(sockfd, MESSAGE, strlen(MESSAGE), 0);
+    std::cout << "Message sent: " << MESSAGE << std::endl;
 
     // 关闭 socket
     close(sockfd);

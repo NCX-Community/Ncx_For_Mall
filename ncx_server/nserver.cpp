@@ -35,6 +35,7 @@ void NServer::handle_new_connection(std::shared_ptr<Connection> origin_conn, Buf
             std::puts("RECV DATA_CHANNEL_HELLO");
             // handle data channel hello
             std::string nonce = hello.digest();
+            handle_data_channel_hello(origin_conn, nonce);
             break;
     }
 }
@@ -68,6 +69,7 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
     visitor->set_message_handle(
         [origin_conn](std::shared_ptr<Connection> conn, Buffer* buf)
         {
+            if(buf->readAbleBytes() > 0)
             origin_conn->Send(buf->RetrieveAllAsString());
         }
     );
@@ -75,6 +77,7 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
     origin_conn->set_message_handle(
         [visitor](std::shared_ptr<Connection> conn, Buffer* buf)
         {
+            if(buf->readAbleBytes() > 0)
             visitor->Send(buf->RetrieveAllAsString());
         }
     );
@@ -86,6 +89,11 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
     std::string data_channel_cmd_with_header = PROTOMSGUTIL::HeaderInstaller(serialized_data_channel_cmd);
     // 注意这里是由数据通道发送命令
     origin_conn->Send(data_channel_cmd_with_header);
+
+    // 此时由于可能visitor在通道建立之前就已经有数据到来，所以需要检查并且执行转发
+    if(visitor->get_input_buffer()->readAbleBytes() > 0) {
+        visitor->handle_message();
+    }
 }
 
 
