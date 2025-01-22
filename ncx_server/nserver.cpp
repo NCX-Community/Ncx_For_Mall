@@ -106,7 +106,7 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
         }
     );
 
-    s_control_channel->register_bridge_closer(bridge_closer->get_bridge_id(), bridge_closer)
+    s_control_channel->register_bridge_closer(bridge_closer->get_bridge_id(), bridge_closer);
 
     // 通知控制通道，数据通道已经建立 / send start tcp transforward
     protocol::DataChannelCmd data_channel_cmd;

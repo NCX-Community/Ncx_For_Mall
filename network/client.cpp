@@ -40,7 +40,7 @@ Client::~Client() {
             std::bind(&remove_connection, loop_, std::placeholders::_1);
         
         loop_->run_on_onwer_thread(
-            std::bind(&Connection::set_disconnect_client_handle, conn, cb)
+            std::bind(&Connection::set_close_handle, conn, cb)
         );
         if(unique) {
             // 说明连接体没有读写动作,可以直接关闭
@@ -71,7 +71,7 @@ void Client::newConnection(int sockfd) {
     conn->set_nonblocking();
     conn->set_conn_handle(on_connect_);
     conn->set_message_handle(on_message_);
-    conn->set_disconnect_client_handle(
+    conn->set_close_handle(
         std::bind(&Client::removeConnection, this, std::placeholders::_1)
     );
 

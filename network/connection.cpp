@@ -84,7 +84,7 @@ void Connection::handle_close()
     if (state != ConnectionState::DISCONNECTED)
     {
         if (on_close_){ on_close_(shared_from_this()); }
-        if (notice_on_close_)
+        if (notice_on_close_) { notice_on_close_(); }
         state = ConnectionState::DISCONNECTED;
     }
 }
