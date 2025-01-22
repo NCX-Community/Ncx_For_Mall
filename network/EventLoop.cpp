@@ -3,7 +3,10 @@
 #include "channel.h"
 #include "current_thread.h"
 
-EventLoop::EventLoop(): poller(std::make_unique<Epoll>()){
+EventLoop::EventLoop(): 
+    poller(std::make_unique<Epoll>()),
+    stop_(false)
+{
     wakeup_fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
     wakeup_channel_ = std::make_unique<Channel>(this, wakeup_fd_);    
 
@@ -24,6 +27,7 @@ void EventLoop::run()
 
     while (true)
     {
+        if(stop_)break;
         std::vector<Channel *> activeChannels = poller->poll();
         // std::cout<<"epoll event count: "<< activeChannels.size() <<std::endl;
         if (activeChannels.empty())
@@ -37,6 +41,8 @@ void EventLoop::run()
         do_after_handle_events();
     }
 }
+
+void EventLoop::stop() { stop_ = true; }
 
 void EventLoop::update_channel(Channel *channel)
 {

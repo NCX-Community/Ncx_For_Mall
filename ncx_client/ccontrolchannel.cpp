@@ -121,6 +121,7 @@ void CControlChannel::handle_cmd_create_datachannel()
     std::unique_ptr<DataChannel> data_channel = std::make_unique<DataChannel>(loop_, args_.server_addr_, args_.service_addr_, id_);
     std::string id = data_channel->get_id();
     data_pool_.emplace(id, std::move(data_channel));
+    std::printf("CREATE DATA CHANNEL ID: %s\n", id.c_str());
 }
 
 void CControlChannel::start()

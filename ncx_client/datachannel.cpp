@@ -87,4 +87,10 @@ void DataChannel::do_data_channel_transforward()
     );
 
     service_client_->connect();
+
+    // 注意：此时server_client_可能已经接受到数据，所以要尝试转发一次
+    if(server_client_->get_connection()->get_input_buffer()->readAbleBytes() > 0)
+    {
+        server_client_->get_connection()->handle_message();
+    }
 }
