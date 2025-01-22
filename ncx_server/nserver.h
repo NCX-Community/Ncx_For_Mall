@@ -42,10 +42,9 @@ private:
     ServerArgs args_;   // 服务器参数集合
 
     /// NCX server 负责监听并处理来自客户端的control client, 完成control channel的建立
-    std::shared_ptr<Server> ncx_acceptor_;
-
-    /// 控制通道集合
-    std::unique_ptr<SControlChannelMap> sc_map_;
+    std::unique_ptr<Server> ncx_acceptor_;
+    std::unique_ptr<SControlChannelMap> sc_map_;    // 控制通道集合
+    
 };
 
 #endif //NSERVER_H

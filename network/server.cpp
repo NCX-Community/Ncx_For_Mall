@@ -45,7 +45,7 @@ void Server::newConnectionHandle(int client_fd) {
     // set connection handle
     newConn->set_conn_handle(on_connect_);
     newConn->set_message_handle(on_message_);
-    newConn->set_disconnect_client_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
+    newConn->set_close_handle(std::bind(&Server::disconnectHandle, this, std::placeholders::_1));
 
     int newConn_id = newConn->get_conn_id();
     //printf("insert new connection handle success\n");
@@ -56,14 +56,10 @@ void Server::newConnectionHandle(int client_fd) {
 }
 
 void Server::disconnectHandle(const std::shared_ptr<Connection>& conn) {
-    std::printf("thread %d disconnect connection\n", CURRENT_THREAD::tid());
+    // std::printf("thread %d disconnect connection\n", CURRENT_THREAD::tid());
     loop_->run_on_onwer_thread(std::bind(&Server::disconnectHandleInLoop, this, conn));
     //唤醒main_reactor_的epoll_wait
-    uint64_t one = 1;
-    ssize_t n = write(loop_->wakeup_fd(), &one, sizeof one);
-    if (n != sizeof one) {
-        std::printf("wake up main reactor error\n");
-    }
+    loop_->wakeup_loop();
 }
 
 void Server::disconnectHandleInLoop(const std::shared_ptr<Connection>& conn) {
@@ -86,20 +82,12 @@ void Server::disconnectHandleInLoop(const std::shared_ptr<Connection>& conn) {
 
     conn->get_epoll_run()->run_on_onwer_thread(std::bind(&Connection::ConnectionConstructor, conn));
     // printf("disconnect connection finish\n");
-    //delete connection
 }
 
-void Server::bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func) {
-    on_connect_ = std::move(func);
-}
-
-void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>, Buffer*)> func) {
-    on_message_ = std::move(func);
-}
-
-void Server::update_on_message(std::shared_ptr<Connection> conn, std::function<void(std::shared_ptr<Connection>, Buffer*)> func) {
-    conn->set_message_handle(func);
-}
+void Server::bind_on_connect(std::function<void(std::shared_ptr<Connection>)> func) { on_connect_ = std::move(func); }
+void Server::bind_on_message(std::function<void(std::shared_ptr<Connection>, Buffer*)> func) { on_message_ = std::move(func);}
+void Server::bind_on_disconnect(std::function<void()> func) { on_disconnect_ = std::move(func); }
+void Server::update_on_message(std::shared_ptr<Connection> conn, std::function<void(std::shared_ptr<Connection>, Buffer*)> func) { conn->set_message_handle(func);}
 
 std::shared_ptr<Connection> Server::getConnection(int conn_id) {
     if(connections.find(conn_id) != connections.end()) {
@@ -109,18 +97,3 @@ std::shared_ptr<Connection> Server::getConnection(int conn_id) {
         return nullptr;
     }
 }
-
-// void Server::exchange_pair(int conn_id1, int conn_id2) {
-//     Connection* conn1 = connections[conn_id1].get();
-//     Connection* conn2 = connections[conn_id2].get();
-
-//     // exchannel for conn1
-//     Transfer* exchannel_1 = new Transfer(conn1, conn2);
-//     conn1->setExChannel(exchannel_1);
-//     conn1->enableExchange();
-
-//     // exchannel for conn2
-//     Transfer* exchannel_2 = new Transfer(conn2, conn1);
-//     conn2->setExChannel(exchannel_2);
-//     conn2->enableExchange();
-// }

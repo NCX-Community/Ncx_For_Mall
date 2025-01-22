@@ -6,7 +6,7 @@ NServer::NServer(ServerArgs args) :
 {
     // 资源创建
     loop_ = std::make_unique<EventLoop>();
-    ncx_acceptor_ = std::make_shared<Server>(loop_.get(), args_.server_addr_, args_.backlog_);
+    ncx_acceptor_ = std::make_unique<Server>(loop_.get(), args_.server_addr_, args_.backlog_);
     sc_map_ = std::make_unique<SControlChannelMap>();
                                        
     // 绑定初始连接的读事件回调--握手阶段
@@ -81,6 +81,32 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
             visitor->Send(buf->RetrieveAllAsString());
         }
     );
+
+    // 注册 bridge closer 
+    std::shared_ptr<BridgeCloser> bridge_closer = std::make_shared<BridgeCloser>(visitor, origin_conn);
+    bridge_closer->set_delete_bridge(
+        [s_control_channel](std::string bridge_id)
+        {
+            s_control_channel->erase_bridge_closer(bridge_id);
+        }
+    );
+    std::weak_ptr<BridgeCloser> bridge_closer_weak = bridge_closer;
+
+    // 设置连接关闭通知，通知关闭桥梁
+    visitor->set_close_notice(
+        [bridge_closer_weak]()
+        {
+            if(auto bridge_closer = bridge_closer_weak.lock()) { bridge_closer->cut_off_bridge(); }
+        }
+    );
+    origin_conn->set_close_notice(
+        [bridge_closer_weak]()
+        {
+            if(auto bridge_closer = bridge_closer_weak.lock()) { bridge_closer->cut_off_bridge(); }
+        }
+    );
+
+    s_control_channel->register_bridge_closer(bridge_closer->get_bridge_id(), bridge_closer)
 
     // 通知控制通道，数据通道已经建立 / send start tcp transforward
     protocol::DataChannelCmd data_channel_cmd;
