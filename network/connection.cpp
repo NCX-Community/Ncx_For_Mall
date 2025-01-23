@@ -43,7 +43,7 @@ void Connection::ConnectionEstablished()
     handle_conn();
 }
 
-Connection::~Connection() { std::printf("connection %d destructed\n", conn_id); };
+Connection::~Connection() { std::printf("connection %d destructed\n", conn_id); ::close(client_fd); };
 
 // 在连接体析构时调用，用于删除连接体的channel
 void Connection::ConnectionConstructor()

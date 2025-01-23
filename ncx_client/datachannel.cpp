@@ -20,6 +20,11 @@ DataChannel::DataChannel(EventLoop* loop, const InetAddress& server_addr, const 
         }
     );
 
+    // 设置通道关闭回调
+    server_client_->set_on_disconnect_cb(
+        [this]() { delete_data_channel(); }
+    );
+
     server_client_->connect();
 }
 

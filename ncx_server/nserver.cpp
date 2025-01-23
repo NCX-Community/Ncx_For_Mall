@@ -65,20 +65,28 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
     SControlChannel* s_control_channel = sc_map_->at(nonce).get(); 
     // 从待处理外界连接池中取出一个外界连接建立转发关系
     std::shared_ptr<Connection> visitor = s_control_channel->pop_visitor();
+
+    std::weak_ptr<Connection> origin_conn_weak = origin_conn;
+    std::weak_ptr<Connection> visitor_weak = visitor;
+
     // 建立转发关系
     visitor->set_message_handle(
-        [origin_conn](std::shared_ptr<Connection> conn, Buffer* buf)
+        [origin_conn_weak](std::shared_ptr<Connection> conn, Buffer* buf)
         {
             if(buf->readAbleBytes() > 0)
-            origin_conn->Send(buf->RetrieveAllAsString());
+            {
+                if(auto origin_conn = origin_conn_weak.lock()) { origin_conn->Send(buf->RetrieveAllAsString()); }
+            }
         }
     );
 
     origin_conn->set_message_handle(
-        [visitor](std::shared_ptr<Connection> conn, Buffer* buf)
+        [visitor_weak](std::shared_ptr<Connection> conn, Buffer* buf)
         {
             if(buf->readAbleBytes() > 0)
-            visitor->Send(buf->RetrieveAllAsString());
+            {
+                if(auto visitor = visitor_weak.lock()) { visitor->Send(buf->RetrieveAllAsString()); }
+            }
         }
     );
 

@@ -119,6 +119,13 @@ void CControlChannel::wait_server_cmd(std::shared_ptr<Connection> server_conn, B
 void CControlChannel::handle_cmd_create_datachannel()
 {
     std::unique_ptr<DataChannel> data_channel = std::make_unique<DataChannel>(loop_, args_.server_addr_, args_.service_addr_, id_);
+    data_channel->set_data_channel_delete_cb(
+        [this](std::string id){ 
+            if(data_pool_.find(id) != data_pool_.end()) {
+                data_pool_.erase(id);
+            }
+        }
+    );
     std::string id = data_channel->get_id();
     data_pool_.emplace(id, std::move(data_channel));
     std::printf("CREATE DATA CHANNEL ID: %s\n", id.c_str());
