@@ -17,7 +17,8 @@ Client::Client(EventLoop* loop, const InetAddress& server_addr)
       connected_(false),
       next_conn_id_(0),
       on_connect_(nullptr),
-      on_message_(nullptr)
+      on_message_(nullptr),
+      on_disconnect_(nullptr)
 {
     connector_->setNewConnectionCb(
         std::bind(&Client::newConnection, this, std::placeholders::_1)
@@ -25,7 +26,7 @@ Client::Client(EventLoop* loop, const InetAddress& server_addr)
 }
 
 Client::~Client() {
-    std::puts("客户端开始关闭！");
+    std::puts("Client Destructor");
     ConnectionPtr conn; // 这是最后的ConntionPtr
     bool unique = false;
     {
@@ -40,7 +41,7 @@ Client::~Client() {
             std::bind(&remove_connection, loop_, std::placeholders::_1);
         
         loop_->run_on_onwer_thread(
-            std::bind(&Connection::set_disconnect_client_handle, conn, cb)
+            std::bind(&Connection::set_close_handle, conn, cb)
         );
         if(unique) {
             // 说明连接体没有读写动作,可以直接关闭
@@ -52,7 +53,7 @@ Client::~Client() {
         // todo: 在connector还在尝试连接的过程中析构客户端会有问题
         // connector_->stop();
     }
-
+    std::puts("Client Destructor End");
 }
 
 // 客户端建立新连接
@@ -71,7 +72,7 @@ void Client::newConnection(int sockfd) {
     conn->set_nonblocking();
     conn->set_conn_handle(on_connect_);
     conn->set_message_handle(on_message_);
-    conn->set_disconnect_client_handle(
+    conn->set_close_handle(
         std::bind(&Client::removeConnection, this, std::placeholders::_1)
     );
 
@@ -94,6 +95,8 @@ void Client::removeConnection(const ConnectionPtr& conn) {
     loop_->run_on_onwer_thread(
         std::bind(&Connection::ConnectionConstructor, conn)
     );
+    connected_ = false;
+    if(on_disconnect_) { on_disconnect_(); }
 }
 
 void Client::connect() 

@@ -35,9 +35,7 @@ int main() {
 
     std::cout << "Connected to 127.0.0.1:7777" << std::endl;
 
-    // 发送消息到服务器
-    send(sockfd, MESSAGE, strlen(MESSAGE), 0);
-    std::cout << "Message sent: " << MESSAGE << std::endl;
+    while(true){}
 
     // 关闭 socket
     close(sockfd);

@@ -28,8 +28,12 @@ public:
 
     /// close 
     void handle_close();
-    void set_disconnect_client_handle(std::function<void(const std::shared_ptr<Connection>&)> disconnectClient);
+    void set_close_handle(std::function<void(const std::shared_ptr<Connection>&)> disconnectClient);
     void force_close();
+    void notice_close();
+    /// @brief 注册连接体关闭时的通知函数
+    /// @param notice_on_close 
+    void set_close_notice(std::function<void()> notice_on_close);
 
     void handle_data_in();
     void handle_data_out();
@@ -65,6 +69,8 @@ private:
     std::function<void(const std::shared_ptr<Connection>&)> on_conn_;
     std::function<void(const std::shared_ptr<Connection>&, Buffer*)> on_message_;
     std::function<void(const std::shared_ptr<Connection>&)> on_close_;
+    std::function<void()> notice_on_close_;
+
     void Read(); 
     void Write(); 
     void ReadNonBlocking();

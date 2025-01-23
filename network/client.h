@@ -51,6 +51,10 @@ public:
         }
     }
 
+    void set_on_disconnect_cb(std::function<void()> cb) {
+        on_disconnect_ = std::move(cb);
+    }
+
     std::shared_ptr<Connection> get_connection() const { return conn_; }
 
 private:
@@ -65,6 +69,7 @@ private:
     // 连接握手阶段，用于对连接的预处理（鉴权、判断连接请求类型）
     std::function<void(std::shared_ptr<Connection>)> on_connect_;
     std::function<void(std::shared_ptr<Connection>, Buffer*)> on_message_;
+    std::function<void()> on_disconnect_;
 
     bool connected_;    // 客户端是否连接成功
     mutable std::mutex mtx_;

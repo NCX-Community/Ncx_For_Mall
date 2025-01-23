@@ -43,7 +43,7 @@ void Connection::ConnectionEstablished()
     handle_conn();
 }
 
-Connection::~Connection() {};
+Connection::~Connection() { std::printf("connection %d destructed\n", conn_id); ::close(client_fd); };
 
 // 在连接体析构时调用，用于删除连接体的channel
 void Connection::ConnectionConstructor()
@@ -53,31 +53,14 @@ void Connection::ConnectionConstructor()
         state = ConnectionState::DISCONNECTED;
         channel->disableAll();
     }
-    
     channel->remove();
 }
 
-void Connection::set_conn_handle(std::function<void(const std::shared_ptr<Connection> &)> on_conn)
-{
-    on_conn_ = std::move(on_conn);
-}
-
-void Connection::handle_conn()
-{
-    if (on_conn_)
-    {
-        on_conn_(shared_from_this());
-    }
-}
-
-void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection> &, Buffer*)> on_message)
-{
-    on_message_ = std::move(on_message);
-}
-
+void Connection::set_conn_handle(std::function<void(const std::shared_ptr<Connection> &)> on_conn){ on_conn_ = std::move(on_conn); }
+void Connection::handle_conn(){ if (on_conn_) { on_conn_(shared_from_this()); } }
+void Connection::set_message_handle(std::function<void(const std::shared_ptr<Connection> &, Buffer*)> on_message){ on_message_ = std::move(on_message); }
 void Connection::handle_message()
 {
-    // printf("tcp connection handle message\n");
     if (on_message_)
     {
         on_message_(shared_from_this(), input_buffer.get());
@@ -93,24 +76,15 @@ void Connection::handle_data_in()
 }
 
 // 连接体非阻塞发送Buffer中的数据
-void Connection::handle_data_out()
-{
-    WriteNonBlocking();
-}
+void Connection::handle_data_out(){ WriteNonBlocking(); }
 
-void Connection::set_disconnect_client_handle(std::function<void(const std::shared_ptr<Connection> &)> disconnectClient)
-{
-    on_close_ = std::move(disconnectClient);
-}
-
+void Connection::set_close_handle(std::function<void(const std::shared_ptr<Connection> &)> disconnectClient) { on_close_ = std::move(disconnectClient); }
 void Connection::handle_close()
 {
     if (state != ConnectionState::DISCONNECTED)
     {
-        if (on_close_)
-        {
-            on_close_(shared_from_this());
-        }
+        if (on_close_){ on_close_(shared_from_this()); }
+        if (notice_on_close_) { notice_on_close_(); }
         state = ConnectionState::DISCONNECTED;
     }
 }
@@ -127,31 +101,21 @@ void Connection::force_close()
     }
 }
 
-void Connection::Recv(std::string& msg)
-{
-    Recv(msg, static_cast<size_t>(msg.size()));
-}
+void Connection::notice_close() { if (notice_on_close_) {  notice_on_close_(); } }
+void Connection::set_close_notice(std::function<void()> notice_on_close) { notice_on_close_ = std::move(notice_on_close); }
 
-void Connection::Recv(std::string& msg, size_t len) {
-    msg = input_buffer->RetrieveAsString(len);
-}
+void Connection::Recv(std::string& msg) { Recv(msg, static_cast<size_t>(msg.size())); }
 
-void Connection::Send(const std::string& msg)
+void Connection::Recv(std::string& msg, size_t len) { msg = input_buffer->RetrieveAsString(len); }
+
+void Connection::Send(const std::string& msg) 
 {
     output_buffer->Append(msg);
     Write(); // todo: 监听写事件
 }
 
-void Connection::Write()
-{
-    WriteNonBlocking();
-}
-
-void Connection::Read()
-{
-    ReadNonBlocking();
-}
-
+void Connection::Write() { WriteNonBlocking(); }
+void Connection::Read() { ReadNonBlocking(); }
 
 void Connection::ReadNonBlocking()
 {

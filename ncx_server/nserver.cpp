@@ -6,7 +6,7 @@ NServer::NServer(ServerArgs args) :
 {
     // 资源创建
     loop_ = std::make_unique<EventLoop>();
-    ncx_acceptor_ = std::make_shared<Server>(loop_.get(), args_.server_addr_, args_.backlog_);
+    ncx_acceptor_ = std::make_unique<Server>(loop_.get(), args_.server_addr_, args_.backlog_);
     sc_map_ = std::make_unique<SControlChannelMap>();
                                        
     // 绑定初始连接的读事件回调--握手阶段
@@ -65,22 +65,56 @@ void NServer::handle_data_channel_hello(std::shared_ptr<Connection> origin_conn,
     SControlChannel* s_control_channel = sc_map_->at(nonce).get(); 
     // 从待处理外界连接池中取出一个外界连接建立转发关系
     std::shared_ptr<Connection> visitor = s_control_channel->pop_visitor();
+
+    std::weak_ptr<Connection> origin_conn_weak = origin_conn;
+    std::weak_ptr<Connection> visitor_weak = visitor;
+
     // 建立转发关系
     visitor->set_message_handle(
-        [origin_conn](std::shared_ptr<Connection> conn, Buffer* buf)
+        [origin_conn_weak](std::shared_ptr<Connection> conn, Buffer* buf)
         {
             if(buf->readAbleBytes() > 0)
-            origin_conn->Send(buf->RetrieveAllAsString());
+            {
+                if(auto origin_conn = origin_conn_weak.lock()) { origin_conn->Send(buf->RetrieveAllAsString()); }
+            }
         }
     );
 
     origin_conn->set_message_handle(
-        [visitor](std::shared_ptr<Connection> conn, Buffer* buf)
+        [visitor_weak](std::shared_ptr<Connection> conn, Buffer* buf)
         {
             if(buf->readAbleBytes() > 0)
-            visitor->Send(buf->RetrieveAllAsString());
+            {
+                if(auto visitor = visitor_weak.lock()) { visitor->Send(buf->RetrieveAllAsString()); }
+            }
         }
     );
+
+    // 注册 bridge closer 
+    std::shared_ptr<BridgeCloser> bridge_closer = std::make_shared<BridgeCloser>(visitor, origin_conn);
+    bridge_closer->set_delete_bridge(
+        [s_control_channel](std::string bridge_id)
+        {
+            s_control_channel->erase_bridge_closer(bridge_id);
+        }
+    );
+    std::weak_ptr<BridgeCloser> bridge_closer_weak = bridge_closer;
+
+    // 设置连接关闭通知，通知关闭桥梁
+    visitor->set_close_notice(
+        [bridge_closer_weak]()
+        {
+            if(auto bridge_closer = bridge_closer_weak.lock()) { bridge_closer->cut_off_bridge(); }
+        }
+    );
+    origin_conn->set_close_notice(
+        [bridge_closer_weak]()
+        {
+            if(auto bridge_closer = bridge_closer_weak.lock()) { bridge_closer->cut_off_bridge(); }
+        }
+    );
+
+    s_control_channel->register_bridge_closer(bridge_closer->get_bridge_id(), bridge_closer);
 
     // 通知控制通道，数据通道已经建立 / send start tcp transforward
     protocol::DataChannelCmd data_channel_cmd;

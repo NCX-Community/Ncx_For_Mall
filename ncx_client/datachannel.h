@@ -13,7 +13,7 @@ class DataChannel
 public:
     DataChannel() = delete;
     DataChannel(EventLoop* loop, const InetAddress& server_addr, const InetAddress& service_addr, const std::string& nonce);
-    ~DataChannel() = default;
+    ~DataChannel() { std::puts("DataChannel Destructor"); };
 
     // 数据通道回调函数集合
 
@@ -24,15 +24,18 @@ public:
 
     /// @brief 数据通道开始转发
     void do_data_channel_transforward();
-
-
+    
     std::string get_id() const { return channel_id_; }
+    void set_data_channel_delete_cb(std::function<void(std::string id)> cb) { data_channel_delete_ = std::move(cb); }
+    void delete_data_channel() { data_channel_delete_(channel_id_); }
 
 private:
     std::string channel_id_;
     std::string nonce_;  // 证明数据通道合法的token 
     std::unique_ptr<Client> server_client_;
     std::unique_ptr<Client> service_client_;
+
+    std::function<void(std::string id)> data_channel_delete_;
 };
 
 #endif // DATACHANNEL_H
