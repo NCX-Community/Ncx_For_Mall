@@ -9,6 +9,7 @@ public:
     EventLoop();
     ~EventLoop();
     void run();
+    void stop();
 
     void update_channel(Channel* channel);
     void delete_channel(Channel* channel);
@@ -29,6 +30,7 @@ private:
     std::mutex mtx;
     std::vector<std::function<void()>> to_do_list;
     std::unique_ptr<Epoll> poller;
+    bool stop_;
 
     //eventfd to wake up epoll_wait on closehandle
     int wakeup_fd_;

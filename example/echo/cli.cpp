@@ -8,7 +8,7 @@
 
 #include <unistd.h>
 
-static const InetAddress SERVER_ADDR("0.0.0.0", 7777);
+static const InetAddress SERVER_ADDR("0.0.0.0", 6666);
 
 class EchoClient {
 public:
@@ -29,11 +29,12 @@ EchoClient::EchoClient(EventLoop* loop, const InetAddress& server_addr) {
         std::puts("connected to server, begin to send message");
         conn->Send("welcome to ncx!");
     });
-    client_->set_on_message_cb([](std::shared_ptr<Connection> conn, Buffer* buf) {
+    client_->set_on_message_cb([this](std::shared_ptr<Connection> conn, Buffer* buf) {
         std::string msg = buf->RetrieveAllAsString();
         std::cout << "recv: " << msg.data() << std::endl;
         sleep(1);
         conn->Send(msg);
+        loop_->stop();
     });
 }
 
@@ -46,9 +47,11 @@ void EchoClient::run() {
 
 int main(void)
 {
-    EventLoop loop;
-    EchoClient client(&loop, SERVER_ADDR);
-    client.run();
+    EventLoop* loop = new EventLoop();
+    EchoClient* client = new EchoClient(loop, SERVER_ADDR);
+    client->run();
+    delete client;
+    while(true){}
     return 0;
 }
 
