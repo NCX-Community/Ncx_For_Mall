@@ -88,7 +88,7 @@ std::string Buffer::RetrieveAllAsString() {
 }
 
 void Buffer::EnsureWriteableBytes(size_t len) {
-    if(writeAbleBytes() > 0) return;
+    if(writeAbleBytes() >= len) return;
     if(writeAbleBytes() + prependAbleBytes() >= kPrePendIndex + len) {
         // 此时writeable和prepenable的剩余空间超过写的空间，则将已有数据复制到初始位置
         // 将不断后退的read_index_后移导致的前面没有利用的空间利用上；
