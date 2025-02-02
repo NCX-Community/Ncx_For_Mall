@@ -49,6 +49,14 @@ else()
     message(FATAL_ERROR "Boost not found")
 endif()
 
+# TomlPlusPlus
+include(FetchContent)
+FetchContent_Declare(
+    TomlPlusPlus
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG        v3.4.0
+)
+FetchContent_MakeAvailable(TomlPlusPlus)
 
 # source code
 aux_source_directory(network NET)
@@ -60,10 +68,10 @@ aux_source_directory(protocol PROTOCOL)
 # test code set
 
 # test for echo
-file(GLOB ECHOSERV "example/echo/serv.cpp")
-file(GLOB ECHOCLIENT "example/echo/cli.cpp")
-add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
-add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
+# file(GLOB ECHOSERV "example/echo/serv.cpp")
+# file(GLOB ECHOCLIENT "example/echo/cli.cpp")
+# add_executable(echoserv ${ECHOSERV} ${NET} ${UTIL})
+# add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
 
 # test_for_ex
 # file(GLOB EXSERV "example/ex/test_ex_serv.cpp")
@@ -82,16 +90,21 @@ add_executable(echocli ${ECHOCLIENT} ${NET} ${UTIL})
 # add_executable(buffertest ${BUFFER} ${NET})
 
 # test_for_protocol
-file(GLOB PROTO "example/protobuf/test_protobuf.cpp")
-add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
-target_link_libraries(protest ${Protobuf_LIBRARIES})
+# file(GLOB PROTO "example/protobuf/test_protobuf.cpp")
+# add_executable(protest ${PROTO} ${PROTOCOL} ${NET})
+# target_link_libraries(protest ${Protobuf_LIBRARIES})
 
 # test_for_uuid
-file(GLOB UUID "example/uuid/test_uuid.cpp")
-add_executable(uuidtest ${UUID} ${UTIL})
-target_link_libraries(uuidtest ${Boost_LIBRARIES})
+# file(GLOB UUID "example/uuid/test_uuid.cpp")
+# add_executable(uuidtest ${UUID} ${UTIL})
+# target_link_libraries(uuidtest ${Boost_LIBRARIES})
 
-# # src 
+# test_for_toml
+# file(GLOB TOML "example/toml/test_toml.cpp")
+# add_executable(tomltest ${TOML})
+# target_link_libraries(tomltest tomlplusplus::tomlplusplus)
+
+# src 
 file(GLOB NCXS "ncx_server/ncxs.cpp")
 file(GLOB NCXC "ncx_client/ncxc.cpp")
 add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL})
@@ -105,8 +118,6 @@ target_link_libraries(ncxs ${Protobuf_LIBRARIES})
 target_link_libraries(ncxc ${Boost_LIBRARIES})
 target_link_libraries(ncxs ${Boost_LIBRARIES})
 
-# 链接ZeroMQ库到可执行文件
-# target_link_libraries(exserv ${PC_ZEROMQ_LIBRARIES})
-# target_link_libraries(musltest ${PC_ZEROMQ_LIBRARIES})
-# target_link_libraries(ncxs ${PC_ZEROMQ_LIBRARIES})
-# target_link_libraries(ncxc ${PC_ZEROMQ_LIBRARIES})
+# link tomlplusplus
+target_link_libraries(ncxc tomlplusplus::tomlplusplus)
+target_link_libraries(ncxs tomlplusplus::tomlplusplus)

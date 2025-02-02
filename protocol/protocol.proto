@@ -6,6 +6,32 @@ message MessageHeader {
     fixed32 message_length = 1;
 }
 
+message Hello {
+    enum HelloType {
+        CONTROL_CHANNEL_HELLO = 0;
+        DATA_CHANNEL_HELLO = 1;
+    }
+
+    message Control_Channel_Hello_Content {
+        optional string service_name = 1;
+        optional int32 proxy_port = 2;
+    }
+
+    optional HelloType hello_type = 1;
+    
+    optional string digest = 2; // 传递唯一标识，比如nonce、token等
+    optional Control_Channel_Hello_Content control_channel_hello_content = 3;
+}
+
+message Ack {
+    enum AckContent {
+        OK = 0;
+        AUTH_ERROR = 1;
+    }
+
+    optional AckContent ack_content = 1;
+}
+
 message ControlChannelCmd {
     enum CCmd {
         CREATE_DATA_CHANNEL = 0;
@@ -22,23 +48,4 @@ message DataChannelCmd {
     }
 
     optional DCmd data_channel_cmd = 1;
-}
-
-message Hello {
-    enum HelloType {
-        CONTROL_CHANNEL_HELLO = 0;
-        DATA_CHANNEL_HELLO = 1;
-    }
-
-    optional HelloType hello_type = 1;
-    optional string digest = 2; // 传递唯一标识，比如nonce、token等
-}
-
-message Ack {
-    enum AckContent {
-        OK = 0;
-        AUTH_ERROR = 1;
-    }
-
-    optional AckContent ack_content = 1;
 }

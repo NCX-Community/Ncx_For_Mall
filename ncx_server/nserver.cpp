@@ -29,7 +29,9 @@ void NServer::handle_new_connection(std::shared_ptr<Connection> origin_conn, Buf
         case protocol::Hello::CONTROL_CHANNEL_HELLO :
             std::puts("RECV CONTROL_CHANNEL_HELLO");
             // handle control channel hello
-            handle_control_channel_hello(origin_conn);
+            handle_control_channel_hello(origin_conn, 
+                                         hello.control_channel_hello_content().service_name(), 
+                                         static_cast<uint16_t>(hello.control_channel_hello_content().proxy_port()));
             break;
         case protocol::Hello::DATA_CHANNEL_HELLO :
             std::puts("RECV DATA_CHANNEL_HELLO");
@@ -40,7 +42,7 @@ void NServer::handle_new_connection(std::shared_ptr<Connection> origin_conn, Buf
     }
 }
 
-void NServer::handle_control_channel_hello(std::shared_ptr<Connection> origin_conn)
+void NServer::handle_control_channel_hello(std::shared_ptr<Connection> origin_conn, const std::string& service_name, const u_int16_t& proxy_port)
 {
     // send hello back
     // 生成唯一标识controlchannel的id标识
@@ -55,7 +57,13 @@ void NServer::handle_control_channel_hello(std::shared_ptr<Connection> origin_co
     std::puts("SERVER SEND CONTROL_CHANNEL_HELLO");
 
     // create control channel ;
-    sc_map_->emplace(nonce, std::make_unique<SControlChannel>(loop_.get(), origin_conn, args_.sc_args_));
+    SControlChannelArgs sargs 
+    {
+        InetAddress(args_.server_addr_.get_ip(), proxy_port),
+        256
+    };
+
+    sc_map_->emplace(nonce, std::make_unique<SControlChannel>(loop_.get(), origin_conn, sargs));
 }
 
 
