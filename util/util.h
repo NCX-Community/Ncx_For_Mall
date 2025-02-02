@@ -30,6 +30,7 @@
 #include<assert.h>
 #include<unordered_set>
 #include<set>
+#include<optional>
 
 class EventLoop;
 class Channel;

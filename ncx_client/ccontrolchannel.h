@@ -12,7 +12,9 @@ typedef std::unordered_map<std::string, std::unique_ptr<DataChannel>> DataChanne
 
 struct CControlChannelArgs {
     InetAddress server_addr_;
+    std::string service_name_;
     InetAddress service_addr_;
+    uint16_t proxy_port_;
 };
 
 class CControlChannel 

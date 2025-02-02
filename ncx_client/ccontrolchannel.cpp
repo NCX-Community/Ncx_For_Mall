@@ -19,6 +19,12 @@ void CControlChannel::do_control_channel_handshake(std::shared_ptr<Connection> s
     // send control channel hello
     protocol::Hello hello;
     hello.set_hello_type(protocol::Hello::CONTROL_CHANNEL_HELLO);
+
+    // set control channel hello content 
+    protocol::Hello_Control_Channel_Hello_Content* content = hello.mutable_control_channel_hello_content();
+    content->set_service_name(args_.service_name_);
+    content->set_proxy_port(args_.proxy_port_);
+    
     std::string send_msg = hello.SerializeAsString();
     std::string send_msg_with_header = PROTOMSGUTIL::HeaderInstaller(send_msg);
     server_conn->Send(send_msg_with_header);
@@ -35,7 +41,7 @@ void CControlChannel::wait_control_channel_hello(std::shared_ptr<Connection> ser
     if(!hello.ParseFromString(recv_hello)) {
         std::cerr << "ParseFromString failed" << std::endl;
     }
-    //std::printf("RECV NONCE: %s\n", hello.digest().c_str());
+    // std::printf("RECV NONCE: %s\n", hello.digest().c_str());
     // switch hello type
     switch (hello.hello_type()) {
         case protocol::Hello::CONTROL_CHANNEL_HELLO :

@@ -15,7 +15,6 @@ typedef std::unordered_map<std::string, std::unique_ptr<SControlChannel>> SContr
 struct ServerArgs{
     InetAddress server_addr_;
     int backlog_ {256};
-    SControlChannelArgs sc_args_;
 };
 
 class NServer {
@@ -28,7 +27,7 @@ public:
 
     /// @brief 处理接收到的control channel hello
     /// @param conn 接受到的原始连接体
-    void handle_control_channel_hello(std::shared_ptr<Connection> conn);
+    void handle_control_channel_hello(std::shared_ptr<Connection> conn, const std::string& service_name, const u_int16_t& proxy_port);
     
     /// @brief 处理接受到的data channel hello
     /// @param conn 接受到的数据通道
