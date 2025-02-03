@@ -3,14 +3,26 @@
 #include "config.h"
 #include <iostream>
 
-const char* CONFIG_FILE = "ncxs.toml";
+const std::string DRAW_S = R"(  
+#   __      _____ _    ___ ___  __  __ ___   _____ ___  
+#   \ \    / / __| |  / __/ _ \|  \/  | __| |_   _/ _ \ 
+#    \ \/\/ /| _|| |_| (_| (_) | |\/| | _|    | || (_) |
+#     \_/\_/ |___|____\___\___/|_|  |_|___|   |_| \___/ 
+#                                                       
+#    _  _  _____  _____ ___ _____   _____ ___           
+#   | \| |/ __\ \/ / __| __| _ \ \ / / __| _ \          
+#   | .` | (__ >  <\__ \ _||   /\ V /| _||   /          
+#   |_|\_|\___/_/\_\___/___|_|_\ \_/ |___|_|_\          
+#                                                       
+)";
+
 
 int 
-main()
+main(int argc, char* argv[])
 {
+    std::cout << DRAW_S << std::endl;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     // read server config 
-    ServerConfig config(CONFIG_FILE);
-    std::puts("SERVERCONFIG LOAD SUCCESS!");
+    ServerConfig config(argv[1]);
     NServer ncxs(config.parseAsServerArgs());
     ncxs.run_server();
 }
