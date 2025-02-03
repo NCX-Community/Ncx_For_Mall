@@ -1,4 +1,4 @@
 [server]
 server_ip = "127.0.0.1"
 server_port = 6666
-back_log = 256
+backlog = 256

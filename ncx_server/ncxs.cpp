@@ -3,13 +3,11 @@
 #include "config.h"
 #include <iostream>
 
-const char* CONFIG_FILE = "ncxs.toml";
-
 int 
-main()
+main(int argc, char* argv[])
 {
     // read server config 
-    ServerConfig config(CONFIG_FILE);
+    ServerConfig config(argv[1]);
     std::puts("SERVERCONFIG LOAD SUCCESS!");
     NServer ncxs(config.parseAsServerArgs());
     ncxs.run_server();
