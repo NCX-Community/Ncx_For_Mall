@@ -72,6 +72,21 @@
         "internet": "cpp",
         "io_context": "cpp",
         "socket": "cpp",
-        "timer": "cpp"
+        "timer": "cpp",
+        "C_Cpp.inlayHints.enabled": "true",
+        "any": "cpp",
+        "strstream": "cpp",
+        "bitset": "cpp",
+        "charconv": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "regex": "cpp",
+        "span": "cpp",
+        "cfenv": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp"
     },
+        
+      
 }

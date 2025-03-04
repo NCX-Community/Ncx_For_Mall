@@ -1,6 +1,5 @@
-#include "nclient.h"
-#include "ccontrolchannel.h"
-#include "config.h"
+#include <iostream>
+#include "cli.h"
 
 const std::string DRAW_C = R"(
 
@@ -21,8 +20,8 @@ int
 main(int argc, char* argv[]) 
 {
     std::cout << DRAW_C << std::endl;
-    // read client config 
-    ClientConfig config(argv[1]);
-    NClient client(config.parseAsControlChannelArgsVec());
-    client.run_client();
+
+    // cli parse
+    // cli是客户端程序的入口
+    Cli::Parse(argc, argv);
 }
