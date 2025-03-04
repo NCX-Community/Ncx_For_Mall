@@ -11,7 +11,7 @@ class Config
 {
 public:
     Config() = delete;
-    Config(const char* path)
+    Config(const std::string& path)
     {
         config = toml::parse_file(path);
     }
@@ -24,7 +24,7 @@ class ServerConfig : public Config
 {
 public:
     ServerConfig() = delete;
-    ServerConfig(const char* path) : Config(path) {}
+    ServerConfig(const std::string& path) : Config(path) {}
     ~ServerConfig() = default;
 
     ServerArgs parseAsServerArgs() 
@@ -61,7 +61,7 @@ class ClientConfig : public Config
 {
 public:
     ClientConfig() = delete;
-    ClientConfig(const char* path) : Config(path) {}
+    ClientConfig(const std::string& path) : Config(path) {}
     ~ClientConfig() = default;
 
     std::vector<CControlChannelArgs> parseAsControlChannelArgsVec() 
