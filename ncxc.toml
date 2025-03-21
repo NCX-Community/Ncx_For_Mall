@@ -1,7 +1,0 @@
-[client]
-server_ip = "127.0.0.1"
-server_port = 6666
-[ssh]
-service_ip = "127.0.0.1"
-service_port = 22
-proxy_port = 6667
