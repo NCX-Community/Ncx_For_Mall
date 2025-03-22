@@ -16,13 +16,10 @@ WORKDIR /app
 COPY . .
 
 # 重新编译proto文件
-RUN protoc --cpp_out=./protocol --experimental_allow_proto3_optional ./protobuf/protocol.protoc
+RUN protoc -I=/app/protocol --cpp_out=/app/protocol --experimental_allow_proto3_optional /app/protocol/protocol.proto
 
 RUN rm -rf build && mkdir build && cd build && cmake .. && make
 
-# 将ncxs源文件拷贝的根目录
-COPY ./ncxs /app/ncxs
-
 EXPOSE 8888
 
-CMD ["./ncxs ncxs.toml"]
+CMD ["/app/build/ncxs /app/ncxs.toml"]
