@@ -1,3 +1,4 @@
+
 # Ncx
 A lightweight, stable and high-performance intranet penetration tool. Like frp, Ncx is desighed to help users easily expose local services to the public network.
 ## Content
