@@ -113,5 +113,5 @@ Contributions are welcome! Feel free to submit pull requests or open issues.
 - [ ] UDP Support
 - [ ] Http Support
 - [ ] configure file hot reload
-- [ ] Docker Start Support
+- [x] Docker Start Support
 - [ ] High availability Support
