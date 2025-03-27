@@ -16,7 +16,7 @@ public:
     /// @param argv 参数数组
     static void Parse(int argc, char* argv[]) {
         try {
-            GetInstance().parse(argc, argv);
+
         } catch (const std::exception& e) {
             // 捕获所有未被处理的异常
             std::cerr << "Fatal Error: " << e.what() << std::endl;
@@ -88,7 +88,7 @@ private:
 
             // 解析配置并启动客户端
             try {
-                auto args = config->parseAsControlChannelArgsVec();
+                auto args = config->parseAsControlChannelArgsVecFromLocalConfig();
                 std::unique_ptr<NClient> client = std::make_unique<NClient>(args);
                 client->run_client();
             } catch (const std::exception& e) {
@@ -99,9 +99,26 @@ private:
         }
     }
 
-    // 处理远程隧道（示例占位符）
+    // 向网关获取服务
     void handleRemoteTunnel() {
-        std::string remote_url = vm["remote"].as<std::string>();
-        throw std::runtime_error("Remote tunnel not implemented. URL: " + remote_url);
+        // parse config
+        std::string remote_config_file = vm["remote"].as<std::string>();
+        std::unique_ptr<ClientConfig> config;
+    
+        // 加载配置文件
+        try {
+            config = std::make_unique<ClientConfig>(remote_config_file);
+        } catch (const std::exception& e) {
+            throw std::runtime_error("Failed to load config file [" + remote_config_file + "]: " + e.what());
+        }
+    
+        // 解析配置并启动客户端
+        try {
+            auto args = config->parseAsControlChannelArgsVecFromRemoteConfig();
+            std::unique_ptr<NClient> client = std::make_unique<NClient>(args);
+            client->run_client();
+        } catch (const std::exception& e) {
+            throw std::runtime_error(std::string("Client initialization failed: ") + e.what());
+        }
     }
 };

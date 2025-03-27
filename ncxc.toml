@@ -1,0 +1,4 @@
+[client]
+gateway_ip = "127.0.0.1"
+gateway_port = 6666
+token = "abc"

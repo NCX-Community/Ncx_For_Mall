@@ -9,14 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 find_package(Threads REQUIRED)
 
-# protobuf
-# 查找Protobuf库
-find_package(Protobuf REQUIRED)
-# 打印 Protobuf 信息
-message(STATUS "Using Protobuf ${Protobuf_VERSION}")
-message(STATUS "Protobuf include dirs: ${Protobuf_INCLUDE_DIRS}")
-message(STATUS "Protobuf libraries: ${Protobuf_LIBRARIES}")
-
 # module 
 include_directories(
     cli
@@ -25,7 +17,32 @@ include_directories(
     network
     ncx_client
     ncx_server
+    http
 )
+
+# Json
+find_package(nlohmann_json REQUIRED)
+if(NLOHMANN_JSON_FOUND)
+    include_directories(${NLOHMANN_JSON_INCLUDE_DIRS})
+    message(STATUS "Using nlohmann_json ${NLOHMANN_JSON_VERSION}")
+    message(STATUS "nlohmann_json include dirs: ${NLOHMANN_JSON_INCLUDE_DIRS}")
+    message(STATUS "nlohmann_json libraries: ${NLOHMANN_JSON_LIBRARIES}")
+else()
+    message(FATAL_ERROR "nlohmann_json not found")
+endif()
+
+# protobuf
+# 查找Protobuf库
+find_package(Protobuf REQUIRED)
+# 打印 Protobuf 信息
+if(PROTOBUF_FOUND)
+    include_directories(${PROTOBUF_INCLUDE_DIRS})
+    message(STATUS "Using Protobuf ${Protobuf_VERSION}")
+    message(STATUS "Protobuf include dirs: ${PROTOBUF_INCLUDE_DIRS}")
+    message(STATUS "Protobuf libraries: ${PROTOBUF_LIBRARIES}")
+else()
+    message(FATAL_ERROR "Protobuf not found")
+endif()
 
 # Boost
 find_package(Boost REQUIRED COMPONENTS program_options)
@@ -54,12 +71,13 @@ aux_source_directory(ncx_client NCX_CLIENT)
 aux_source_directory(ncx_server NCX_SERVER)
 aux_source_directory(protocol PROTOCOL)
 aux_source_directory(cli CLI)
+aux_source_directory(http HTTP)
 
 # src 
 file(GLOB NCXS "ncx_server/ncxs.cpp")
 file(GLOB NCXC "ncx_client/ncxc.cpp")
-add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL} ${CLI})
-add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL} ${CLI})
+add_executable(ncxs ${NCXS} ${NET} ${UTIL} ${NCX_SERVER} ${PROTOCOL} ${CLI} ${HTTP})
+add_executable(ncxc ${NCXC} ${NET} ${UTIL} ${NCX_CLIENT} ${PROTOCOL} ${CLI} ${HTTP})
 
 # link boost
 target_link_libraries(ncxc ${Boost_LIBRARIES})
@@ -76,3 +94,7 @@ target_link_libraries(ncxs tomlplusplus::tomlplusplus)
 # link protobuf
 target_link_libraries(ncxc ${Protobuf_LIBRARIES})
 target_link_libraries(ncxs ${Protobuf_LIBRARIES})
+
+# link nlohmann_json
+target_link_libraries(ncxc ${NLOHMANN_JSON_LIBRARIES})
+target_link_libraries(ncxs ${NLOHMANN_JSON_LIBRARIES})

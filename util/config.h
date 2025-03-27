@@ -1,9 +1,12 @@
 #include <toml++/toml.hpp>
+
 #include "util.h"
 #include "InetAddress.h"
 #include "singleton.h"
 #include "nserver.h"
 #include "nclient.h"
+#include "model.h"
+#include "http_client.h"
 
 // #define TOML_EXCEPTIONS 0 
 
@@ -90,10 +93,10 @@ public:
     ClientConfig(const std::string& path) : Config(path) {}
     ~ClientConfig() = default;
 
-    std::vector<CControlChannelArgs> parseAsControlChannelArgsVec() {
+    std::vector<CControlChannelArgs> parseAsControlChannelArgsVecFromLocalConfig() {
         try {
             std::vector<CControlChannelArgs> result;
-    
+
             // 检查配置文件是否为空
             if (config.empty()) {
                 throw std::runtime_error("Failed To Parse Client Config File: Config is empty!");
@@ -118,7 +121,6 @@ public:
             if (!server_ip_node || !server_ip_node.is_string()) {
                 throw std::runtime_error("Failed To Parse Client Config File: [client.server_ip] is missing or invalid!");
             }
-    
             // 检查 server_port 是否存在且为整数
             auto server_port_node = client_table->at_path("server_port");
             if (!server_port_node || !server_port_node.is_integer()) {
@@ -129,7 +131,6 @@ public:
             std::string server_ip = server_ip_node.as_string()->get();
             int server_port = server_port_node.as_integer()->get();
             InetAddress server_addr(server_ip.c_str(), static_cast<uint16_t>(server_port));
-    
             // 解析所有客户端服务
             table->for_each([server_addr, &result](const toml::key& key, auto val) {
                 if (key == "client") {
@@ -173,7 +174,70 @@ public:
                     static_cast<uint16_t>(proxy_port)
                 });
             });
+            return result;
+        } catch (const std::exception& e) {
+            // 捕获所有可能的异常，并输出错误信息
+            std::cerr << "Error: " << e.what() << std::endl;
+            exit(1); // 退出程序，避免继续执行无效状态
+        }
+    }
+
+    std::vector<CControlChannelArgs> parseAsControlChannelArgsVecFromRemoteConfig() {
+        try {
+            std::vector<CControlChannelArgs> result;
+
+            // 检查配置文件是否为空
+            if (config.empty()) {
+                throw std::runtime_error("Failed To Parse Client Config File: Config is empty!");
+            }
     
+            // 获取根表
+            toml::table* table = config.as_table();
+            if (!table) {
+                throw std::runtime_error("Failed To Parse Client Config File: Config is not a valid table!");
+            }
+    
+            // 检查 client 节点是否存在
+            auto client_node = table->at_path("client");
+            if (!client_node || !client_node.is_table()) {
+                throw std::runtime_error("Failed To Parse Client Config File: [client] section is missing or invalid!");
+            }
+    
+            auto client_table = client_node.as_table();
+    
+            // 检查 server_ip 是否存在且为字符串
+            auto gateway_ip_node = client_table->at_path("gateway_ip");
+            if (!gateway_ip_node || !gateway_ip_node.is_string()) {
+                throw std::runtime_error("Failed To Parse Client Config File: [client.server_ip] is missing or invalid!");
+            }
+            // 检查 server_port 是否存在且为整数
+            auto gateway_port_node = client_table->at_path("gateway_port");
+            if (!gateway_port_node || !gateway_port_node.is_integer()) {
+                throw std::runtime_error("Failed To Parse Client Config File: [client.server_port] is missing or invalid!");
+            }
+            // 检查 token 是否存在且为字符串
+            auto token_node = client_table->at_path("token");
+            if (!token_node || !token_node.is_string()) {
+                throw std::runtime_error("Failed To Parse Client Config File: [client.token] is missing or invalid!");
+            }
+    
+            // 解析 server_ip 和 server_port
+            std::string gateway_ip = gateway_ip_node.as_string()->get();
+            int gateway_port = gateway_port_node.as_integer()->get();
+            InetAddress gateway_addr(gateway_ip.c_str(), static_cast<uint16_t>(gateway_port));
+            
+            // 解析token
+            std::string token = token_node.as_string()->get();
+
+            // 向gateway_addr发送get请求获取所有服务信息
+            GetServiceReq req;
+            req.token = token;
+            net::io_context ioc;
+            auto s = std::make_shared<session>(ioc, std::move(req.to_json()));
+            s->Get(gateway_ip.c_str(), std::to_string(gateway_port).c_str(), "/getservice", 11);
+            ioc.run();
+
+            GetServiceResp resp;
             return result;
         } catch (const std::exception& e) {
             // 捕获所有可能的异常，并输出错误信息

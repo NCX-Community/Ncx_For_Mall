@@ -23,5 +23,6 @@ main(int argc, char* argv[])
 
     // cli parse
     // cli是客户端程序的入口
-    Cli::Parse(argc, argv);
+    Cli::GetInstance().Parse(argc, argv);
+
 }
