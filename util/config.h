@@ -230,19 +230,27 @@ public:
             std::string token = token_node.as_string()->get();
 
             // 向gateway_addr发送get请求获取所有服务信息
-            GetServiceReq req;
-            req.token = token;
+            http::request<http::string_body> req;
+            req.body = GetServiceReq(token).to_json();
             net::io_context ioc;
-            auto s = std::make_shared<session>(ioc, std::move(req.to_json()));
+            auto s = std::make_shared<session>(ioc, std::move(req));
             s->Get(gateway_ip.c_str(), std::to_string(gateway_port).c_str(), "/getservice", 11);
             ioc.run();
+            GetServiceResp resp = GetServiceResp::parse(s->res_.body());
 
-            GetServiceResp resp;
+            // parse resp
+            InetAddress server_addr(resp.server_addr.c_str(), resp.server_port);
+            for (int i = 0; i < resp.services.size(); i++)
+            {
+                InetAddress service_addr(resp.services[i].service_addr.c_str(), resp.services[i].service_port);
+                result.emplace_back(server_addr, resp.services[i].service_name, service_addr, resp.services[i].proxy_port);
+            }
+
             return result;
         } catch (const std::exception& e) {
             // 捕获所有可能的异常，并输出错误信息
             std::cerr << "Error: " << e.what() << std::endl;
-            exit(1); // 退出程序，避免继续执行无效状态
+            exit(1);
         }
     }
 };

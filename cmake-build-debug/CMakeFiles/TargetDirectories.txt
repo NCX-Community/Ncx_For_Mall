@@ -1,0 +1,6 @@
+/home/cjy/project/Ncx_For_Mall/cmake-build-debug/CMakeFiles/ncxs.dir
+/home/cjy/project/Ncx_For_Mall/cmake-build-debug/CMakeFiles/ncxc.dir
+/home/cjy/project/Ncx_For_Mall/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/cjy/project/Ncx_For_Mall/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/cjy/project/Ncx_For_Mall/cmake-build-debug/_deps/tomlplusplus-build/CMakeFiles/edit_cache.dir
+/home/cjy/project/Ncx_For_Mall/cmake-build-debug/_deps/tomlplusplus-build/CMakeFiles/rebuild_cache.dir

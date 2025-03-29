@@ -21,9 +21,9 @@ class session : public std::enable_shared_from_this<session>
     beast::tcp_stream stream_;
     beast::flat_buffer buffer_; // (Must persist between reads)
     http::request<http::string_body> req_;
-    http::response<http::string_body> res_;
 
 public:
+    http::response<http::string_body> res_;
     // Objects are constructed with a strand to
     // ensure that handlers do not execute concurrently.
     explicit
@@ -35,7 +35,7 @@ public:
     }
 
     // Get
-    void
+    void 
     Get(
         char const* host,
         char const* port,
